@@ -1,0 +1,23 @@
+<div>
+    <div [hidden]="submitted" style="width: 300px; display: inline-block">
+        <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" required name="login">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="text" class="form-control" id="password" required name="password">
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+    <br/>
+    <br/>
+    <nav>
+        <a routerLink="../map" class="btn btn-primary active" role="button" routerLinkActive="active">Map</a>
+    </nav>
+</div>
+
