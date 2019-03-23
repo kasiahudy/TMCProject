@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
 
     onSubmit() {
         this.x = this.user;
-        // this.appService.loginUser(this.user)
+        // this.appService.createUser(this.user)
         //    .subscribe(
         //        response => {console.log(response); this.userType = response['userType']; }, error => console.log(error));
         switch (this.user.username) {

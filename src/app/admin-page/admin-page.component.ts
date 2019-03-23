@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import { AppService } from '../app.service';
+import { Observable } from 'rxjs';
+import {User} from "../user";
 
 @Component({
     selector: 'app-admin-page',
@@ -8,11 +10,21 @@ import {Router} from '@angular/router';
 })
 
 export class AdminPageComponent implements OnInit {
-    constructor(private router: Router) { }
+
+    users: Observable<User[]>;
+
+    constructor(private appService: AppService) { }
+
     ngOnInit() {
+        this.reloadData();
     }
+
     onLogout() {
-        localStorage.clear();
-        this.router.navigate(['../login']);
+        this.appService.logout();
     }
+
+    reloadData() {
+        this.users = this.appService.getUsers();
+    }
+
 }

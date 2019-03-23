@@ -4,5 +4,11 @@
         Admin panel
     </h1>
     <button (click)="onLogout()" type="logout" class="btn btn-success">Logout</button>
+    <h1>Users</h1>
+
+    <div *ngFor="let user of users | async">
+        <user-details [user]='user'></user-details>
+    </div>
+
     <router-outlet></router-outlet>
 </div>
