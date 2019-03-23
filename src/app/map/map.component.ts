@@ -6,6 +6,7 @@ import OlTileLayer from 'ol/layer/Tile';
 import OlView from 'ol/View';
 
 import { fromLonLat } from 'ol/proj';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-map',
@@ -19,6 +20,8 @@ export class MapComponent implements OnInit {
     source: OlXYZ;
     layer: OlTileLayer;
     view: OlView;
+
+    constructor(private router: Router) { }
 
     ngOnInit() {
         this.source = new OlXYZ({
@@ -39,5 +42,9 @@ export class MapComponent implements OnInit {
             layers: [this.layer],
             view: this.view
         });
+    }
+    onLogout() {
+        localStorage.clear();
+        this.router.navigate(['../login']);
     }
 }

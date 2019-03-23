@@ -1,3 +1,4 @@
+
 <div>
     <div [hidden]="submitted" style="width: 300px; display: inline-block">
         <form (ngSubmit)="onSubmit()">
@@ -11,9 +12,12 @@
                 <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password">
             </div>
 
-            <button type="submit" class="btn btn-success">Login</button>
-            <a routerLink="../register" class="btn btn-link">Register</a>
+            <div class="form-group">
+                <label for="password">Mail</label>
+                <input type="password" class="form-control" id="mail" required [(ngModel)]="user.mail" name="mail">
+            </div>
+
+            <button type="submit" class="btn btn-success">Register</button>
         </form>
     </div>
 </div>
-

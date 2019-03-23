@@ -5,12 +5,12 @@ import { AppService } from '../app.service';
 import { User } from '../user';
 
 @Component({
-    selector: 'app-login-page',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    selector: 'app-register-page',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.css']
 })
 
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
     user: User = new User();
     x: User;
     constructor(private appService: AppService, private router: Router) { }
@@ -29,8 +29,7 @@ export class LoginComponent implements OnInit {
                 break;
             }
             case 'user': {
-                localStorage.setItem('currentUser', JSON.stringify('user'));
-
+                localStorage.clear();
                 this.router.navigate(['../map']);
                 break;
             }
