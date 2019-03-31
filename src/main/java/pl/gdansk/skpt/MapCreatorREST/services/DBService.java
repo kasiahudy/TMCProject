@@ -31,6 +31,11 @@ abstract public class DBService<T> {
         }
     }
 
+    @Transactional
+    public void remove(T entity) {
+        entityManager.remove(entity);
+    }
+
     public T find(String id) {
         return entityManager.find(entityClass, id);
     }

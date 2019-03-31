@@ -9,10 +9,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "user_table")
-@EqualsAndHashCode(of = "id")
-public class User {
+@EqualsAndHashCode(of = "login")
+public class SystemUser {
 
-    private enum PriviligeLevels{
+    public enum PriviligeLevels{
         NORMAL_USER,
         SUPER_USER;
     }
@@ -45,10 +45,10 @@ public class User {
     @Column(name = "privilage")
     private PriviligeLevels privilage;
 
-//    public User(){
+//    public SystemUser(){
 //    }
 //
-//    public User(String firstName, String surName, String email, String login, String password){
+//    public SystemUser(String firstName, String surName, String email, String login, String password){
 //        this.firstName = firstName;
 //        this.surName = surName;
 //        this.email = email;
