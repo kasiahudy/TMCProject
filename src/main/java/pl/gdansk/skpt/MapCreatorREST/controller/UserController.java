@@ -2,12 +2,11 @@ package pl.gdansk.skpt.MapCreatorREST.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.SystemUser;
 import pl.gdansk.skpt.MapCreatorREST.services.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -28,6 +27,11 @@ public class UserController {
         else{
             return new ResponseEntity<>("Already exists", HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping()
+    public List<SystemUser> GetAllUsers(){
+        return userService.getAllUsers();
     }
 
     @PostMapping("/remove")

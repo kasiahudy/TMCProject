@@ -13,6 +13,7 @@ import pl.gdansk.skpt.MapCreatorREST.model.SystemUser;
 import pl.gdansk.skpt.MapCreatorREST.security.MyUserDetails;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Service
 public class UserService extends DBService<SystemUser> implements UserDetailsService {
@@ -39,5 +40,9 @@ public class UserService extends DBService<SystemUser> implements UserDetailsSer
             throw new UsernameNotFoundException(username);
         }
         return new MyUserDetails(user);
+    }
+
+    public List<SystemUser> getAllUsers(){
+        return entityManager.createQuery("SELECT o FROM SystemUser o", SystemUser.class).getResultList();
     }
 }
