@@ -18,6 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/add")
     public ResponseEntity<String> CreateUser(@RequestBody SystemUser systemUser){
         if(userService.find(systemUser.getLogin()) == null){
@@ -34,6 +35,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/remove")
     public ResponseEntity<String> DeleteUser(@RequestBody SystemUser systemUser){
         if(userService.find(systemUser.getLogin()) != null){
