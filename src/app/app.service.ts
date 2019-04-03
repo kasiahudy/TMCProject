@@ -1,27 +1,32 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
 import { User } from './user';
+import { SystemUser } from './system-user';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AppService {
 
-    private baseUrl = 'http://localhost:8080/api/login';
+    private baseUrl = 'http://localhost:8080/api';
 
     constructor(private http: HttpClient, private router: Router) { }
 
     loginUser(username: string, password: string) {
-        return this.http.post<any>(`${this.baseUrl}` + `/users/authenticate`, { '{username}': username, '{password}': password })
-            .pipe(map(user => {
-                if (user && user.token) {
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                }
-                return user;
-            }));
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Access-Control-Allow-Credentials':  'true',
+            })
+        };
+
+        const payload = new FormData();
+
+        payload.append('username', username);
+        payload.append('password', password);
+        return this.http.post<any>(`${this.baseUrl}` + `/login`, payload,{ withCredentials: true});
     }
 
     logout() {
@@ -29,8 +34,14 @@ export class AppService {
         this.router.navigate(['../login']);
     }
 
-    createUser(user): Observable<Object> {
-        return this.http.post(`${this.baseUrl}` + `/create`, user);
+    createUser(user: SystemUser): Observable<Object> {
+
+        //const user = new SystemUser();
+        //user.login = 'katxxxx';
+        //user.password = 'hud';
+        //user.privilage = 'NORMAL_USER';
+
+        return this.http.post(`${this.baseUrl}` + `/users/add`, user);
     }
 
     updateUser(id: number, value: any): Observable<Object> {
@@ -42,11 +53,11 @@ export class AppService {
     }
 
     getUsers(): Observable<any> {
-        // return this.http.get(`${this.baseUrl}`);
-        const user = new User();
+        return this.http.get(`${this.baseUrl}/users`,{ withCredentials: true});
+        /*const user = new User();
         user.username = 'user';
         user.type = 'type';
         const users = [user, user, user, user];
-        return of(users);
+        return of(users);*/
     }
 }

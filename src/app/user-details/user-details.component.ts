@@ -3,6 +3,7 @@ import { AppService } from '../app.service';
 import { User } from '../user';
 
 import { AdminPageComponent } from '../admin-page/admin-page.component';
+import {SystemUser} from '../system-user';
 
 @Component({
     selector: 'user-details',
@@ -11,7 +12,7 @@ import { AdminPageComponent } from '../admin-page/admin-page.component';
 })
 export class UserDetailsComponent implements OnInit {
 
-    @Input() user: User;
+    @Input() user: SystemUser;
 
     constructor(private customerService: AppService, private adminPageComponent: AdminPageComponent) { }
 
@@ -19,23 +20,23 @@ export class UserDetailsComponent implements OnInit {
     }
 
     updateUser() {
-        this.customerService.updateUser(this.user.id,
-            { username: this.user.username, type: this.user.type})
+        /*this.customerService.updateUser(this.user.id,
+            { username: this.user.login, type: this.user.privilage})
             .subscribe(
                 data => {
                     console.log(data);
                     this.user = data as User;
                 },
-                error => console.log(error));
+                error => console.log(error));*/
     }
 
     deleteUser() {
-        this.customerService.deleteUser(this.user.id)
+        /*this.customerService.deleteUser(this.user.id)
             .subscribe(
                 data => {
                     console.log(data);
                     this.adminPageComponent.reloadData();
                 },
-                error => console.log(error));
+                error => console.log(error));*/
     }
 }

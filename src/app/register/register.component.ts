@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppService } from '../app.service';
-import { User } from '../user';
+import { SystemUser } from '../system-user';
 
 @Component({
     selector: 'app-register-page',
@@ -11,31 +11,32 @@ import { User } from '../user';
 })
 
 export class RegisterComponent implements OnInit {
-    user: User = new User();
-    x: User;
-    constructor(private appService: AppService, private router: Router) { }
+    user: SystemUser = new SystemUser();
+    message: any;
+    constructor(private appService: AppService, private router: Router) {
+        this.message = {exists: 'false'};
+    }
     ngOnInit() {
     }
 
     onSubmit() {
-        this.x = this.user;
-        // this.appService.createUser(this.user)
-        //    .subscribe(
-        //        response => {console.log(response); this.userType = response['userType']; }, error => console.log(error));
-        switch (this.user.username) {
-            case 'admin': {
-                localStorage.setItem('currentUser', JSON.stringify('user'));
-                this.router.navigate(['../admin-page']);
-                break;
-            }
-            case 'user': {
-                localStorage.clear();
-                this.router.navigate(['../map']);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
+        this.user.privilage = 'NORMAL_USER';
+        this.appService.createUser(this.user)
+            .subscribe(
+            response => {
+                console.log(response);}
+            , error => {
+                console.log(error.error.text);
+                if(error.error.text === undefined) {
+                    this.message = {exists: true, text: 'User login already exists', type: 'error'};
+                } else {
+                    this.router.navigate(['../map']);
+                }
+
+            });
+    }
+
+    onLogout() {
+        this.appService.logout();
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppService } from '../app.service';
-import { User } from '../user';
+import { SystemUser } from '../system-user';
 
 @Component({
     selector: 'app-login-page',
@@ -11,32 +11,18 @@ import { User } from '../user';
 })
 
 export class LoginComponent implements OnInit {
-    user: User = new User();
-    x: User;
+    user: SystemUser = new SystemUser();
     constructor(private appService: AppService, private router: Router) { }
     ngOnInit() {
     }
 
     onSubmit() {
-        this.x = this.user;
-        // this.appService.loginUser(this.user)
-        //    .subscribe(
-        //        response => {console.log(response); this.userType = response['userType']; }, error => console.log(error));
-        switch (this.user.username) {
-            case 'admin': {
-                localStorage.setItem('currentUser', JSON.stringify('user'));
-                this.router.navigate(['../admin-page']);
-                break;
-            }
-            case 'user': {
-                localStorage.setItem('currentUser', JSON.stringify('user'));
+        this.appService.loginUser(this.user.login, this.user.password)
+            .subscribe(
+                response => {
+                    console.log(response);
+                    this.router.navigate(['../map']);},
+                    error => console.log(error));
 
-                this.router.navigate(['../map']);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
     }
 }
