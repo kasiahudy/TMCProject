@@ -15,7 +15,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import pl.gdansk.skpt.MapCreatorREST.services.UserService;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @EnableWebSecurity
 @Configuration
@@ -77,8 +84,14 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedMethods(List.of("POST", "GET"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        configuration.addAllowedHeader("content-type");
+        configuration.addAllowedHeader("Access-Control-Allow-Credentials");
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }
