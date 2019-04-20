@@ -11,6 +11,7 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { RoutePointDetailsComponent } from './route-point-details/route-point-details.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { UserDetailsComponent } from './user-details/user-details.component';
     MapComponent,
     AdminPageComponent,
     RegisterComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    RoutePointDetailsComponent
   ],
   imports: [
     BrowserModule,

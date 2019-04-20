@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AppService } from '../app.service';
-import { User } from '../user';
 
 import { AdminPageComponent } from '../admin-page/admin-page.component';
 import {SystemUser} from '../system-user';

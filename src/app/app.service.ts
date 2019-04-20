@@ -3,8 +3,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
-import { User } from './user';
 import { SystemUser } from './system-user';
+import { RoutePoint } from './route-point';
 
 @Injectable({
     providedIn: 'root'
@@ -59,5 +59,28 @@ export class AppService {
         user.type = 'type';
         const users = [user, user, user, user];
         return of(users);*/
+    }
+
+    getRoutePoints(): Observable<any> {
+        const routePoint = new RoutePoint();
+        routePoint.name = 'point 1';
+        routePoint.description = 'desc 1';
+        routePoint.lon = 18.532743;
+        routePoint.lat = 54.422876;
+
+        const routePoint2 = new RoutePoint();
+        routePoint2.name = 'point 2';
+        routePoint2.description = 'desc 2';
+        routePoint2.lon = 18.544867;
+        routePoint2.lat = 54.422876;
+
+        const routePoint3 = new RoutePoint();
+        routePoint3.name = 'point 3';
+        routePoint3.description = 'desc 3';
+        routePoint3.lon = 18.556945;
+        routePoint3.lat = 54.422876;
+
+        const routePoints = [routePoint, routePoint2, routePoint3];
+        return of(routePoints);
     }
 }
