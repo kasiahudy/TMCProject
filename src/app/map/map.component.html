@@ -10,6 +10,7 @@
     <div *ngFor="let routePoint of routePoints | async">
         <route-point-details [routePoint]='routePoint'></route-point-details>
     </div>
+    <button class="btn btn-secondary btn-sm" (click)='saveRoutePoints()'>Save</button>
 </div>
 
 <div style="margin-top: 10px; display: inline-block; width: 80%">

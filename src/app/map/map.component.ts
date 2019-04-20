@@ -120,4 +120,9 @@ export class MapComponent implements OnInit {
     adminPage() {
         this.router.navigate(['../admin-page']);
     }
+
+    saveRoutePoints(){
+        this.routePoints;
+        var x = 6;
+    }
 }
