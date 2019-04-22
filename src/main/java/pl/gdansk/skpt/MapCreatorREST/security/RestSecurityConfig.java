@@ -69,6 +69,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users").hasRole("SUPER_USER")
                 .antMatchers("/events/add").hasRole("SUPER_USER")
                 .antMatchers("/users/remove").authenticated()
+                .antMatchers("/maps/*").permitAll()
             .and()
                 .formLogin()
                     .loginPage("/login")

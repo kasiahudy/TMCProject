@@ -30,7 +30,7 @@ public class Event {
     @Column
     @Setter
     @Getter
-    @OneToMany
+    @ManyToMany
     private List<SystemUser> participants;
 
     @Column
