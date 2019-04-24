@@ -1,0 +1,21 @@
+<div *ngIf="sitePoint">
+    <div *ngIf="!sitePointEdit">
+        <div>
+            <label>Lon: </label> {{sitePoint.lon}}
+        </div>
+        <div>
+            <label>Lat: </label> {{sitePoint.lat}}
+        </div>
+        <!--<button type="button" class="btn btn-primary btn-sm" (click)='updateUser()' style="margin-right: 10px;">Update</button>
+        <button type="button" class="btn btn-danger btn-sm" (click)='deleteUser()'>Delete</button>-->
+        <button class="btn btn-secondary btn-sm" (click)='edit()'>Edit</button>
+    </div>
+    <form *ngIf="sitePointEdit"(ngSubmit)="onSubmit()" style="alignment: center">
+        <div class="form-group row">
+            <button type="submit" class="btn btn-success" style="margin-right: 10px">Submit</button>
+            <button class="btn btn-secondary btn-sm" (click)='cancel()'>Cancel</button>
+            <button class="btn btn-secondary btn-sm" (click)='delete()'>Delete</button>
+        </div>
+    </form>
+    <hr/>
+</div>

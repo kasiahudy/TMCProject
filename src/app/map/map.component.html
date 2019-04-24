@@ -6,11 +6,22 @@
     <button (click)="onLogout()" type="logout" class="btn btn-success" style="margin-right: 10px; margin-top: 10px">Logout</button>
 </div>
 <div style="display: inline-block; float: left; margin-top: 30px; width: 20%;">
-    <h2>Route points:</h2><br/>
+    <!--<h2>Route points:</h2><br/>
     <div *ngFor="let routePoint of routePoints | async">
         <route-point-details [routePoint]='routePoint'></route-point-details>
+    </div>-->
+
+    <h2>Maps:</h2>
+    <div class="col-sm-8" style="margin-left: 15%">
+    <select class="form-control" [(ngModel)]="siteMapName" (change)="select()">
+        <option *ngFor="let siteMap of siteMaps | async" >{{siteMap.name}}</option>
+    </select>
+    </div><br/>
+    <h3>{{siteMapName}}</h3><br/>
+    <div *ngFor="let point of sitePoints | async">
+        <site-point-details [sitePoint]='point'></site-point-details>
     </div>
-    <button class="btn btn-secondary btn-sm" (click)='saveRoutePoints()'>Save</button>
+    <button class="btn btn-secondary btn-sm" (click)='saveMap()'>Save</button>
 </div>
 
 <div style="margin-top: 10px; display: inline-block; width: 80%">

@@ -19,8 +19,9 @@ import { fromLonLat } from 'ol/proj';
 import { AppService } from '../app.service';
 import {Router} from '@angular/router';
 
-import {Observable} from 'rxjs';
-import {RoutePoint} from '../route-point';
+import {Observable, of} from 'rxjs';
+import { SiteMap} from '../site-map';
+import { SitePoint} from '../site-point';
 
 @Component({
     selector: 'app-map',
@@ -30,16 +31,20 @@ import {RoutePoint} from '../route-point';
 
 export class MapComponent implements OnInit {
 
-    routePoints: Observable<RoutePoint[]>;
+    siteMaps: Observable<SiteMap[]>;
+    siteMapName: string;
+    sitePoints: Observable<SitePoint[]>;
     map: OlMap;
     source: OlXYZ;
     layer: OlTileLayer;
     view: OlView;
+    markerSource: OlSourceVector;
+    markerLayer: OlLayerVector;
 
     constructor(private appService: AppService, private router: Router) { }
 
     ngOnInit() {
-
+        this.sitePoints = of([]);
 
         this.source = new OlXYZ({
             url: 'http://tile.osm.org/{z}/{x}/{y}.png'
@@ -62,44 +67,84 @@ export class MapComponent implements OnInit {
 
         this.map.on('click', this.handleMapClick.bind(this));
         this.reloadData();
+
+        this.markerSource = new OlSourceVector({});
+        this.markerLayer = new OlLayerVector({ source: this.markerSource});
+        this.map.addLayer(this.markerLayer );
     }
 
     reloadData() {
-        this.routePoints = this.appService.getRoutePoints();
-        this.routePoints.subscribe(routePoints => {
-                routePoints.forEach(function(routePoint){
-                    var x = routePoint;
-                    console.log(routePoint);
-                    this.addMarker(routePoint.lon, routePoint.lat);
-                }.bind(this));
-        });
+        this.siteMaps = of([]);
+        /*this.appService.getMap('new map4')
+            .subscribe(
+                response => {
+                    console.log(response);
+                    this.fixSiteMap(response.name, response.points);
+                    this.siteMaps.subscribe(siteMaps => {
+                        siteMaps[0].points.forEach(function(point) {
+                            this.addMarker(point.lon, point.lat);
+                        }.bind(this));
+                    });
+                }
+                , error => {
+                    console.log(error);
+
+                });*/
+        this.appService.getAllMaps()
+            .subscribe(
+                responses => {
+                    console.log(responses);
+                    responses.forEach(function(response) {
+                        const fixedMap = this.fixSiteMap(response.name, response.points);
+                        this.siteMaps.subscribe(siteMaps => {
+                            siteMaps.push(fixedMap);
+                        });
+                        this.siteMaps.subscribe(siteMaps => {
+                            siteMaps[0].points.forEach(function(point) {
+                                this.addMarker(point.lon, point.lat);
+                            }.bind(this));
+                        });
+                    }.bind(this));
+                }
+                , error => {
+                    console.log(error);
+
+                });
+
     }
 
     handleMapClick(evt) {
         const lontat = toLonLat(evt.coordinate);
-        console.info(lontat); //   <=== coordinate projection
+        console.log(lontat); //   <=== coordinate projection
 
         this.addMarker(lontat[0], lontat[1]);
 
-        this.routePoints.subscribe(routePoints => {
-            const routePoint = new RoutePoint();
-            routePoint.name = 'point ' + routePoints.length;
-            routePoint.description = 'desc ' + routePoints.length;
-            routePoint.lon = lontat[0];
-            routePoint.lat = lontat[1];
-            routePoints.push(routePoint);
+        /*this.siteMaps.subscribe(siteMaps => {
+            const sitePoint = new SitePoint();
+            sitePoint.lon = parseFloat (lontat[0]);
+            sitePoint.lat = parseFloat (lontat[1]);
+            siteMaps[0].points.push(sitePoint);
+        });*/
+
+        this.siteMaps.subscribe(siteMaps => {
+            const newSiteMap = siteMaps.find(siteMap => siteMap.name === this.siteMapName);
+            this.sitePoints.subscribe(sitePoints => {
+                const sitePoint = new SitePoint();
+                sitePoint.lon = parseFloat (lontat[0]);
+                sitePoint.lat = parseFloat (lontat[1]);
+                sitePoints.push(sitePoint);
+            });
         });
+
     }
 
     addMarker(lng, lat) {
-        const source = new OlSourceVector({});
-        const layer = new OlLayerVector({ source: source});
-        this.map.addLayer(layer );
+
         const marker = new OlFeature({
             geometry: new OlGeomPoint(transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857'))
         });
 
-        var iconStyle = new OlStyle({
+        const iconStyle = new OlStyle({
             image: new OlIcon(({
                 anchor: [0.5, 1],
                 src: 'http://cdn.mapmarker.io/api/v1/pin?text=&size=30&hoffset=1'
@@ -109,10 +154,10 @@ export class MapComponent implements OnInit {
         marker.setStyle(iconStyle);
 
         marker.on('click', function(evt) {
-            console.info('click'); //   <=== coordinate projection
+            console.log('click'); //   <=== coordinate projection
         });
 
-        source.addFeature(marker);
+        this.markerSource.addFeature(marker);
     }
     onLogout() {
         this.appService.logout();
@@ -121,8 +166,86 @@ export class MapComponent implements OnInit {
         this.router.navigate(['../admin-page']);
     }
 
-    saveRoutePoints(){
-        this.routePoints;
-        var x = 6;
+    fixSiteMap(name: string, points: string) {
+        const siteMap = new SiteMap();
+        siteMap.name = name;
+        siteMap.points = [];
+
+        points = points.replace(new RegExp('\\(', 'g'), '');
+        points = points.replace(new RegExp('\\)', 'g'), '');
+        points = points.replace(new RegExp(';', 'g'), '');
+
+        const newPoints = points.split('POINT');
+        newPoints.forEach(function(point){
+            if(point !== '') {
+                const lonLat = point.split(' ');
+                const sitePoint = new SitePoint();
+                sitePoint.lon = parseFloat (lonLat[1]);
+                sitePoint.lat = parseFloat (lonLat[2]);
+                siteMap.points.push(sitePoint);
+            }
+
+        });
+        return siteMap;
+    }
+
+    saveMap(){
+        const newSiteMap = new SiteMap();
+        newSiteMap.name = this.siteMapName;
+        this.sitePoints.subscribe(sitePoints => {
+            newSiteMap.points = sitePoints;
+        });
+        this.appService.addMap(newSiteMap)
+            .subscribe(
+                response => {
+                    console.log(response);
+                }
+                , error => {
+                    console.log(error);
+
+                });
+    }
+
+    select(){
+        this.sitePoints = of([]);
+        this.siteMaps = of([]);
+        this.markerSource.clear();
+        this.appService.getAllMaps()
+            .subscribe(
+                responses => {
+                    console.log(responses);
+                    responses.forEach(function(response) {
+                        const fixedMap = this.fixSiteMap(response.name, response.points);
+                        this.siteMaps.subscribe(siteMaps => {
+                            siteMaps.push(fixedMap);
+                        });
+                        if(response.name === this.siteMapName) {
+                            this.sitePoints.subscribe(sitePoints => {
+                                fixedMap.points.forEach(function(point) {
+                                    sitePoints.push(point);
+                                });
+
+                            });
+                            fixedMap.points.forEach(function(point) {
+                                this.addMarker(point.lon, point.lat);
+                            }.bind(this));
+                        }
+                    }.bind(this));
+                }
+                , error => {
+                    console.log(error);
+
+                });
+
+        console.log(this.siteMapName);
+        this.siteMaps.subscribe(siteMaps => {
+            const newSiteMap = siteMaps.find(siteMap => siteMap.name === this.siteMapName);
+            this.sitePoints.subscribe(sitePoints => {
+                newSiteMap.points.forEach(function(point) {
+                    sitePoints.push(point);
+                });
+
+            });
+        });
     }
 }

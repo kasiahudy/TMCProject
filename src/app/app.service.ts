@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import {Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
 import { SystemUser } from './system-user';
-import { RoutePoint } from './route-point';
+import { SiteMap } from './site-map';
 
 @Injectable({
     providedIn: 'root'
@@ -61,26 +60,41 @@ export class AppService {
         return of(users);*/
     }
 
-    getRoutePoints(): Observable<any> {
-        const routePoint = new RoutePoint();
-        routePoint.name = 'point 1';
-        routePoint.description = 'desc 1';
+    fixSiteMap(siteMap: SiteMap) {
+        const newSiteMap = {name: '', points: ''};
+        newSiteMap.name = siteMap.name;
+        siteMap.points.forEach( function(point) {
+            newSiteMap.points += 'POINT (' + point.lon + ' ' + point.lat + ');';
+        });
+        return newSiteMap;
+    }
+
+    addMap(siteMap: SiteMap) {
+        /*const siteMap = new SiteMap();
+        siteMap.name = 'new map4';
+        siteMap.points = [];
+
+        const routePoint = new SitePoint();
         routePoint.lon = 18.532743;
         routePoint.lat = 54.422876;
 
-        const routePoint2 = new RoutePoint();
-        routePoint2.name = 'point 2';
-        routePoint2.description = 'desc 2';
+        const routePoint2 = new SitePoint();
         routePoint2.lon = 18.544867;
         routePoint2.lat = 54.422876;
+        siteMap.points.push(routePoint);
+        siteMap.points.push(routePoint2);*/
 
-        const routePoint3 = new RoutePoint();
-        routePoint3.name = 'point 3';
-        routePoint3.description = 'desc 3';
-        routePoint3.lon = 18.556945;
-        routePoint3.lat = 54.422876;
 
-        const routePoints = [routePoint, routePoint2, routePoint3];
-        return of(routePoints);
+        return this.http.post(`${this.baseUrl}` + `/maps?`, this.fixSiteMap(siteMap));
+    }
+
+    getMap(siteMapName: string): Observable<any> {
+
+
+        return this.http.get(`${this.baseUrl}/maps/points?`, {params: {mapName: siteMapName}});
+    }
+
+    getAllMaps(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/maps/all`);
     }
 }

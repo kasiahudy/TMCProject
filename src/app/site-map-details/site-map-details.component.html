@@ -1,0 +1,4 @@
+<h3>{{siteMap.name}}</h3><br/>
+<div *ngFor="let point of sitePoints | async">
+    <site-point-details [sitePoint]='point'></site-point-details>
+</div>
