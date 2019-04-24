@@ -44,6 +44,11 @@ public class SiteMapController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<SiteMap>> getAllMaps(){
+        return new ResponseEntity<>(siteMapService.getAllSiteMaps(),HttpStatus.OK);
+    }
+
     @GetMapping("/sample")
     public ResponseEntity<SiteMap> getSampleMap(){
         List<Point> listOfPoints = new ArrayList<Point>();

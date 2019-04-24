@@ -30,4 +30,8 @@ public class SiteMapService extends DBService<SiteMap> {
             return null;
         }
     }
+
+    public List<SiteMap> getAllSiteMaps(){
+        return entityManager.createQuery("SELECT o FROM SiteMap o", SiteMap.class).getResultList();
+    }
 }
