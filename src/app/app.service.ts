@@ -30,7 +30,7 @@ export class AppService {
 
     logout() {
         localStorage.removeItem('currentUser');
-        this.router.navigate(['../login']);
+        return this.http.get(`${this.baseUrl}/logout`);
     }
 
     createUser(user: SystemUser): Observable<Object> {

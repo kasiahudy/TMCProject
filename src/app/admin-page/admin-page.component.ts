@@ -21,11 +21,14 @@ export class AdminPageComponent implements OnInit {
     }
 
     onLogout() {
-        this.appService.logout();
-    }
+        this.appService.logout() .subscribe(
+            responses => {
+                console.log(responses);
+            }
+            , error => {
+                console.log(error);
 
-    mapPage() {
-        this.router.navigate(['../map']);
+            });
     }
 
     reloadData() {

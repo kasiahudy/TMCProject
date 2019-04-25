@@ -1,6 +1,13 @@
-<div style="text-align:right">
-    <button (click)="onLogout()" type="logout" class="btn btn-success" style="margin-right: 10px; margin-top: 10px; margin-bottom: 10px">Return</button>
-</div>
+
+<nav class="navbar navbar-expand-md sticky-top navbar-dark fixed-top bg-dark">
+    <div class="navbar-nav-scroll">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" >SKPT Map creator</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 <div *ngIf="message.exists" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">{{message.text}}</div>
 <div>
     <div [hidden]="submitted" style="width: 300px; display: inline-block">
@@ -15,6 +22,7 @@
                 <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password">
             </div>
             <button type="submit" class="btn btn-success">Register</button>
+            <a routerLink="../login" class="btn btn-link">Return</a>
         </form>
     </div>
 </div>

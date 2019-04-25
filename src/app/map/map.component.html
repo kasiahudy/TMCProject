@@ -1,30 +1,38 @@
 
 
+<nav class="navbar navbar-expand-md sticky-top navbar-dark fixed-top bg-dark">
+    <div class="navbar-nav-scroll">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" >SKPT Map creator</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="../admin-page">Admin page</a>
+            </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <li class="nav-item">
+            <a class="nav-link p-2" href="../login" (click)="onLogout()">Logout <span class="sr-only">(current)</span></a>
 
-<div style="text-align:right">
-    <button (click)="adminPage()" type="adminPage" class="btn btn-success" style="margin-right: 10px; margin-top: 10px">Admin page</button>
-    <button (click)="onLogout()" type="logout" class="btn btn-success" style="margin-right: 10px; margin-top: 10px">Logout</button>
-</div>
-<div style="display: inline-block; float: left; margin-top: 30px; width: 20%;">
-    <!--<h2>Route points:</h2><br/>
-    <div *ngFor="let routePoint of routePoints | async">
-        <route-point-details [routePoint]='routePoint'></route-point-details>
-    </div>-->
-
+        </li>
+    </ul>
+</nav>
+<div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 10px;">
     <h2>Maps:</h2>
     <div class="col-sm-8" style="margin-left: 15%">
     <select class="form-control" [(ngModel)]="siteMapName" (change)="select()">
-        <option *ngFor="let siteMap of siteMaps | async" >{{siteMap.name}}</option>
+        <option *ngFor="let siteMap of siteMaps | async" [value]="siteMap.name">{{siteMap.name}}</option>
     </select>
     </div><br/>
     <h3>{{siteMapName}}</h3><br/>
     <div *ngFor="let point of sitePoints | async">
         <site-point-details [sitePoint]='point'></site-point-details>
     </div>
-    <button class="btn btn-secondary btn-sm" (click)='saveMap()'>Save</button>
+    <button class="btn btn-success btn-sm" (click)='saveMap()'>Save</button>
 </div>
 
-<div style="margin-top: 10px; display: inline-block; width: 80%">
+<div style=" display: inline-block; width: 80%">
     <div id="map" class="map"></div>
 </div>
 

@@ -1,10 +1,22 @@
 
+<nav class="navbar navbar-expand-md sticky-top navbar-dark fixed-top bg-dark">
+    <div class="navbar-nav-scroll">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" >SKPT Map creator</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="../map">Map</a>
+            </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <li class="nav-item">
+            <a class="nav-link p-2" href="../login" (click)="onLogout()">Logout <span class="sr-only">(current)</span></a>
 
-
-<div style="text-align:right">
-    <button (click)="mapPage()" type="map" class="btn btn-success" style="margin-right: 10px; margin-top: 10px">Map</button>
-    <button (click)="onLogout()" type="logout" class="btn btn-success" style="margin-right: 10px; margin-top: 10px">Logout</button>
-</div>
+        </li>
+    </ul>
+</nav>
 <div style="text-align:center">
     <h1>
         Admin panel

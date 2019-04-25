@@ -8,7 +8,10 @@
         </div>
         <!--<button type="button" class="btn btn-primary btn-sm" (click)='updateUser()' style="margin-right: 10px;">Update</button>
         <button type="button" class="btn btn-danger btn-sm" (click)='deleteUser()'>Delete</button>-->
-        <button class="btn btn-secondary btn-sm" (click)='edit()'>Edit</button>
+        <div class="form-group row d-inline">
+            <button class="btn btn-secondary btn-sm" (click)='edit()'>Edit</button>
+            <button class="btn btn-secondary btn-sm ml-1" (click)='delete()'>Delete</button>
+        </div>
     </div>
     <form *ngIf="sitePointEdit"(ngSubmit)="onSubmit()" style="alignment: center">
         <div class="form-group row">

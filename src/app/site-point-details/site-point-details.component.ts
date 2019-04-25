@@ -36,6 +36,9 @@ export class SitePointDetailsComponent implements OnInit {
     }
 
     delete() {
+
+        this.sitePoint.lon = null;
+        this.sitePoint.lat = null;
         this.sitePoint = null;
     }
 }

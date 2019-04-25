@@ -35,8 +35,4 @@ export class RegisterComponent implements OnInit {
 
             });
     }
-
-    onLogout() {
-        this.appService.logout();
-    }
 }
