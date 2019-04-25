@@ -40,10 +40,12 @@ export class MapComponent implements OnInit {
     view: OlView;
     markerSource: OlSourceVector;
     markerLayer: OlLayerVector;
+    isMapChosen: boolean;
 
     constructor(private appService: AppService, private router: Router) { }
 
     ngOnInit() {
+        this.isMapChosen = false;
         this.sitePoints = of([]);
 
         this.source = new OlXYZ({
@@ -207,6 +209,7 @@ export class MapComponent implements OnInit {
     }
 
     select(){
+        this.isMapChosen = true;
         this.sitePoints = of([]);
         this.siteMaps = of([]);
         this.markerSource.clear();

@@ -18,18 +18,22 @@
         </li>
     </ul>
 </nav>
-<div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 10px;">
-    <h2>Maps:</h2>
-    <div class="col-sm-8" style="margin-left: 15%">
-    <select class="form-control" [(ngModel)]="siteMapName" (change)="select()">
-        <option *ngFor="let siteMap of siteMaps | async" [value]="siteMap.name">{{siteMap.name}}</option>
-    </select>
+<div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 20px;">
+
+    <div class="col-sm-5 d-inline" style="margin-left: 15%">
+        <h4>Choose map:</h4>
+        <select class="form-control" [(ngModel)]="siteMapName" (change)="select()">
+            <option *ngFor="let siteMap of siteMaps | async" [value]="siteMap.name">{{siteMap.name}}</option>
+        </select>
     </div><br/>
-    <h3>{{siteMapName}}</h3><br/>
-    <div *ngFor="let point of sitePoints | async">
-        <site-point-details [sitePoint]='point'></site-point-details>
+    <div *ngIf="isMapChosen">
+        <h3>{{siteMapName}}</h3><br/>
+        <div *ngFor="let point of sitePoints | async">
+            <site-point-details [sitePoint]='point'></site-point-details>
+        </div>
+        <button class="btn btn-success btn-sm" (click)='saveMap()'>Save</button>
     </div>
-    <button class="btn btn-success btn-sm" (click)='saveMap()'>Save</button>
+
 </div>
 
 <div style=" display: inline-block; width: 80%">
