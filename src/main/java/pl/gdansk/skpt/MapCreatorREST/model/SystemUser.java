@@ -45,16 +45,16 @@ public class SystemUser {
     @Column(name = "privilage")
     private PriviligeLevels privilage;
 
-//    public SystemUser(){
-//    }
-//
-//    public SystemUser(String firstName, String surName, String email, String login, String password){
-//        this.firstName = firstName;
-//        this.surName = surName;
-//        this.email = email;
-//        this.login = login;
-//        this.password = password;
-//        this.privilage = PriviligeLevels.NORMAL_USER;
-//    }
+    public SystemUser(){
+    }
+
+    public SystemUser(String firstName, String surName, String email, String login, String password){
+        this.firstName = firstName;
+        this.surName = surName;
+        this.email = email;
+        this.login = login;
+        this.password = password;
+        this.privilage = PriviligeLevels.NORMAL_USER;
+    }
 
 }
