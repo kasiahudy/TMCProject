@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "event_table")
+@Table(name = "events_table")
 @EqualsAndHashCode(of = "id")
 public class Event {
     @Id
@@ -30,12 +30,40 @@ public class Event {
     @Column
     @Setter
     @Getter
-    @ManyToMany
-    private List<SystemUser> participants;
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "event_enchanced_table_id")
+    private List<Marker> markers;
+
+
+    @Column
+    @Setter
+    @Getter
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "event_enchanced_table_id")
+    private List<Track> tracks;
 
     @Column
     @Setter
     @Getter
     @ManyToMany
     private List<SystemUser> builders;
+
+    public Event(String name, LocalDate date, List<Marker> markers, List<SystemUser> users){
+        this.name = name;
+        this.date = date;
+        this.markers = markers;
+        this.builders = users;
+    }
+
+    public Event(){
+
+    }
+
+
 }

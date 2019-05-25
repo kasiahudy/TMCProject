@@ -14,26 +14,21 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.io.WKTReader;
 
-public class JsonToPointDeserializer extends JsonDeserializer<List<Point>> {
+public class JsonToPointDeserializer extends JsonDeserializer<Point> {
 
     private final static GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 26910);
 
     @Override
-    public List<Point> deserialize(JsonParser jp, DeserializationContext ctxt)
+    public Point deserialize(JsonParser jp, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
 
-        List<Point> listOfPoints = new ArrayList<Point>();
-        try {
-            String pointsAsJSON = jp.getText();
-            if(pointsAsJSON == null || pointsAsJSON.length() <= 0)
-                return null;
 
-            String[] serializedPointsTable = pointsAsJSON.split(";");
-            for(String serializedPoint : serializedPointsTable){
-                Point point = (Point) new WKTReader().read(serializedPoint);
-                listOfPoints.add(point);
-            }
-            return listOfPoints;
+        try {
+            String pointAsJSON = jp.getText();
+            if (pointAsJSON == null || pointAsJSON.length() <= 0) return null;
+
+                Point point = (Point) new WKTReader().read(pointAsJSON);
+            return point;
         }
         catch(Exception e){
             e.printStackTrace();

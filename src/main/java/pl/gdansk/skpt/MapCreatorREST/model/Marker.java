@@ -7,8 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import pl.gdansk.skpt.MapCreatorREST.Util.JsonToPointDeserializer;
 import pl.gdansk.skpt.MapCreatorREST.Util.PointToJsonSerializer;
-import pl.gdansk.skpt.MapCreatorREST.Util.SingleJsonToPointDeserializer;
-import pl.gdansk.skpt.MapCreatorREST.Util.SinglePointToJsonSerializer;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -16,7 +14,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "tasiemka_table")
 @EqualsAndHashCode(of = "id")
-public class Tape {
+public class Marker {
     @Id
     @Getter
     @Column(name="id")
@@ -33,12 +31,12 @@ public class Tape {
 
     @Getter
     @Column(name="coordinate")
-    @JsonSerialize(using = SinglePointToJsonSerializer.class)
-    @JsonDeserialize(using = SingleJsonToPointDeserializer.class)
+    @JsonSerialize(using = PointToJsonSerializer.class)
+    @JsonDeserialize(using = JsonToPointDeserializer.class)
     private Point coordinate;
 
 
-    public Tape(String tapeCode, String lanternCode, Point point){
+    public Marker(String tapeCode, String lanternCode, Point point){
         this.coordinate = point;
         this.tapeCode = tapeCode;
         this.lanternCode = lanternCode;

@@ -10,19 +10,22 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTWriter;
 
-public class SinglePointToJsonSerializer extends JsonSerializer<Point> {
+public class PointsListToJsonSerializer extends JsonSerializer<List<Point>> {
 
     @Override
-    public void serialize(Point point, JsonGenerator jgen,
+    public void serialize(List<Point> pointsList, JsonGenerator jgen,
                           SerializerProvider provider) throws IOException,
             JsonProcessingException {
 
         StringBuilder pointsAsJSON = new StringBuilder("");
         try
         {
-            pointsAsJSON.append(new WKTWriter().write(point));
-            pointsAsJSON.append(";");
-
+            if(pointsList != null) {
+                for(Point point :pointsList){
+                    pointsAsJSON.append(new WKTWriter().write(point));
+                    pointsAsJSON.append(";");
+                }
+            }
         }
         catch(Exception e) {
             e.printStackTrace();
