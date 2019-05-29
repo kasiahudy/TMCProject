@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tasiemka_table")
+@Table(name = "markers_table")
 @EqualsAndHashCode(of = "id")
 public class Marker {
     @Id
@@ -35,10 +35,10 @@ public class Marker {
     @JsonDeserialize(using = JsonToPointDeserializer.class)
     private Point coordinate;
 
-
-    public Marker(String tapeCode, String lanternCode, Point point){
-        this.coordinate = point;
-        this.tapeCode = tapeCode;
-        this.lanternCode = lanternCode;
-    }
+//
+//    public Marker(String tapeCode, String lanternCode, Point point){
+//        this.coordinate = point;
+//        this.tapeCode = tapeCode;
+//        this.lanternCode = lanternCode;
+//    }
 }

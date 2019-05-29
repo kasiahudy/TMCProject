@@ -13,6 +13,6 @@ public class EventService extends DBService<Event> {
     }
 
     public List<Event> getAllEvents(){
-        return entityManager.createQuery("SELECT o FROM EventEnchanced o", Event.class).getResultList();
+        return entityManager.createQuery("SELECT o FROM Event o", Event.class).getResultList();
     }
 }

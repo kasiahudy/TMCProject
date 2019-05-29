@@ -24,8 +24,12 @@ public class Track {
     @Column
     @Setter
     @Getter
-    @ManyToMany
+    @ManyToMany(
+            cascade = CascadeType.ALL
+    )
     private List<CheckPoint> checkpoints;
+
+
 
 
 }

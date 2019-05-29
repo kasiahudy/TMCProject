@@ -3,9 +3,7 @@ package pl.gdansk.skpt.MapCreatorREST.services;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 abstract public class DBService<T> {
     final EntityManager entityManager;
@@ -20,15 +18,15 @@ abstract public class DBService<T> {
 
     @Transactional
     public void save(T entity) {
-        if (entityManager.find(entityClass, idSupplier.apply(entity)) == null) {
-            //Jeśli identyfikator nie występuje w bazie danych, obiekt encyjny jest w stanie new
+        if (notYetInDB(entity)) {
             entityManager.persist(entity);
         } else {
-            //Jeśli identyfikator występuje w bazie danych, należy przeprowadzić obiekt do stanu managed, aby
-            //wprowadzone w nim modyfikacje zostały zarejestrowane w ramach kontekstu trwałości (ang. persistence
-            //context). Zmiany zostaną zapisane w bazie danych, gdy bieżąca transakcja zostanie zatwierdzona.
             entityManager.merge(entity);
         }
+    }
+
+    private boolean notYetInDB(T entity) {
+        return idSupplier.apply(entity) == null || entityManager.find(entityClass, idSupplier.apply(entity)) == null;
     }
 
     @Transactional

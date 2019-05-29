@@ -20,7 +20,7 @@ public class Event {
     private UUID id;
 
     @Getter
-    @Column(name = "event_name")
+    @Column(name = "event_name", nullable = false)
     private String name;
 
     @Getter
@@ -34,7 +34,7 @@ public class Event {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "event_enchanced_table_id")
+    //@JoinColumn(name = "event_enchanced_table_id")
     private List<Marker> markers;
 
 
@@ -45,7 +45,7 @@ public class Event {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JoinColumn(name = "event_enchanced_table_id")
+    //@JoinColumn(name = "event_enchanced_table_id")
     private List<Track> tracks;
 
     @Column
@@ -54,16 +54,17 @@ public class Event {
     @ManyToMany
     private List<SystemUser> builders;
 
-    public Event(String name, LocalDate date, List<Marker> markers, List<SystemUser> users){
-        this.name = name;
-        this.date = date;
-        this.markers = markers;
-        this.builders = users;
-    }
-
-    public Event(){
-
-    }
+//    public Event(String name, LocalDate date, List<Marker> markers, List<SystemUser> users, List<Track> tracks){
+//        this.name = name;
+//        this.date = date;
+//        this.markers = markers;
+//        this.builders = users;
+//        this.tracks = tracks;
+//    }
+//
+//    public Event(){
+//
+//    }
 
 
 }

@@ -22,8 +22,10 @@ public class CheckPoint {
     Marker mainMarker;
 
 
-    @OneToMany
-    List<Marker> affiliateMarker;
+    @OneToMany(
+        cascade = CascadeType.ALL
+    )
+    List<Marker> affiliateMarkers;
 
 
 
