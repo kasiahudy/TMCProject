@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.Event;
 import pl.gdansk.skpt.MapCreatorREST.model.SystemUser;
 import pl.gdansk.skpt.MapCreatorREST.model.Marker;
+import pl.gdansk.skpt.MapCreatorREST.model.Track;
 import pl.gdansk.skpt.MapCreatorREST.services.EventService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/events")
@@ -25,46 +28,129 @@ public class EventController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addEvent(@RequestBody Event newEvent){
+    public ResponseEntity<UUID> addEvent(@RequestBody Event newEvent){
 
             eventService.save(newEvent);
 
-        return new ResponseEntity<>("not implemented", HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<>(newEvent.getId(), HttpStatus.NOT_IMPLEMENTED);
     }
-
-//    @GetMapping("/sample")
-//    public  ResponseEntity<Event> addSampleEvent(){
-//        Event eventEnchanced;
-//        try {
-//            Marker marker1 = new Marker("Tasiemka 1","Lampion 1", (Point) new WKTReader().read("POINT (1 1)"));
-//            Marker marker2 = new Marker("Tasiemka 2",null, (Point) new WKTReader().read("POINT (2 2)"));
-//            Marker marker3 = new Marker("Tasiemka 3","Lampion 3", (Point) new WKTReader().read("POINT (3 41)"));
-//
-//
-//        List<Marker> sampleMarkers = new ArrayList<Marker>();
-//        sampleMarkers.add(marker1);
-//        sampleMarkers.add(marker2);
-//        sampleMarkers.add(marker3);
-//
-//
-//        SystemUser user1 = new SystemUser("Jan","Nowak","jnowak@wp.pl","jnowak","adasdasdsa");
-//        SystemUser user2 = new SystemUser("Pawel","Kowalski","pkowal@wp.pl","pkowal","hsadsa");
-//        List<SystemUser> sampleUsers = new ArrayList<SystemUser>();
-//        sampleUsers.add(user1);
-//        sampleUsers.add(user2);
-//
-//
-//       eventEnchanced = new Event();
-//
-//        return new ResponseEntity<Event>(eventEnchanced,HttpStatus.OK);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<Event>(new Event(),HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
     @GetMapping()
-    public  List<Event> getEvent(){
+    public  List<Event> getAllEvents(){
         return eventService.getAllEvents();
     }
+
+    @GetMapping("/{id}")
+    public  ResponseEntity<Event> getEvent(@PathVariable UUID id){
+        Event event = eventService.find(id);
+        if(event != null){
+            return new ResponseEntity<>(event,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/markers")
+    public  ResponseEntity<List<Marker>> getMarkersFromEvent(@RequestParam UUID eventId){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            return new ResponseEntity<>(event.getMarkers(),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/lanterns")
+    public  ResponseEntity<List<Marker>> getLanternsFromEvent(@RequestParam UUID eventId){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            return new ResponseEntity<>(event.getMarkers()
+                                                .stream()
+                                                .filter(marker -> marker.getLanternCode() != null)
+                                                .collect(Collectors.toList())
+                                        ,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/markers")
+    public  ResponseEntity<String> getMarkersFromEvent(@RequestParam UUID eventId,
+                                                       @RequestBody Marker newMarker){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            event.getMarkers().add(newMarker);
+            eventService.save(event);
+            return new ResponseEntity<>("Added new marker",HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/markers")
+    public  ResponseEntity<String> getMarkerFromEvent(@RequestParam UUID eventId,
+                                                      @RequestParam UUID markerId){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            Marker marker = event.getMarkers().stream()
+                    .filter(m -> m.getId() == markerId)
+                    .findAny()
+                    .orElse(null);
+            if(marker != null){
+                event.getMarkers().remove(marker);
+                eventService.save(event);
+                return new ResponseEntity<>("Removed track",HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("No such marker in Event",HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return new ResponseEntity<>("No such Event",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/tracks")
+    public  ResponseEntity<List<Track>> getTracksFromEvent(@RequestParam UUID eventId){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            return new ResponseEntity<>(event.getTracks(),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/tracks")
+    public  ResponseEntity<String> getTracksFromEvent(@RequestParam UUID eventId,
+                                                       @RequestBody Track newTrack){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            event.getTracks().add(newTrack);
+            eventService.save(event);
+            return new ResponseEntity<>("Added new track",HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/tracks")
+    public  ResponseEntity<String> getTrackFromEvent(@RequestParam UUID eventId,
+                                                     @RequestParam UUID trackId){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            Track track = event.getTracks().stream()
+                    .filter(t -> t.getId() == trackId)
+                    .findAny()
+                    .orElse(null);
+            if(track != null){
+                event.getTracks().remove(track);
+                eventService.save(event);
+                return new ResponseEntity<>("Removed track",HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("No such track in Event",HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return new ResponseEntity<>("No such Event",HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

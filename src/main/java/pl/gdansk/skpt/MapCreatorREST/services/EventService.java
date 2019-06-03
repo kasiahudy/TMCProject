@@ -5,6 +5,7 @@ import pl.gdansk.skpt.MapCreatorREST.model.Event;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EventService extends DBService<Event> {
@@ -15,4 +16,7 @@ public class EventService extends DBService<Event> {
     public List<Event> getAllEvents(){
         return entityManager.createQuery("SELECT o FROM Event o", Event.class).getResultList();
     }
+
+
+
 }

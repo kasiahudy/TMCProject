@@ -23,7 +23,7 @@ public class CheckPoint {
 
 
     @OneToMany(
-        cascade = CascadeType.ALL
+        cascade = {CascadeType.PERSIST,CascadeType.MERGE}
     )
     List<Marker> affiliateMarkers;
 

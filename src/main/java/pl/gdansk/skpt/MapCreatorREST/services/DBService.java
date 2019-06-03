@@ -3,11 +3,12 @@ package pl.gdansk.skpt.MapCreatorREST.services;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.UUID;
 import java.util.function.Function;
 
 abstract public class DBService<T> {
     final EntityManager entityManager;
-    private final Class<T> entityClass;
+    protected final Class<T> entityClass;
     private final Function<T,Object> idSupplier;
 
     public DBService(EntityManager entityManager,Class<T> entityClass, Function<T,Object> idSupplier){
@@ -35,6 +36,10 @@ abstract public class DBService<T> {
     }
 
     public T find(String id) {
+        return entityManager.find(entityClass, id);
+    }
+
+    public T find(UUID id) {
         return entityManager.find(entityClass, id);
     }
 }

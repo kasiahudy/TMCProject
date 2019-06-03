@@ -20,6 +20,10 @@ public class Track {
     @GeneratedValue( strategy= GenerationType.AUTO )
     private UUID id;
 
+    @Getter
+    @Column
+    private String name;
+
 
     @Column
     @Setter
