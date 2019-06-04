@@ -9,9 +9,8 @@
     </div>
 </nav>
 <div *ngIf="message.exists" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">{{message.text}}</div>
-<br/>
-<br/>
-<div>
+
+<div style="margin-top: 74px">
     <div [hidden]="submitted" style="width: 300px; display: inline-block">
         <form (ngSubmit)="onSubmit()">
             <div class="form-group">

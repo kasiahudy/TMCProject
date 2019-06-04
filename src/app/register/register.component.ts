@@ -30,7 +30,12 @@ export class RegisterComponent implements OnInit {
                 if(error.error.text === undefined) {
                     this.message = {exists: true, text: 'User login already exists', type: 'error'};
                 } else {
-                    this.router.navigate(['../map']);
+                    this.appService.loginUser(this.user.login, this.user.password)
+                        .subscribe(
+                            response => {
+                                console.log(response);
+                                this.router.navigate(['../map']);},
+                            error2 => console.log(error2));
                 }
 
             });

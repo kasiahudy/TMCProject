@@ -23,6 +23,9 @@ import {Observable, of} from 'rxjs';
 import { SiteMap} from '../site-map';
 import { SitePoint} from '../site-point';
 
+import { Event } from '../event';
+import { Marker } from '../marker';
+
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -31,22 +34,30 @@ import { SitePoint} from '../site-point';
 
 export class MapComponent implements OnInit {
 
-    siteMaps: Observable<SiteMap[]>;
-    siteMapName: string;
-    sitePoints: Observable<SitePoint[]>;
     map: OlMap;
     source: OlXYZ;
     layer: OlTileLayer;
     view: OlView;
     markerSource: OlSourceVector;
     markerLayer: OlLayerVector;
-    isMapChosen: boolean;
+
+
+    events: Observable<Event[]>;
+    eventMarkers: Observable<Marker[]>;
+    selectedEvent: Event;
+    selectedEventName: string;
+
+    isEventChosen: boolean;
+    showAdminPanelButton: boolean;
 
     constructor(private appService: AppService, private router: Router) { }
 
     ngOnInit() {
-        this.isMapChosen = false;
-        this.sitePoints = of([]);
+        this.isAdmin();
+        this.isEventChosen = false;
+
+        this.events = of([]);
+        this.eventMarkers = of([]);
 
         this.source = new OlXYZ({
             url: 'http://tile.osm.org/{z}/{x}/{y}.png'
@@ -73,46 +84,22 @@ export class MapComponent implements OnInit {
         this.markerSource = new OlSourceVector({});
         this.markerLayer = new OlLayerVector({ source: this.markerSource});
         this.map.addLayer(this.markerLayer );
+        this.markerSource.clear();
+    }
+
+    isAdmin() {
+        this.appService.getUsers().subscribe(
+            users => {
+                if(users.length === 0){
+                    this.showAdminPanelButton = false;
+                } else {
+                    this.showAdminPanelButton = true;
+                }
+            });
     }
 
     reloadData() {
-        this.siteMaps = of([]);
-        /*this.appService.getMap('new map4')
-            .subscribe(
-                response => {
-                    console.log(response);
-                    this.fixSiteMap(response.name, response.points);
-                    this.siteMaps.subscribe(siteMaps => {
-                        siteMaps[0].points.forEach(function(point) {
-                            this.addMarker(point.lon, point.lat);
-                        }.bind(this));
-                    });
-                }
-                , error => {
-                    console.log(error);
-
-                });*/
-        this.appService.getAllMaps()
-            .subscribe(
-                responses => {
-                    console.log(responses);
-                    responses.forEach(function(response) {
-                        const fixedMap = this.fixSiteMap(response.name, response.points);
-                        this.siteMaps.subscribe(siteMaps => {
-                            siteMaps.push(fixedMap);
-                        });
-                        this.siteMaps.subscribe(siteMaps => {
-                            siteMaps[0].points.forEach(function(point) {
-                                this.addMarker(point.lon, point.lat);
-                            }.bind(this));
-                        });
-                    }.bind(this));
-                }
-                , error => {
-                    console.log(error);
-
-                });
-
+        this.loadEvents();
     }
 
     handleMapClick(evt) {
@@ -121,6 +108,16 @@ export class MapComponent implements OnInit {
 
         this.addMarker(lontat[0], lontat[1]);
 
+        const marker = new Marker();
+        marker.coordinate = 'POINT (' + lontat[0] + ' ' + lontat[1] + ');';
+        this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
+            response => {
+                console.log(response);}
+            , error => {
+                console.log(error.error);
+            }
+        );
+
         /*this.siteMaps.subscribe(siteMaps => {
             const sitePoint = new SitePoint();
             sitePoint.lon = parseFloat (lontat[0]);
@@ -128,7 +125,7 @@ export class MapComponent implements OnInit {
             siteMaps[0].points.push(sitePoint);
         });*/
 
-        this.siteMaps.subscribe(siteMaps => {
+        /*this.siteMaps.subscribe(siteMaps => {
             const newSiteMap = siteMaps.find(siteMap => siteMap.name === this.siteMapName);
             this.sitePoints.subscribe(sitePoints => {
                 const sitePoint = new SitePoint();
@@ -136,7 +133,7 @@ export class MapComponent implements OnInit {
                 sitePoint.lat = parseFloat (lontat[1]);
                 sitePoints.push(sitePoint);
             });
-        });
+        });*/
 
     }
 
@@ -160,12 +157,6 @@ export class MapComponent implements OnInit {
         });
 
         this.markerSource.addFeature(marker);
-    }
-    onLogout() {
-        this.appService.logout();
-    }
-    adminPage() {
-        this.router.navigate(['../admin-page']);
     }
 
     fixSiteMap(name: string, points: string) {
@@ -192,6 +183,7 @@ export class MapComponent implements OnInit {
     }
 
     saveMap(){
+        /*
         const newSiteMap = new SiteMap();
         newSiteMap.name = this.siteMapName;
         this.sitePoints.subscribe(sitePoints => {
@@ -205,11 +197,59 @@ export class MapComponent implements OnInit {
                 , error => {
                     console.log(error);
 
+                });*/
+    }
+
+    loadEvents() {
+        this.eventMarkers = of([]);
+        this.events = of([]);
+        this.appService.getAllEvents()
+            .subscribe(
+                responses => {
+                    console.log(responses);
+                    responses.forEach(function(response) {
+                        this.events.subscribe(events => {
+                            events.push(response);
+                        });
+                    }.bind(this));
+                }
+                , error => {
+                    console.log(error);
+
                 });
     }
 
-    select(){
-        this.isMapChosen = true;
+    select(selectEvent){
+        const selectedEventId = selectEvent.target.value;
+        this.isEventChosen = true;
+        this.markerSource.clear();
+        this.eventMarkers = of([]);
+        //this.loadEvents();
+
+        this.events.subscribe(events => {
+            this.selectedEvent = events.find(event => event.id === selectedEventId);
+        });
+
+        this.eventMarkers.subscribe(eventMarkers => {
+            this.selectedEvent.markers.forEach(function(marker) {
+                let newMarker = new Marker();
+                newMarker = marker;
+                let coordinates = marker.coordinate;
+                if(coordinates != null) {
+                    coordinates = coordinates.replace(new RegExp('POINT \\(', 'g'), '');
+                    coordinates = coordinates.replace(new RegExp('\\);', 'g'), '');
+                    const lonLat = coordinates.split(' ');
+                    newMarker.lon = parseFloat (lonLat[0]);
+                    newMarker.lat = parseFloat (lonLat[1]);
+                    this.addMarker(newMarker.lon, newMarker.lat);
+                }
+                eventMarkers.push(newMarker);
+
+            }.bind(this));
+        });
+
+        const u = this.eventMarkers;
+        /*this.isMapChosen = true;
         this.sitePoints = of([]);
         this.siteMaps = of([]);
         this.markerSource.clear();
@@ -249,6 +289,11 @@ export class MapComponent implements OnInit {
                 });
 
             });
-        });
+        });*/
+
+    }
+
+    onLogout() {
+        this.appService.logout();
     }
 }

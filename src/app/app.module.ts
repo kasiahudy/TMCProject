@@ -12,7 +12,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { SitePointDetailsComponent} from './site-point-details/site-point-details.component';
-import { SiteMapDetailsComponent} from './site-map-details/site-map-details.component';
 
 @NgModule({
   declarations: [
@@ -22,8 +21,7 @@ import { SiteMapDetailsComponent} from './site-map-details/site-map-details.comp
     AdminPageComponent,
     RegisterComponent,
     UserDetailsComponent,
-    SitePointDetailsComponent,
-    SiteMapDetailsComponent
+    SitePointDetailsComponent
   ],
   imports: [
     BrowserModule,

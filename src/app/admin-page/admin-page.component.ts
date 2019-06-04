@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {SystemUser} from '../system-user';
 import {Router} from '@angular/router';
 import { SiteMap} from '../site-map';
+import { Event } from '../event';
 
 @Component({
     selector: 'app-admin-page',
@@ -50,6 +51,23 @@ export class AdminPageComponent implements OnInit {
             siteMap.name = this.newMapName;
             siteMap.points = [];
             this.appService.addMap(siteMap).subscribe(
+                response => {
+                    console.log(response);
+                }
+                , error => {
+                    console.log(error);
+
+                });
+        }
+    }
+
+    saveNewEvent() {
+        this.isAddNewMAp = false;
+        if(this.newMapName !== '') {
+            const event = new Event();
+            event.name = this.newMapName;
+            event.date = '2019-05-15';
+            this.appService.addEvent(event).subscribe(
                 response => {
                     console.log(response);
                 }

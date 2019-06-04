@@ -6,7 +6,7 @@
             <li class="nav-item">
                 <a class="nav-link active" href="#" >SKPT Map creator</a>
             </li>
-            <li class="nav-item">
+            <li *ngIf="showAdminPanelButton" class="nav-item">
                 <a class="nav-link " href="../admin-page">Admin page</a>
             </li>
         </ul>
@@ -21,15 +21,16 @@
 <div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 20px;">
 
     <div class="col-sm-5 d-inline" style="margin-left: 15%">
-        <h4>Choose map:</h4>
-        <select class="form-control" [(ngModel)]="siteMapName" (change)="select()">
-            <option *ngFor="let siteMap of siteMaps | async" [value]="siteMap.name">{{siteMap.name}}</option>
+        <h4>Choose event:</h4>
+        <select class="form-control" [(ngModel)]="selectedEventName" (change)="select($event)">
+            <option *ngFor="let event of events | async" [value]="event.id">{{event.name}}</option>
         </select>
     </div><br/>
-    <div *ngIf="isMapChosen">
-        <h3>{{siteMapName}}</h3><br/>
-        <div *ngFor="let point of sitePoints | async">
-            <site-point-details [sitePoint]='point'></site-point-details>
+    <div *ngIf="isEventChosen">
+        <h3>{{selectedEvent.name}}</h3>
+        <h4>{{selectedEvent.date}}</h4><br/>
+        <div *ngFor="let marker of eventMarkers | async">
+            <site-point-details [marker]='marker'></site-point-details>
         </div>
         <button class="btn btn-success btn-sm" (click)='saveMap()'>Save</button>
     </div>

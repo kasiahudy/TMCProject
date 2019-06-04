@@ -4,6 +4,8 @@ import {Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
 import { SystemUser } from './system-user';
 import { SiteMap } from './site-map';
+import { Event } from './event';
+import {Marker} from './marker';
 
 @Injectable({
     providedIn: 'root'
@@ -96,5 +98,17 @@ export class AppService {
 
     getAllMaps(): Observable<any> {
         return this.http.get(`${this.baseUrl}/maps/all`);
+    }
+
+    addEvent(event: Event) {
+        return this.http.post(`${this.baseUrl}` + `/events/add?`, event);
+    }
+
+    addMarkerToEvent(event: Event, marker: Marker) {
+        return this.http.put(`${this.baseUrl}/eventId=${event.id}`, marker,{ withCredentials: true});
+    }
+
+    getAllEvents(): Observable<any> {
+        return this.http.get(`${this.baseUrl}/events`);
     }
 }

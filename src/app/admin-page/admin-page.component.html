@@ -32,7 +32,7 @@
             <h2 class="display-5">New map</h2>
             <button *ngIf="!isAddNewMAp" class="btn btn-secondary btn" (click)='addNewMap()'>Add</button>
         </div>
-        <form *ngIf="isAddNewMAp"(ngSubmit)="saveNewMap()" style="alignment: center">
+        <form *ngIf="isAddNewMAp"(ngSubmit)="saveNewEvent()" style="alignment: center">
             <div class="form-group row ">
                 <div class="col-sm-6" style="margin-left: 25%;">
                     <input type="text" id="name" class="form-control" required [(ngModel)]="newMapName" name="name" placeholder="Map name">

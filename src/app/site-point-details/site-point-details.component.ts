@@ -3,6 +3,7 @@ import { AppService } from '../app.service';
 
 import { MapComponent } from '../map/map.component';
 import {SitePoint} from '../site-point';
+import { Marker } from '../marker';
 
 @Component({
     selector: 'site-point-details',
@@ -11,9 +12,12 @@ import {SitePoint} from '../site-point';
 })
 export class SitePointDetailsComponent implements OnInit {
 
-    @Input() sitePoint: SitePoint;
-    sitePointNew: SitePoint;
+    //@Input() sitePoint: SitePoint;
+    //sitePointNew: SitePoint;
     sitePointEdit = false;
+
+    @Input() marker: Marker;
+    newMarker: Marker;
 
     constructor(private customerService: AppService, private mapComponent: MapComponent) { }
 
@@ -21,13 +25,13 @@ export class SitePointDetailsComponent implements OnInit {
 
     }
     edit() {
-        this.sitePointNew = new SitePoint();
-        this.sitePointNew.lat = this.sitePoint.lat;
-        this.sitePointNew.lon = this.sitePoint.lon;
+        this.newMarker = new Marker();
+        this.newMarker.lat = this.marker.lat;
+        this.newMarker.lon = this.marker.lon;
         this.sitePointEdit = true;
     }
     onSubmit(){
-        this.sitePoint = this.sitePointNew;
+        this.marker = this.newMarker;
         this.sitePointEdit = false;
     }
 
@@ -37,8 +41,8 @@ export class SitePointDetailsComponent implements OnInit {
 
     delete() {
 
-        this.sitePoint.lon = null;
-        this.sitePoint.lat = null;
-        this.sitePoint = null;
+        this.marker.lon = null;
+        this.marker.lat = null;
+        this.marker = null;
     }
 }
