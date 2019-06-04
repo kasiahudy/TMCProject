@@ -85,7 +85,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedMethods(List.of("POST", "GET"));
+        configuration.setAllowedMethods(List.of("POST", "GET","PUT","DELETE"));
         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         configuration.addAllowedHeader("content-type");
         configuration.addAllowedHeader("Access-Control-Allow-Credentials");
