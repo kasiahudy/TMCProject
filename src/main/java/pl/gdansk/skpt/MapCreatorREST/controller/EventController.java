@@ -93,7 +93,7 @@ public class EventController {
         Event event = eventService.find(eventId);
         if(event != null){
             Marker marker = event.getMarkers().stream()
-                    .filter(m -> m.getId() == markerId)
+                    .filter(m -> m.getId().compareTo(markerId) == 0)
                     .findAny()
                     .orElse(null);
             if(marker != null){
@@ -137,7 +137,7 @@ public class EventController {
         Event event = eventService.find(eventId);
         if(event != null){
             Track track = event.getTracks().stream()
-                    .filter(t -> t.getId() == trackId)
+                    .filter(t -> t.getId().compareTo(trackId) == 0)
                     .findAny()
                     .orElse(null);
             if(track != null){
