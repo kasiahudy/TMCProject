@@ -20,11 +20,9 @@ import { AppService } from '../app.service';
 import {Router} from '@angular/router';
 
 import {Observable, of} from 'rxjs';
-import { SiteMap} from '../site-map';
-import { SitePoint} from '../site-point';
 
-import { Event } from '../event';
-import { Marker } from '../marker';
+import { Event } from '../models/event';
+import { Marker } from '../models/marker';
 
 @Component({
     selector: 'app-map',
@@ -112,29 +110,14 @@ export class MapComponent implements OnInit {
         marker.coordinate = 'POINT (' + lontat[0] + ' ' + lontat[1] + ');';
         this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
             response => {
-                console.log(response);}
+                console.log(response);
+                this.refreshSelectedEvent();
+                }
             , error => {
                 console.log(error.error);
+                this.refreshSelectedEvent();
             }
         );
-
-        /*this.siteMaps.subscribe(siteMaps => {
-            const sitePoint = new SitePoint();
-            sitePoint.lon = parseFloat (lontat[0]);
-            sitePoint.lat = parseFloat (lontat[1]);
-            siteMaps[0].points.push(sitePoint);
-        });*/
-
-        /*this.siteMaps.subscribe(siteMaps => {
-            const newSiteMap = siteMaps.find(siteMap => siteMap.name === this.siteMapName);
-            this.sitePoints.subscribe(sitePoints => {
-                const sitePoint = new SitePoint();
-                sitePoint.lon = parseFloat (lontat[0]);
-                sitePoint.lat = parseFloat (lontat[1]);
-                sitePoints.push(sitePoint);
-            });
-        });*/
-
     }
 
     addMarker(lng, lat) {
@@ -159,47 +142,6 @@ export class MapComponent implements OnInit {
         this.markerSource.addFeature(marker);
     }
 
-    fixSiteMap(name: string, points: string) {
-        const siteMap = new SiteMap();
-        siteMap.name = name;
-        siteMap.points = [];
-
-        points = points.replace(new RegExp('\\(', 'g'), '');
-        points = points.replace(new RegExp('\\)', 'g'), '');
-        points = points.replace(new RegExp(';', 'g'), '');
-
-        const newPoints = points.split('POINT');
-        newPoints.forEach(function(point){
-            if(point !== '') {
-                const lonLat = point.split(' ');
-                const sitePoint = new SitePoint();
-                sitePoint.lon = parseFloat (lonLat[1]);
-                sitePoint.lat = parseFloat (lonLat[2]);
-                siteMap.points.push(sitePoint);
-            }
-
-        });
-        return siteMap;
-    }
-
-    saveMap(){
-        /*
-        const newSiteMap = new SiteMap();
-        newSiteMap.name = this.siteMapName;
-        this.sitePoints.subscribe(sitePoints => {
-            newSiteMap.points = sitePoints;
-        });
-        this.appService.addMap(newSiteMap)
-            .subscribe(
-                response => {
-                    console.log(response);
-                }
-                , error => {
-                    console.log(error);
-
-                });*/
-    }
-
     loadEvents() {
         this.eventMarkers = of([]);
         this.events = of([]);
@@ -219,16 +161,53 @@ export class MapComponent implements OnInit {
                 });
     }
 
+    refreshSelectedEvent() {
+        this.appService.getEvent(this.selectedEvent).subscribe(
+            response => {
+                let event = new Event();
+                event = response;
+                this.selectedEvent = event;
+
+                this.eventMarkers = of([]);
+                this.markerSource.clear();
+
+                this.eventMarkers.subscribe(eventMarkers => {
+                    this.selectedEvent.markers.forEach(function(marker) {
+                        let newMarker = new Marker();
+                        newMarker = marker;
+                        let coordinates = marker.coordinate;
+                        if(coordinates != null) {
+                            coordinates = coordinates.replace(new RegExp('POINT \\(', 'g'), '');
+                            coordinates = coordinates.replace(new RegExp('\\);', 'g'), '');
+                            const lonLat = coordinates.split(' ');
+                            newMarker.lon = parseFloat (lonLat[0]);
+                            newMarker.lat = parseFloat (lonLat[1]);
+                            this.addMarker(newMarker.lon, newMarker.lat);
+                        }
+                        eventMarkers.push(newMarker);
+
+                    }.bind(this));
+                });
+            }
+            , error => {
+                console.log(error);
+
+            });
+    }
+
     select(selectEvent){
         const selectedEventId = selectEvent.target.value;
         this.isEventChosen = true;
         this.markerSource.clear();
         this.eventMarkers = of([]);
-        //this.loadEvents();
+
+
 
         this.events.subscribe(events => {
             this.selectedEvent = events.find(event => event.id === selectedEventId);
         });
+
+        this.refreshSelectedEvent();
 
         this.eventMarkers.subscribe(eventMarkers => {
             this.selectedEvent.markers.forEach(function(marker) {
@@ -247,50 +226,6 @@ export class MapComponent implements OnInit {
 
             }.bind(this));
         });
-
-        const u = this.eventMarkers;
-        /*this.isMapChosen = true;
-        this.sitePoints = of([]);
-        this.siteMaps = of([]);
-        this.markerSource.clear();
-        this.appService.getAllMaps()
-            .subscribe(
-                responses => {
-                    console.log(responses);
-                    responses.forEach(function(response) {
-                        const fixedMap = this.fixSiteMap(response.name, response.points);
-                        this.siteMaps.subscribe(siteMaps => {
-                            siteMaps.push(fixedMap);
-                        });
-                        if(response.name === this.siteMapName) {
-                            this.sitePoints.subscribe(sitePoints => {
-                                fixedMap.points.forEach(function(point) {
-                                    sitePoints.push(point);
-                                });
-
-                            });
-                            fixedMap.points.forEach(function(point) {
-                                this.addMarker(point.lon, point.lat);
-                            }.bind(this));
-                        }
-                    }.bind(this));
-                }
-                , error => {
-                    console.log(error);
-
-                });
-
-        console.log(this.siteMapName);
-        this.siteMaps.subscribe(siteMaps => {
-            const newSiteMap = siteMaps.find(siteMap => siteMap.name === this.siteMapName);
-            this.sitePoints.subscribe(sitePoints => {
-                newSiteMap.points.forEach(function(point) {
-                    sitePoints.push(point);
-                });
-
-            });
-        });*/
-
     }
 
     onLogout() {

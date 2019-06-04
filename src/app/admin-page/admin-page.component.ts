@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { Observable } from 'rxjs';
-import {SystemUser} from '../system-user';
+import {SystemUser} from '../models/system-user';
 import {Router} from '@angular/router';
 import { SiteMap} from '../site-map';
-import { Event } from '../event';
+import { Event } from '../models/event';
 
 @Component({
     selector: 'app-admin-page',

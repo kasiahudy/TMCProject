@@ -11,7 +11,7 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
-import { SitePointDetailsComponent} from './site-point-details/site-point-details.component';
+import { MarkerDetailsComponent} from './marker-details/marker-details.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { SitePointDetailsComponent} from './site-point-details/site-point-detail
     AdminPageComponent,
     RegisterComponent,
     UserDetailsComponent,
-    SitePointDetailsComponent
+    MarkerDetailsComponent
   ],
   imports: [
     BrowserModule,

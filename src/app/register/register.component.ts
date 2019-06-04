@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppService } from '../app.service';
-import { SystemUser } from '../system-user';
+import { SystemUser } from '../models/system-user';
 
 @Component({
     selector: 'app-register-page',

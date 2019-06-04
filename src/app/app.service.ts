@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
-import { SystemUser } from './system-user';
+import { SystemUser } from './models/system-user';
 import { SiteMap } from './site-map';
-import { Event } from './event';
-import {Marker} from './marker';
+import { Event } from './models/event';
+import {Marker} from './models/marker';
 
 @Injectable({
     providedIn: 'root'
@@ -104,11 +104,19 @@ export class AppService {
         return this.http.post(`${this.baseUrl}` + `/events/add?`, event);
     }
 
-    addMarkerToEvent(event: Event, marker: Marker) {
-        return this.http.put(`${this.baseUrl}/eventId=${event.id}`, marker,{ withCredentials: true});
-    }
-
     getAllEvents(): Observable<any> {
         return this.http.get(`${this.baseUrl}/events`);
+    }
+
+    getEvent(event: Event): Observable<any> {
+        return this.http.get(`${this.baseUrl}/events/${event.id}`);
+    }
+
+    addMarkerToEvent(event: Event, marker: Marker) {
+        return this.http.put(`${this.baseUrl}/events/markers?eventId=${event.id}`, marker,{ withCredentials: true});
+    }
+
+    deleteMarkerFromEvent(event: Event, marker: Marker) {
+        return this.http.delete(`${this.baseUrl}/events/markers?eventId=${event.id}&markerId=${marker.id}`);
     }
 }

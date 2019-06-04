@@ -30,7 +30,7 @@
         <h3>{{selectedEvent.name}}</h3>
         <h4>{{selectedEvent.date}}</h4><br/>
         <div *ngFor="let marker of eventMarkers | async">
-            <site-point-details [marker]='marker'></site-point-details>
+            <marker-details [marker]='marker' [event]='selectedEvent' (refreshEvent)='refreshSelectedEvent()'></marker-details>
         </div>
         <button class="btn btn-success btn-sm" (click)='saveMap()'>Save</button>
     </div>
