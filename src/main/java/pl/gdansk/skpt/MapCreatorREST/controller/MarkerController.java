@@ -16,22 +16,26 @@ public class MarkerController {
     final MarkerService markerService;
     public MarkerController(MarkerService service){this.markerService = service;}
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteMarker(@PathVariable UUID id){
+    @GetMapping("{id}")
+    public ResponseEntity<Marker> getMarker(@PathVariable UUID id){
         Marker marker = markerService.find(id);
         if(marker != null) {
-            markerService.remove(marker);
-            return new ResponseEntity<>("Successfully removed", HttpStatus.OK);
+            return new ResponseEntity<>(marker, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>("",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<UUID> deleteMarker(@RequestBody Marker newMarker){
+    @PostMapping("")
+    public ResponseEntity<String> addMarker(@RequestBody Marker marker){
+        if(markerService.find(marker.getId()) != null){
+            markerService.save(marker);
+            return new ResponseEntity<>("Marker with id " + marker.getId() + " successfully updated",HttpStatus.OK );
+        }else{
+            return new ResponseEntity<>("No such marker in database. Add it to some event first", HttpStatus.NOT_FOUND);
+        }
 
-            markerService.save(newMarker);
-            return new ResponseEntity<>(newMarker.getId(), HttpStatus.OK);
+
 
     }
 }
