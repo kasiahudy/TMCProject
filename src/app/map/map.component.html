@@ -21,23 +21,77 @@
 <div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 20px;">
 
     <div class="col-sm-5 d-inline" style="margin-left: 15%">
-        <h4>Choose event:</h4>
+        <h4>Select event:</h4>
         <select class="form-control" [(ngModel)]="selectedEventName" (change)="select($event)">
             <option *ngFor="let event of events | async" [value]="event.id">{{event.name}}</option>
         </select>
     </div><br/>
-    <div *ngIf="isEventChosen">
+    <div *ngIf="isEventChosen && !markerEdit && !addNewTrack">
         <h3>{{selectedEvent.name}}</h3>
-        <h4>{{selectedEvent.date}}</h4><br/>
+        <h4>{{selectedEvent.date}}</h4>
+        <br/>
+        <h5>Select track:</h5>
+        <select class="form-control" [(ngModel)]="selectedTrackName" (change)="selectTrack($event)">
+            <option *ngFor="let track of selectedEventTracks | async" [value]="track.id">{{track.name}}</option>
+        </select>
+        <br/>
+        <button class="btn btn-success btn-sm" (click)='addNewTrackForm()'>Add track</button>
+        <br/><br/>
         <div *ngFor="let marker of eventMarkers | async">
-            <marker-details [marker]='marker' [event]='selectedEvent' (refreshEvent)='refreshSelectedEvent()'></marker-details>
+            <marker-details [marker]='marker' [event]='selectedEvent' [track]='selectedTrack' [isTrackMarker]='false' (refreshEvent)='refreshSelectedEvent()'></marker-details>
         </div>
-        <button class="btn btn-success btn-sm" (click)='saveMap()'>Save</button>
+        <h3>Tracks:</h3>
+        <div *ngFor="let marker of trackMarkers | async">
+            <marker-details [marker]='marker' [event]='selectedEvent' [track]='selectedTrack' [isTrackMarker]='true' (refreshEvent)='refreshSelectedEvent()'></marker-details>
+        </div>
     </div>
+    <div *ngIf="markerEdit">
+        <form (ngSubmit)="saveMarker()" style="alignment: center">
+            <div class="form-group row ">
+                <div class="col-sm-6" style="margin-left: 25%;">
+                    <label>Lantern: </label>
+                    <input type="text" id="lanternCode" class="form-control" required [(ngModel)]="selectedMarker.lanternCode" name="name">
+                </div>
+            </div>
+            <div>
+                <label>Lon: </label> {{selectedMarker.lon}}
+            </div>
+            <div>
+                <label>Lat: </label> {{selectedMarker.lat}}
+            </div>
+            <div *ngIf="selectedMarker.lanternCode">
+                <h5>Select track:</h5>
+                <select class="form-control" name="selectTrackNameInMarker" [(ngModel)]="selectedTrackName" (change)="selectTrack($event)">
+                    <option *ngFor="let track of selectedEventTracks | async" [value]="track.id">{{track.name}}</option>
+                </select>
+                <br/>
+                <button class="btn btn-secondary" (click)='addToTrack()'>Return</button>
+            </div>
+            <div class="form-group row  d-inline">
+                <button type="submit" class="btn btn-success" style="margin-right: 10px">Submit</button>
+                <button class="btn btn-secondary" (click)='return()'>Return</button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="addNewTrack">
+        <form (ngSubmit)="addTrack()" style="alignment: center">
+            <div class="form-group row ">
+                <div class="col-sm-6" style="margin-left: 25%;">
+                    <label>Track name: </label>
+                    <input type="text" id="selectedTrackName" class="form-control" required [(ngModel)]="newTrackName" name="name">
+                </div>
+            </div>
+            <div class="form-group row  d-inline">
+                <button type="submit" class="btn btn-success" style="margin-right: 10px">Add track</button>
+                <button class="btn btn-secondary" (click)='return()'>Return</button>
+            </div>
+        </form>
+    </div>
+
 
 </div>
 
-<div style=" display: inline-block; width: 80%">
+<div style=" display: inline-block; width: 80%; height: 80%">
     <div id="map" class="map"></div>
 </div>
 

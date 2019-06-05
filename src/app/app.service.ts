@@ -6,6 +6,8 @@ import { SystemUser } from './models/system-user';
 import { SiteMap } from './site-map';
 import { Event } from './models/event';
 import {Marker} from './models/marker';
+import {Track} from "./models/track";
+import {Checkpoint} from "./models/checkpoint";
 
 @Injectable({
     providedIn: 'root'
@@ -113,10 +115,22 @@ export class AppService {
     }
 
     addMarkerToEvent(event: Event, marker: Marker) {
-        return this.http.put(`${this.baseUrl}/events/markers?eventId=${event.id}`, marker,{ withCredentials: true});
+        return this.http.put(`${this.baseUrl}/events/markers?eventId=${event.id}`, marker);
     }
 
     deleteMarkerFromEvent(event: Event, marker: Marker) {
         return this.http.delete(`${this.baseUrl}/events/markers?eventId=${event.id}&markerId=${marker.id}`);
+    }
+
+    editMarker(marker: Marker) {
+        return this.http.post(`${this.baseUrl}` + `/markers/add?`, marker);
+    }
+
+    addTrackToEvent(event: Event, track: Track) {
+        return this.http.put(`${this.baseUrl}/events/tracks?eventId=${event.id}`, track);
+    }
+
+    addCheckpointToTrack(track: Track, checkpoint: Checkpoint) {
+        return this.http.put(`${this.baseUrl}/tracks/checkpoints?id=${track.id}`, checkpoint);
     }
 }
