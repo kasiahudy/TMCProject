@@ -13,6 +13,7 @@ import { RegisterComponent } from './register/register.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { MarkerDetailsComponent} from './marker-details/marker-details.component';
 import {TrackDetailsComponent} from './track-details/track-details.component';
+import {EventPageComponent} from './event-page/event-page.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {TrackDetailsComponent} from './track-details/track-details.component';
     RegisterComponent,
     UserDetailsComponent,
     MarkerDetailsComponent,
-    TrackDetailsComponent
+    TrackDetailsComponent,
+      EventPageComponent
   ],
   imports: [
     BrowserModule,

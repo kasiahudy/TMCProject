@@ -20,13 +20,7 @@
 </nav>
 <div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 20px;">
 
-    <div class="col-sm-5 d-inline" style="margin-left: 15%">
-        <h4>Select event:</h4>
-        <select class="form-control" [(ngModel)]="selectedEventName" (change)="selectEvent($event)">
-            <option *ngFor="let event of events | async" [value]="event.id">{{event.name}}</option>
-        </select>
-    </div><br/>
-    <div *ngIf="isEventChosen && !markerEdit && !addNewTrack">
+    <div *ngIf="!markerEdit && !addNewTrack">
         <h3>{{selectedEvent.name}}</h3>
         <h4>{{selectedEvent.date}}</h4>
         <br/>
@@ -38,7 +32,8 @@
         <div *ngFor="let track of selectedEventTracks | async">
             <track-details [track]='track'></track-details>
         </div>
-        <button class="btn btn-success btn-sm" (click)='newTrackForm()'>Add track</button>
+        <br/>
+        <button class="btn btn-success btn-sm" (click)='newTrackForm()'>Add new track</button>
         <br/>
     </div>
     <div *ngIf="markerEdit">
@@ -61,12 +56,13 @@
                     <option *ngFor="let track of selectedEventTracks | async" [value]="track.id">{{track.name}}</option>
                 </select>
                 <br/>
-                <button class="btn btn-secondary" (click)='addToTrack()'>Add to track</button>
+                <button class="btn btn-secondary" style="margin-bottom: 10px" (click)='addToTrack()'>Add to track</button>
 
             </div>
             <div class="form-group row  d-inline">
                 <button type="submit" class="btn btn-success" style="margin-right: 10px">Submit</button>
-                <button class="btn btn-secondary" (click)='return()'>Return</button>
+                <button class="btn btn-secondary"  style="margin-right: 10px" (click)='return()'>Return</button>
+                <button class="btn btn-danger" (click)='deleteMarker()'>Delete marker</button>
             </div>
         </form>
     </div>

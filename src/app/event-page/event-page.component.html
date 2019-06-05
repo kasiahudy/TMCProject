@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-md sticky-top navbar-dark fixed-top bg-dark">
+    <div class="navbar-nav-scroll">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" >SKPT Map creator</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div style="margin-top: 100px">
+    <div style="width: 300px; display: inline-block">
+        <h4>Select event:</h4>
+        <select class="form-control" [(ngModel)]="selectedEventName" (change)="selectEvent($event)">
+            <option *ngFor="let event of events | async" [value]="event.id">{{event.name}}</option>
+        </select>
+    </div>
+</div>
+<br/>
+<button class="btn btn-secondary"  style="margin-right: 10px" (click)='goToMap()'>Select</button>
+

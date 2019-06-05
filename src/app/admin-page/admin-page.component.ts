@@ -15,13 +15,13 @@ import { Event } from '../models/event';
 export class AdminPageComponent implements OnInit {
 
     users: Observable<SystemUser[]>;
-    isAddNewMAp: boolean;
-    newMapName: string;
+    isAddNewEvent: boolean;
+    newEventName: string;
 
     constructor(private appService: AppService, private router: Router) { }
 
     ngOnInit() {
-        this.isAddNewMAp = false;
+        this.isAddNewEvent = false;
         this.reloadData();
     }
 
@@ -40,32 +40,15 @@ export class AdminPageComponent implements OnInit {
         this.users = this.appService.getUsers();
     }
 
-    addNewMap() {
-        this.isAddNewMAp = true;
-    }
-
-    saveNewMap() {
-        this.isAddNewMAp = false;
-        if(this.newMapName !== '') {
-            const siteMap = new SiteMap();
-            siteMap.name = this.newMapName;
-            siteMap.points = [];
-            this.appService.addMap(siteMap).subscribe(
-                response => {
-                    console.log(response);
-                }
-                , error => {
-                    console.log(error);
-
-                });
-        }
+    addNewEvent() {
+        this.isAddNewEvent = true;
     }
 
     saveNewEvent() {
-        this.isAddNewMAp = false;
-        if(this.newMapName !== '') {
+        this.isAddNewEvent = false;
+        if(this.newEventName !== '') {
             const event = new Event();
-            event.name = this.newMapName;
+            event.name = this.newEventName;
             event.date = '2019-05-15';
             this.appService.addEvent(event).subscribe(
                 response => {
@@ -79,7 +62,7 @@ export class AdminPageComponent implements OnInit {
     }
 
     cancel() {
-        this.isAddNewMAp = false;
+        this.isAddNewEvent = false;
     }
 
 }

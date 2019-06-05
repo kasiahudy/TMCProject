@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 response => {
                     console.log(response);
-                    this.router.navigate(['../map']);},
+                    this.router.navigate(['../event-page']);},
                     error => console.log(error));
 
     }

@@ -5,13 +5,15 @@ import { MapComponent } from './map/map.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
+import {EventPageComponent} from './event-page/event-page.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
-    { path: 'map', component: MapComponent, canActivate: [AuthGuard] },
+    { path: 'map/:selectedEventId', component: MapComponent, canActivate: [AuthGuard] },
     { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthGuard] },
     { path: 'register', component:  RegisterComponent},
+    { path: 'event-page', component: EventPageComponent}
 ];
 
 @NgModule({

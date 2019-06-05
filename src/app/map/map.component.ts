@@ -17,7 +17,7 @@ import { toLonLat } from 'ol/proj';
 
 import { fromLonLat } from 'ol/proj';
 import { AppService } from '../app.service';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 
 import {Observable, of} from 'rxjs';
 
@@ -43,6 +43,7 @@ export class MapComponent implements OnInit {
 
 
     events: Observable<Event[]>;
+
     eventMarkers: Observable<Marker[]>;
     selectedEvent: Event;
     selectedEventName: string;
@@ -57,14 +58,19 @@ export class MapComponent implements OnInit {
     addNewTrack:boolean;
     newTrackName: string
 
-    isEventChosen: boolean;
     showAdminPanelButton: boolean;
 
-    constructor(private appService: AppService, private router: Router) { }
+    constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
+        this.selectedEvent = new Event();
+        this.route.params.subscribe(params => {
+            const selectedEventId = params['selectedEventId'];
+            this.selectedEvent.id = selectedEventId;
+            this.refreshSelectedEvent();
+        });
+
         this.isAdmin();
-        this.isEventChosen = false;
         this.markerEdit = false;
         this.addNewTrack = false;
 
@@ -95,7 +101,6 @@ export class MapComponent implements OnInit {
         });
 
         this.map.on('click', this.handleMapClick.bind(this));
-        this.reloadData();
 
         this.markerSource = new OlSourceVector({});
         this.markerLayer = new OlLayerVector({ source: this.markerSource});
@@ -104,10 +109,6 @@ export class MapComponent implements OnInit {
     }
 
 
-
-    reloadData() {
-        this.loadEvents();
-    }
 
     handleMapClick(evt) {
         const f = this.map.forEachFeatureAtPixel(
@@ -223,24 +224,6 @@ export class MapComponent implements OnInit {
             });
     }
 
-    selectEvent(selectEvent){
-        const selectedEventId = selectEvent.target.value;
-        this.isEventChosen = true;
-        this.markerSource.clear();
-        this.eventMarkers = of([]);
-
-        this.events.subscribe(events => {
-            this.selectedEvent = events.find(event => event.id === selectedEventId);
-        });
-
-        this.refreshSelectedEvent();
-
-    }
-
-
-
-
-
     editMarkerForm() {
         this.markerEdit = true;
     }
@@ -264,7 +247,7 @@ export class MapComponent implements OnInit {
     }
 
     addToTrack() {
-        this.saveMarker();
+        //this.saveMarker();
         const checkpoint = new Checkpoint();
         checkpoint.mainMarker = this.selectedMarker;
         this.appService.addCheckpointToTrack(this.selectedTrack, checkpoint).subscribe(
@@ -291,6 +274,19 @@ export class MapComponent implements OnInit {
             }
         );
         this.markerEdit = false;
+    }
+
+    deleteMarker() {
+        this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
+            responses => {
+                console.log(responses);
+                this.refreshSelectedEvent();
+            }
+            , error => {
+                console.log(error);
+                this.refreshSelectedEvent();
+            }
+        );
     }
 
     newTrackForm() {

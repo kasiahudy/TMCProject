@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
                         .subscribe(
                             response => {
                                 console.log(response);
-                                this.router.navigate(['../map']);},
+                                this.router.navigate(['../event-page']);},
                             error2 => console.log(error2));
                 }
 

@@ -106,6 +106,7 @@ export class AppService {
         return this.http.post(`${this.baseUrl}` + `/events/add?`, event);
     }
 
+
     getAllEvents(): Observable<any> {
         return this.http.get(`${this.baseUrl}/events`);
     }
