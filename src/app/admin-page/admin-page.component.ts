@@ -17,6 +17,7 @@ export class AdminPageComponent implements OnInit {
     users: Observable<SystemUser[]>;
     isAddNewEvent: boolean;
     newEventName: string;
+    newEventDate: string;
 
     constructor(private appService: AppService, private router: Router) { }
 
@@ -49,7 +50,7 @@ export class AdminPageComponent implements OnInit {
         if(this.newEventName !== '') {
             const event = new Event();
             event.name = this.newEventName;
-            event.date = '2019-05-15';
+            event.date = this.newEventDate;
             this.appService.addEvent(event).subscribe(
                 response => {
                     console.log(response);

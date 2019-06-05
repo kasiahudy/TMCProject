@@ -106,7 +106,6 @@ export class AppService {
         return this.http.post(`${this.baseUrl}` + `/events/add?`, event);
     }
 
-
     getAllEvents(): Observable<any> {
         return this.http.get(`${this.baseUrl}/events`);
     }
@@ -124,7 +123,7 @@ export class AppService {
     }
 
     editMarker(marker: Marker) {
-        return this.http.post(`${this.baseUrl}` + `/markers/add?`, marker);
+        return this.http.post(`${this.baseUrl}` + `/markers?`, marker);
     }
 
     addTrackToEvent(event: Event, track: Track) {

@@ -14,10 +14,12 @@ export class EventPageComponent implements OnInit {
 
     selectedEventId: string;
     events: Observable<Event[]>;
+    showAdminPanelButton: boolean;
 
     constructor(private appService: AppService, private router: Router) { }
 
     ngOnInit() {
+        this.isAdmin();
         this.loadEvents();
     }
 
@@ -48,6 +50,21 @@ export class EventPageComponent implements OnInit {
         if(this.selectedEventId != null) {
             this.router.navigate(['../map', this.selectedEventId]);
         }
+    }
+
+    isAdmin() {
+        this.appService.getUsers().subscribe(
+            users => {
+                if(users.length === 0){
+                    this.showAdminPanelButton = false;
+                } else {
+                    this.showAdminPanelButton = true;
+                }
+            });
+    }
+
+    onLogout() {
+        this.appService.logout();
     }
 
 

@@ -6,7 +6,7 @@
                 <a class="nav-link active" href="#" >SKPT Map creator</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " href="../map">Map</a>
+                <a class="nav-link " href="../event-page">Select event</a>
             </li>
         </ul>
     </div>
@@ -34,8 +34,11 @@
         </div>
         <form *ngIf="isAddNewEvent"(ngSubmit)="saveNewEvent()" style="alignment: center">
             <div class="form-group row ">
-                <div class="col-sm-6" style="margin-left: 25%;">
+                <div class="col-sm-6" style="margin-left: 25%; margin-bottom: 10px">
                     <input type="text" id="name" class="form-control" required [(ngModel)]="newEventName" name="name" placeholder="Event name">
+                </div>
+                <div class="col-sm-6" style="margin-left: 25%;">
+                    <input type="text" id="date" class="form-control" required [(ngModel)]="newEventDate" name="name" placeholder="Event date">
                 </div>
             </div>
             <div class="form-group row  d-inline">

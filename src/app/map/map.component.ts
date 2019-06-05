@@ -121,6 +121,10 @@ export class MapComponent implements OnInit {
             this.selectedMarker = marker;
             this.editMarkerForm();
         } else {
+            if( evt.pointerEvent.buttons === 1) {
+                console.log('prawy przycisk');
+            }
+
             if (!this.markerEdit && this.selectedEvent != null) {
                 const lontat = toLonLat(evt.coordinate);
                 console.log(lontat); //   <=== coordinate projection
@@ -247,19 +251,20 @@ export class MapComponent implements OnInit {
     }
 
     addToTrack() {
-        //this.saveMarker();
-        const checkpoint = new Checkpoint();
-        checkpoint.mainMarker = this.selectedMarker;
-        this.appService.addCheckpointToTrack(this.selectedTrack, checkpoint).subscribe(
-            responses => {
-                console.log(responses);
-                this.refreshSelectedEvent();
-            }
-            , error => {
-                console.log(error);
-                this.refreshSelectedEvent();
-            }
-        );
+        if(this.selectedMarker.lanternCode != null) {
+            const checkpoint = new Checkpoint();
+            checkpoint.mainMarker = this.selectedMarker;
+            this.appService.addCheckpointToTrack(this.selectedTrack, checkpoint).subscribe(
+                responses2 => {
+                    console.log(responses2);
+                    this.refreshSelectedEvent();
+                }
+                , error2 => {
+                    console.log(error2);
+                    this.refreshSelectedEvent();
+                }
+            );
+        }
     }
 
     saveMarker() {
