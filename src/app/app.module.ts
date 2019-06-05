@@ -12,6 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { MarkerDetailsComponent} from './marker-details/marker-details.component';
+import {TrackDetailsComponent} from './track-details/track-details.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MarkerDetailsComponent} from './marker-details/marker-details.component
     AdminPageComponent,
     RegisterComponent,
     UserDetailsComponent,
-    MarkerDetailsComponent
+    MarkerDetailsComponent,
+    TrackDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<h4>{{track.name}}</h4>
+<div *ngFor="let marker of trackMarkers | async">
+    <marker-details [marker]='marker' ></marker-details>
+</div>

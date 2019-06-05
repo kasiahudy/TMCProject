@@ -22,7 +22,7 @@
 
     <div class="col-sm-5 d-inline" style="margin-left: 15%">
         <h4>Select event:</h4>
-        <select class="form-control" [(ngModel)]="selectedEventName" (change)="select($event)">
+        <select class="form-control" [(ngModel)]="selectedEventName" (change)="selectEvent($event)">
             <option *ngFor="let event of events | async" [value]="event.id">{{event.name}}</option>
         </select>
     </div><br/>
@@ -30,20 +30,16 @@
         <h3>{{selectedEvent.name}}</h3>
         <h4>{{selectedEvent.date}}</h4>
         <br/>
-        <h5>Select track:</h5>
-        <select class="form-control" [(ngModel)]="selectedTrackName" (change)="selectTrack($event)">
-            <option *ngFor="let track of selectedEventTracks | async" [value]="track.id">{{track.name}}</option>
-        </select>
         <br/>
-        <button class="btn btn-success btn-sm" (click)='addNewTrackForm()'>Add track</button>
-        <br/><br/>
         <div *ngFor="let marker of eventMarkers | async">
-            <marker-details [marker]='marker' [event]='selectedEvent' [track]='selectedTrack' [isTrackMarker]='false' (refreshEvent)='refreshSelectedEvent()'></marker-details>
+            <marker-details [marker]='marker'></marker-details>
         </div>
         <h3>Tracks:</h3>
-        <div *ngFor="let marker of trackMarkers | async">
-            <marker-details [marker]='marker' [event]='selectedEvent' [track]='selectedTrack' [isTrackMarker]='true' (refreshEvent)='refreshSelectedEvent()'></marker-details>
+        <div *ngFor="let track of selectedEventTracks | async">
+            <track-details [track]='track'></track-details>
         </div>
+        <button class="btn btn-success btn-sm" (click)='newTrackForm()'>Add track</button>
+        <br/>
     </div>
     <div *ngIf="markerEdit">
         <form (ngSubmit)="saveMarker()" style="alignment: center">
@@ -65,7 +61,8 @@
                     <option *ngFor="let track of selectedEventTracks | async" [value]="track.id">{{track.name}}</option>
                 </select>
                 <br/>
-                <button class="btn btn-secondary" (click)='addToTrack()'>Return</button>
+                <button class="btn btn-secondary" (click)='addToTrack()'>Add to track</button>
+
             </div>
             <div class="form-group row  d-inline">
                 <button type="submit" class="btn btn-success" style="margin-right: 10px">Submit</button>

@@ -6,3 +6,4 @@ export class Marker {
     lanternCode: string;
     tapeCode: string;
 }
+

@@ -3,8 +3,6 @@ import { AppService } from '../app.service';
 
 import { MapComponent } from '../map/map.component';
 import { Marker } from '../models/marker';
-import { Event } from '../models/event';
-import {Track} from '../models/track';
 
 @Component({
     selector: 'marker-details',
@@ -16,82 +14,17 @@ export class MarkerDetailsComponent implements OnInit {
     sitePointEdit = false;
 
     @Input() marker: Marker;
-    @Input() event: Event;
-    @Input() track: Track;
-    @Input() isTrackMarker: boolean;
-    @Output() refreshEvent: EventEmitter<null> = new EventEmitter();
-    newMarker: Marker;
-    isLantern = false;
 
     constructor(private appService: AppService, private mapComponent: MapComponent) { }
 
     ngOnInit() {
-        if(this.marker.lanternCode != null) {
-            this.isLantern = true;
-        }
-    }
-    edit() {
-        /*this.newMarker = new Marker();
-        this.newMarker.id = this.marker.id;
-        this.newMarker.lat = this.marker.lat;
-        this.newMarker.lon = this.marker.lon;
-        this.sitePointEdit = true;*/
+        let coordinates = this.marker.coordinate;
+        coordinates = coordinates.replace(new RegExp('POINT \\(', 'g'), '');
+        coordinates = coordinates.replace(new RegExp('\\);', 'g'), '');
+        const lonLat = coordinates.split(' ');
+        this.marker.lon = parseFloat (lonLat[0]);
+        this.marker.lat = parseFloat (lonLat[1]);
 
-        this.marker.lanternCode = 'LX';
-
-        this.appService.editMarker(this.marker).subscribe(
-            responses => {
-                console.log(responses);
-                //this.refreshEvent.emit();
-                if(this.marker.lanternCode != null) {
-                    this.isLantern = true;
-                }
-            }
-            , error => {
-                console.log(error);
-                //this.refreshEvent.emit();
-                if(this.marker.lanternCode != null) {
-                    this.isLantern = true;
-                }
-            }
-        );
-    }
-
-    onSubmit(){
-        //this.marker = this.newMarker;
-        this.marker.lanternCode = 'LX';
-
-        this.appService.editMarker(this.marker).subscribe(
-            responses => {
-                console.log(responses);
-                //this.refreshEvent.emit();
-            }
-            , error => {
-                console.log(error);
-                //this.refreshEvent.emit();
-            }
-        );
-        this.sitePointEdit = false;
-    }
-
-    cancel() {
-        this.sitePointEdit = false;
-    }
-
-    delete() {
-        this.appService.deleteMarkerFromEvent(this.event, this.marker).subscribe(
-            responses => {
-                console.log(responses);
-                this.marker.lon = null;
-                this.marker.lat = null;
-                this.marker = null;
-                this.refreshEvent.emit();
-            }
-            , error => {
-                console.log(error);
-                this.refreshEvent.emit();
-            }
-        );
     }
 
 }

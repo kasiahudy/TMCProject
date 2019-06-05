@@ -103,16 +103,7 @@ export class MapComponent implements OnInit {
         this.markerSource.clear();
     }
 
-    isAdmin() {
-        this.appService.getUsers().subscribe(
-            users => {
-                if(users.length === 0){
-                    this.showAdminPanelButton = false;
-                } else {
-                    this.showAdminPanelButton = true;
-                }
-            });
-    }
+
 
     reloadData() {
         this.loadEvents();
@@ -127,24 +118,25 @@ export class MapComponent implements OnInit {
             const marker = f.get('desc');
             console.log('click' + marker.lon + ' ' + marker.lat);
             this.selectedMarker = marker;
-            this.markerEdit = true;
+            this.editMarkerForm();
         } else {
-            this.markerEdit = false;
-            const lontat = toLonLat(evt.coordinate);
-            console.log(lontat); //   <=== coordinate projection
+            if (!this.markerEdit && this.selectedEvent != null) {
+                const lontat = toLonLat(evt.coordinate);
+                console.log(lontat); //   <=== coordinate projection
 
-            const marker = new Marker();
-            marker.coordinate = 'POINT (' + lontat[0] + ' ' + lontat[1] + ');';
-            this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
-                response => {
-                    console.log(response);
-                    this.refreshSelectedEvent();
-                }
-                , error => {
-                    console.log(error.error);
-                    this.refreshSelectedEvent();
-                }
-            );
+                const marker = new Marker();
+                marker.coordinate = 'POINT (' + lontat[0] + ' ' + lontat[1] + ');';
+                this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
+                    response => {
+                        console.log(response);
+                        this.refreshSelectedEvent();
+                    }
+                    , error => {
+                        console.log(error.error);
+                        this.refreshSelectedEvent();
+                    }
+                );
+            }
         }
 
     }
@@ -165,10 +157,6 @@ export class MapComponent implements OnInit {
         });
 
         marker.setStyle(iconStyle);*/
-
-        // marker.on('click', function(evt) {
-            // console.log('click'); //   <=== coordinate projection
-        // });
 
         this.markerSource.addFeature(olMarker);
     }
@@ -235,7 +223,7 @@ export class MapComponent implements OnInit {
             });
     }
 
-    select(selectEvent){
+    selectEvent(selectEvent){
         const selectedEventId = selectEvent.target.value;
         this.isEventChosen = true;
         this.markerSource.clear();
@@ -251,6 +239,12 @@ export class MapComponent implements OnInit {
 
 
 
+
+
+    editMarkerForm() {
+        this.markerEdit = true;
+    }
+
     selectTrack(selectEvent) {
         const selectedTrackId = selectEvent.target.value;
 
@@ -259,31 +253,18 @@ export class MapComponent implements OnInit {
         });
         this.trackMarkers.subscribe(markers => {
             this.selectedTrack.checkpoints.forEach(function(checkpoint) {
-                let newCheckpoint = new Marker();
-                newCheckpoint = this.selectedEvent.markers.find(marker => marker.id === checkpoint.id);
-                if(newCheckpoint != null) {
-                    markers.push(newCheckpoint);
+                let marker = new Marker();
+                marker = checkpoint.mainMarker;
+                if(marker != null) {
+                    markers.push(marker);
                 }
             }.bind(this));
         });
         this.refreshSelectedEvent();
     }
 
-    saveMarker() {
-        this.appService.editMarker(this.selectedMarker).subscribe(
-            responses => {
-                console.log(responses);
-                //this.refreshEvent.emit();
-            }
-            , error => {
-                console.log(error);
-                //this.refreshEvent.emit();
-            }
-        );
-        this.markerEdit = false;
-    }
-
     addToTrack() {
+        this.saveMarker();
         const checkpoint = new Checkpoint();
         checkpoint.mainMarker = this.selectedMarker;
         this.appService.addCheckpointToTrack(this.selectedTrack, checkpoint).subscribe(
@@ -298,7 +279,21 @@ export class MapComponent implements OnInit {
         );
     }
 
-    addNewTrackForm() {
+    saveMarker() {
+        this.appService.editMarker(this.selectedMarker).subscribe(
+            responses => {
+                console.log(responses);
+                this.refreshSelectedEvent();
+            }
+            , error => {
+                console.log(error);
+                this.refreshSelectedEvent();
+            }
+        );
+        this.markerEdit = false;
+    }
+
+    newTrackForm() {
         this.addNewTrack = true;
     }
 
@@ -321,6 +316,17 @@ export class MapComponent implements OnInit {
     return() {
         this.markerEdit = false;
         this.addNewTrack = false;
+    }
+
+    isAdmin() {
+        this.appService.getUsers().subscribe(
+            users => {
+                if(users.length === 0){
+                    this.showAdminPanelButton = false;
+                } else {
+                    this.showAdminPanelButton = true;
+                }
+            });
     }
 
     onLogout() {
