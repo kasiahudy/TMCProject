@@ -21,6 +21,7 @@ public class Track {
     private UUID id;
 
     @Getter
+    @Setter
     @Column
     private String name;
 

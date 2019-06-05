@@ -20,10 +20,12 @@ public class Event {
     private UUID id;
 
     @Getter
+    @Setter
     @Column(name = "event_name", nullable = false)
     private String name;
 
     @Getter
+    @Setter
     @Column(name = "event_date")
     private LocalDate date;
 

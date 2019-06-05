@@ -2,6 +2,7 @@ package pl.gdansk.skpt.MapCreatorREST.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,9 +20,12 @@ public class CheckPoint {
 
 
     @OneToOne
+    @Setter
+    @Getter
     Marker mainMarker;
 
-
+    @Setter
+    @Getter
     @OneToMany(
         cascade = {CascadeType.PERSIST,CascadeType.MERGE}
     )

@@ -19,10 +19,11 @@ public class SystemUser {
 
     @Id
     @Getter
+    @Setter
     @Column(name = "login")
     private String login;
 
-    @Getter
+    @Setter
     @Column(name = "firstName")
     private String firstName;
 

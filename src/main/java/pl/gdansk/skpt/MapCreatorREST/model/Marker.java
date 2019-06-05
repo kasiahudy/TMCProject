@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import pl.gdansk.skpt.MapCreatorREST.Util.JsonToPointDeserializer;
 import pl.gdansk.skpt.MapCreatorREST.Util.PointToJsonSerializer;
 
@@ -22,14 +23,17 @@ public class Marker {
     private UUID id;
 
     @Getter
+    @Setter
     @Column(name="lanternCode")
     private String lanternCode;
 
     @Getter
+    @Setter
     @Column(name="tapeCode")
     private String tapeCode;
 
     @Getter
+    @Setter
     @Column(name="coordinate")
     @JsonSerialize(using = PointToJsonSerializer.class)
     @JsonDeserialize(using = JsonToPointDeserializer.class)
