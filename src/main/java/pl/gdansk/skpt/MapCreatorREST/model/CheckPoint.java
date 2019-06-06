@@ -19,7 +19,9 @@ public class CheckPoint {
     private UUID id;
 
 
-    @OneToOne
+    @ManyToOne(
+            cascade = {CascadeType.PERSIST,CascadeType.MERGE}
+    )
     @Setter
     @Getter
     Marker mainMarker;
