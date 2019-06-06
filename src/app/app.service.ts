@@ -133,4 +133,8 @@ export class AppService {
     addCheckpointToTrack(track: Track, checkpoint: Checkpoint) {
         return this.http.put(`${this.baseUrl}/tracks/checkpoints?id=${track.id}`, checkpoint);
     }
+
+    deleteCheckpointFromTrack(track: Track, checkpoint: Checkpoint) {
+        return this.http.delete(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}&checkPointId=${checkpoint.id}`);
+    }
 }

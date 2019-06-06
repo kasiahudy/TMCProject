@@ -11,6 +11,7 @@ import OlFeature from 'ol/Feature';
 import OlGeomPoint from 'ol/geom/Point';
 import OlStyle from 'ol/style/Style';
 import OlIcon from 'ol/style/Icon';
+import OlText from 'ol/style/Text';
 
 import { transform } from 'ol/proj';
 import { toLonLat } from 'ol/proj';
@@ -154,14 +155,24 @@ export class MapComponent implements OnInit {
             geometry: new OlGeomPoint(transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857'))
         });
 
-        /*const iconStyle = new OlStyle({
+
+        const iconStyle = new OlStyle({
             image: new OlIcon(({
                 anchor: [0.5, 1],
-                src: 'http://cdn.mapmarker.io/api/v1/pin?text=&size=30&hoffset=1'
-            }))
+                src: 'https://cdn.mapmarker.io/api/v1/fa/stack?size=20&icon=&color=%23FFFFFF&on=fa-dot-circle&oncolor=%23333333&hoffset=0&voffset=0&iconsize=0&'
+            })),
+            text: new OlText({
+                text: marker.lanternCode,
+                offsetY: -25,
+                fontSize: 50,
+            })
+            //image: new OlIcon(({
+                //anchor: [0.5, 1],
+                //src: 'http://cdn.mapmarker.io/api/v1/pin?text=&size=30&hoffset=1'
+            //}))
         });
 
-        marker.setStyle(iconStyle);*/
+        olMarker.setStyle(iconStyle);
 
         this.markerSource.addFeature(olMarker);
     }
@@ -282,16 +293,57 @@ export class MapComponent implements OnInit {
     }
 
     deleteMarker() {
-        this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
-            responses => {
-                console.log(responses);
-                this.refreshSelectedEvent();
-            }
-            , error => {
-                console.log(error);
-                this.refreshSelectedEvent();
-            }
-        );
+        let isMarkerInTrack = false;
+        this.selectedEventTracks.subscribe(tracks => {
+            tracks.forEach(function(track) {
+                track.checkpoints.forEach(function(checkpoint) {
+                    if(checkpoint.mainMarker.id === this.selectedMarker.id) {
+                        this.appService.deleteCheckpointFromTrack(track, checkpoint).subscribe(
+                            responses => {
+                                console.log(responses);
+                                this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
+                                    responses2 => {
+                                        console.log(responses2);
+                                        this.refreshSelectedEvent();
+                                    }
+                                    , error2 => {
+                                        console.log(error2);
+                                        this.refreshSelectedEvent();
+                                    }
+                                );
+                            }
+                            , error => {
+                                console.log(error);
+                                this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
+                                    responses2 => {
+                                        console.log(responses2);
+                                        this.refreshSelectedEvent();
+                                    }
+                                    , error2 => {
+                                        console.log(error2);
+                                        this.refreshSelectedEvent();
+                                    }
+                                );
+                            }
+                        );
+                        isMarkerInTrack = true;
+                    }
+                }.bind(this));
+            }.bind(this));
+        });
+        if(!isMarkerInTrack) {
+            this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
+                responses => {
+                    console.log(responses);
+                    this.refreshSelectedEvent();
+                }
+                , error => {
+                    console.log(error);
+                    this.refreshSelectedEvent();
+                }
+            );
+        }
+
     }
 
     newTrackForm() {
