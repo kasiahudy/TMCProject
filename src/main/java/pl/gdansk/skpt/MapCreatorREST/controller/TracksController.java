@@ -7,6 +7,7 @@ import pl.gdansk.skpt.MapCreatorREST.model.CheckPoint;
 import pl.gdansk.skpt.MapCreatorREST.model.Track;
 import pl.gdansk.skpt.MapCreatorREST.services.TracksService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -35,7 +36,7 @@ public class TracksController {
         Track track = tracksService.find(trackId);
         if(track != null){
             CheckPoint checkPoint = track.getCheckpoints().stream()
-                    .filter(c -> c.getId() == checkPointId)
+                    .filter(c -> c.getId().compareTo(checkPointId) == 0)
                     .findAny()
                     .orElse(null);
             if(checkPoint != null){
