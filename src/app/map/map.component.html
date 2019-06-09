@@ -13,8 +13,10 @@
     </div>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
+            <a class="nav-link p-2" (click)="exportMap()">Export map <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link p-2" href="../login" (click)="onLogout()">Logout <span class="sr-only">(current)</span></a>
-
         </li>
     </ul>
 </nav>
@@ -25,10 +27,11 @@
         <h4>{{selectedEvent.date}}</h4>
         <br/>
         <br/>
+        <h4>All markers:</h4>
         <div *ngFor="let marker of eventMarkers | async">
             <marker-details [marker]='marker'></marker-details>
         </div>
-        <h3>Tracks:</h3>
+        <h4>Tracks:</h4>
         <div *ngFor="let track of selectedEventTracks | async">
             <track-details [track]='track'></track-details>
         </div>

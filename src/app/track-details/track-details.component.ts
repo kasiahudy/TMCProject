@@ -3,8 +3,8 @@ import { AppService } from '../app.service';
 
 import { MapComponent } from '../map/map.component';
 import {Track} from '../models/track';
-import {Observable, of} from "rxjs";
-import {Marker} from "../models/marker";
+import {Observable, of} from 'rxjs';
+import {Marker} from '../models/marker';
 
 @Component({
     selector: 'track-details',

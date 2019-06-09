@@ -25,7 +25,10 @@ import {Observable, of} from 'rxjs';
 import { Event } from '../models/event';
 import { Marker } from '../models/marker';
 import {Track} from '../models/track';
-import {Checkpoint} from "../models/checkpoint";
+import {Checkpoint} from '../models/checkpoint';
+
+import { saveAs } from 'file-saver';
+
 
 @Component({
     selector: 'app-map',
@@ -42,12 +45,8 @@ export class MapComponent implements OnInit {
     markerSource: OlSourceVector;
     markerLayer: OlLayerVector;
 
-
-    events: Observable<Event[]>;
-
     eventMarkers: Observable<Marker[]>;
     selectedEvent: Event;
-    selectedEventName: string;
     selectedEventTracks: Observable<Track[]>;
     selectedTrack: Track;
     selectedTrackName: string;
@@ -75,7 +74,6 @@ export class MapComponent implements OnInit {
         this.markerEdit = false;
         this.addNewTrack = false;
 
-        this.events = of([]);
         this.eventMarkers = of([]);
         this.selectedEventTracks = of([]);
         this.trackMarkers = of([]);
@@ -83,7 +81,8 @@ export class MapComponent implements OnInit {
         this.selectedMarker = new Marker();
 
         this.source = new OlXYZ({
-            url: 'http://tile.osm.org/{z}/{x}/{y}.png'
+            url: 'http://tile.osm.org/{z}/{x}/{y}.png',
+            crossOrigin: 'anonymous'
         });
 
         this.layer = new OlTileLayer({
@@ -103,7 +102,8 @@ export class MapComponent implements OnInit {
 
         this.map.on('click', this.handleMapClick.bind(this));
 
-        this.markerSource = new OlSourceVector({});
+        this.markerSource = new OlSourceVector({
+        });
         this.markerLayer = new OlLayerVector({ source: this.markerSource});
         this.map.addLayer(this.markerLayer );
         this.markerSource.clear();
@@ -122,10 +122,6 @@ export class MapComponent implements OnInit {
             this.selectedMarker = marker;
             this.editMarkerForm();
         } else {
-            if( evt.pointerEvent.buttons === 1) {
-                console.log('prawy przycisk');
-            }
-
             if (!this.markerEdit && this.selectedEvent != null) {
                 const lontat = toLonLat(evt.coordinate);
                 console.log(lontat); //   <=== coordinate projection
@@ -155,11 +151,11 @@ export class MapComponent implements OnInit {
             geometry: new OlGeomPoint(transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857'))
         });
 
-
         const iconStyle = new OlStyle({
             image: new OlIcon(({
                 anchor: [0.5, 1],
-                src: 'https://cdn.mapmarker.io/api/v1/fa/stack?size=20&icon=&color=%23FFFFFF&on=fa-dot-circle&oncolor=%23333333&hoffset=0&voffset=0&iconsize=0&'
+                src: 'assets/marker.png',
+                crossOrigin: null
             })),
             text: new OlText({
                 text: marker.lanternCode,
@@ -175,25 +171,6 @@ export class MapComponent implements OnInit {
         olMarker.setStyle(iconStyle);
 
         this.markerSource.addFeature(olMarker);
-    }
-
-    loadEvents() {
-        this.eventMarkers = of([]);
-        this.events = of([]);
-        this.appService.getAllEvents()
-            .subscribe(
-                responses => {
-                    console.log(responses);
-                    responses.forEach(function(response) {
-                        this.events.subscribe(events => {
-                            events.push(response);
-                        });
-                    }.bind(this));
-                }
-                , error => {
-                    console.log(error);
-
-                });
     }
 
     refreshSelectedEvent() {
@@ -364,6 +341,20 @@ export class MapComponent implements OnInit {
             }
         );
         this.addNewTrack = false;
+    }
+
+    exportMap() {
+        this.map.once('rendercomplete', function(event) {
+            const canvas = event.context.canvas;
+            if (navigator.msSaveBlob) {
+                navigator.msSaveBlob(canvas.msToBlob(), 'map.png');
+            } else {
+                canvas.toBlob(function(blob) {
+                    saveAs(blob, 'map.png');
+                });
+            }
+        });
+        this.map.renderSync();
     }
 
     return() {
