@@ -29,8 +29,9 @@ public class Track {
     @Column
     @Setter
     @Getter
-    @ManyToMany(
-            cascade = CascadeType.ALL
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<CheckPoint> checkpoints;
 
