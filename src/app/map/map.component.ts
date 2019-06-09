@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
+
+import OlWMS from 'ol/source/TileWMS';
+
 import OlTileLayer from 'ol/layer/Tile';
 import OlView from 'ol/View';
 
@@ -13,8 +16,7 @@ import OlStyle from 'ol/style/Style';
 import OlIcon from 'ol/style/Icon';
 import OlText from 'ol/style/Text';
 
-import { transform } from 'ol/proj';
-import { toLonLat } from 'ol/proj';
+import { transform, toLonLat, get } from 'ol/proj';
 
 import { fromLonLat } from 'ol/proj';
 import { AppService } from '../app.service';
@@ -80,13 +82,19 @@ export class MapComponent implements OnInit {
 
         this.selectedMarker = new Marker();
 
-        this.source = new OlXYZ({
-            url: 'http://tile.osm.org/{z}/{x}/{y}.png',
-            crossOrigin: 'anonymous'
+        this.source = new OlWMS({
+            url: 'http://mapy.geoportal.gov.pl/wss/service/img/guest/ORTO/MapServer/WMSServer',
+            params: {
+                'LAYERS': 'Raster',
+                'CRS': 'EPSG:2180',
+                'VERSION': '1.1.1'
+            }
         });
 
         this.layer = new OlTileLayer({
-            source: this.source
+            source: this.source,
+            isBaseLayer: true,
+            projection: get('EPSG:2180')
         });
 
         this.view = new OlView({
@@ -160,8 +168,8 @@ export class MapComponent implements OnInit {
             })),
             text: new OlText({
                 text: marker.lanternCode,
-                offsetY: -25,
-                fontSize: 50,
+                offsetY: -16,
+                font: 'bold 15px sans-serif'
             })
             //image: new OlIcon(({
                 //anchor: [0.5, 1],
