@@ -5,6 +5,7 @@ import {SystemUser} from '../models/system-user';
 import {Router} from '@angular/router';
 import { SiteMap} from '../site-map';
 import { Event } from '../models/event';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-admin-page',
@@ -18,8 +19,11 @@ export class AdminPageComponent implements OnInit {
     isAddNewEvent: boolean;
     newEventName: string;
     newEventDate: string;
+    message: any;
 
-    constructor(private appService: AppService, private router: Router) { }
+    constructor(private appService: AppService, private router: Router) {
+        this.message = {exists: 'false'};
+    }
 
     ngOnInit() {
         this.isAddNewEvent = false;
@@ -51,15 +55,24 @@ export class AdminPageComponent implements OnInit {
             const event = new Event();
             event.name = this.newEventName;
             event.date = this.newEventDate;
-            this.appService.addEvent(event).subscribe(
-                response => {
-                    console.log(response);
-                }
-                , error => {
-                    console.log(error);
+            if(moment(event.date).isValid()){
+                event.date = moment(event.date).format('YYYY-MM-DD');
+                this.appService.addEvent(event).subscribe(
+                    response => {
+                        console.log(response);
+                    }
+                    , error => {
+                        console.log(error);
 
-                });
+                    });
+            } else {
+                this.message = {exists: true, text: 'Wrong date type', type: 'error'};
+            }
+        } else {
+            this.message = {exists: true, text: 'Fill name field', type: 'error'};
         }
+        this.newEventDate = '';
+        this.newEventName = '';
     }
 
     cancel() {

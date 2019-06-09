@@ -17,6 +17,7 @@
         </li>
     </ul>
 </nav>
+<div *ngIf="message.exists" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">{{message.text}}</div>
 <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
     <div class="bg-dark w-40 mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="width: 40%;">
         <div class="my-3 py-3">
@@ -35,10 +36,12 @@
         <form *ngIf="isAddNewEvent"(ngSubmit)="saveNewEvent()" style="alignment: center">
             <div class="form-group row ">
                 <div class="col-sm-6" style="margin-left: 25%; margin-bottom: 10px">
-                    <input type="text" id="name" class="form-control" required [(ngModel)]="newEventName" name="name" placeholder="Event name">
+                    <label>Event name</label>
+                    <input type="text" id="name" class="form-control" required [(ngModel)]="newEventName" name="name">
                 </div>
                 <div class="col-sm-6" style="margin-left: 25%;">
-                    <input type="text" id="date" class="form-control" required [(ngModel)]="newEventDate" name="name" placeholder="Event date">
+                    <label>Event date</label>
+                    <input type="text" id="date" class="form-control" required [(ngModel)]="newEventDate" name="name" placeholder="YYYY-MM-DD">
                 </div>
             </div>
             <div class="form-group row  d-inline">

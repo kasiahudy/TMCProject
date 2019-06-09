@@ -151,9 +151,10 @@ export class MapComponent implements OnInit {
             geometry: new OlGeomPoint(transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857'))
         });
 
+        // icon creator: http://cdn.mapmarker.io/editor
         const iconStyle = new OlStyle({
             image: new OlIcon(({
-                anchor: [0.5, 1],
+                anchor: [0.5, 0.5],
                 src: 'assets/marker.png',
                 crossOrigin: null
             })),
