@@ -17,12 +17,10 @@ export class MarkerDetailsComponent implements OnInit {
     constructor(private appService: AppService) { }
 
     ngOnInit() {
-        let coordinates = this.marker.coordinate;
-        coordinates = coordinates.replace(new RegExp('POINT \\(', 'g'), '');
-        coordinates = coordinates.replace(new RegExp('\\);', 'g'), '');
-        const lonLat = coordinates.split(' ');
-        this.marker.lon = parseFloat (lonLat[0]);
-        this.marker.lat = parseFloat (lonLat[1]);
+        const coordinates = this.marker.coordinate;
+        const lonLat = Marker.coordinatesToLonLat(coordinates)
+        this.marker.lon = lonLat.lon;
+        this.marker.lat = lonLat.lat;
 
     }
 

@@ -53,7 +53,7 @@ export class EventPageComponent implements OnInit {
 
     goToMap() {
         if(this.selectedEventId != null) {
-            this.router.navigate(['../map', this.selectedEventId]);
+            this.router.navigate(['../main-map-page', this.selectedEventId]);
         }
     }
 

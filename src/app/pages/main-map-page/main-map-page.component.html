@@ -13,7 +13,7 @@
     </div>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
-            <a class="nav-link p-2" (click)="exportMap()">Export map <span class="sr-only">(current)</span></a>
+            <a class="nav-link p-2" (click)="child.exportMap()">Export map <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link p-2" href="../login" (click)="onLogout()">Logout <span class="sr-only">(current)</span></a>
@@ -92,6 +92,6 @@
 </div>
 
 <div style=" display: inline-block; width: 80%; height: 80%">
-    <div id="map" class="map"></div>
+    <map (clickOnMarker)='clickOnMarker($event)' (clickOnMap)='clickOnMap($event)'></map>
 </div>
 
