@@ -14,7 +14,7 @@ const routes: Routes = [
     { path: 'main-map-page/:selectedEventId', component: MainMapPageComponent, canActivate: [AuthGuard] },
     { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthGuard] },
     { path: 'register', component:  RegisterComponent},
-    { path: 'event-page/:username', component: EventPageComponent},
+    { path: 'event-page', component: EventPageComponent},
     { path: 'track-map/:selectedEventId/:selectedTrackId', component: TrackMapComponent}
 ];
 

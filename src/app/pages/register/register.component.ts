@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AppService } from '../../app.service';
 import { SystemUser } from '../../models/system-user';
+import {CurrentUser} from '../../models/currentUser';
 
 @Component({
     selector: 'app-register-page',
@@ -34,7 +35,8 @@ export class RegisterComponent implements OnInit {
                         .subscribe(
                             response => {
                                 console.log(response);
-                                this.router.navigate(['../event-page', this.user.login]);},
+                                CurrentUser.username = this.user.login;
+                                this.router.navigate(['../event-page']);},
                             error2 => console.log(error2));
                 }
 

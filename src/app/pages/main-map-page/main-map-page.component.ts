@@ -276,6 +276,10 @@ export class MainMapPageComponent implements OnInit {
             });
     }
 
+    returnToEventSelect() {
+        this.router.navigate(['../event-page']);
+    }
+
     onLogout() {
         this.appService.logout();
     }

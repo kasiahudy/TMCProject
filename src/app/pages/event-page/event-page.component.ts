@@ -3,6 +3,7 @@ import { AppService } from '../../app.service';
 import {Observable, of} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Event} from "../../models/event";
+import {CurrentUser} from "../../models/currentUser";
 
 @Component({
     selector: 'event-page',
@@ -22,9 +23,7 @@ export class EventPageComponent implements OnInit {
     ngOnInit() {
         this.isAdmin();
         this.loadEvents();
-        this.route.params.subscribe(params => {
-            this.username = params['username'];
-        });
+        this.username = CurrentUser.username;
     }
 
     loadEvents() {
@@ -35,8 +34,10 @@ export class EventPageComponent implements OnInit {
                     console.log(responses);
                     responses.forEach(function(response) {
                         this.events.subscribe(events => {
-                            //let builder = response.bulders.find
-                            events.push(response);
+                            const eventBuilder = response.builders.find(builder => builder.login === this.username);
+                            if(eventBuilder != null || this.username === 'admin') {
+                                events.push(response);
+                            }
                         });
                     }.bind(this));
                 }
