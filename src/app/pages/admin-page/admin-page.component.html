@@ -34,7 +34,7 @@
         </div>
 
         <div *ngFor="let user of users | async">
-            <user-details [user]='user'></user-details>
+            <user-details [user]='user' [isBuilder]="false" ></user-details>
         </div>
     </div>
     <div class="bg-light w-60 mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden" style="width: 60%;">

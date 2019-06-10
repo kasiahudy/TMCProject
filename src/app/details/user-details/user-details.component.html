@@ -1,12 +1,8 @@
 <div *ngIf="user">
     <div>
         <label>Name: </label> {{user.login}}
+        <br/>
+        <button *ngIf="isBuilder" class="btn btn-danger btn-sm" (click)='delete()'>Delete</button>
     </div>
-    <div>
-        <label>Type: </label> {{user.privilage}}
-    </div>
-    <!--<button type="button" class="btn btn-primary btn-sm" (click)='updateUser()' style="margin-right: 10px;">Update</button>
-    <button type="button" class="btn btn-danger btn-sm" (click)='deleteUser()'>Delete</button>-->
 
-    <hr/>
 </div>

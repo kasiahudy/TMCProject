@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { AppService } from '../../app.service';
 
 import { AdminPageComponent } from '../../pages/admin-page/admin-page.component';
@@ -12,6 +12,8 @@ import {SystemUser} from '../../models/system-user';
 export class UserDetailsComponent implements OnInit {
 
     @Input() user: SystemUser;
+    @Input() isBuilder: boolean;
+    @Output() deleteBuilder = new EventEmitter();
 
     constructor(private customerService: AppService, private adminPageComponent: AdminPageComponent) { }
 
@@ -37,5 +39,11 @@ export class UserDetailsComponent implements OnInit {
                     this.adminPageComponent.reloadData();
                 },
                 error => console.log(error));*/
+    }
+
+    delete() {
+        if(this.isBuilder) {
+            this.deleteBuilder.emit({builderId: this.user.login});
+        }
     }
 }

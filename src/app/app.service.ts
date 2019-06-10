@@ -83,4 +83,16 @@ export class AppService {
     deleteCheckpointFromTrack(track: Track, checkpoint: Checkpoint) {
         return this.http.delete(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}&checkPointId=${checkpoint.id}`);
     }
+
+    getBuilders(event: Event): Observable<any> {
+        return this.http.get(`${this.baseUrl}/events/builders?eventId=${event.id}`);
+    }
+
+    addBuilder(event: Event, builderId: string) {
+        return this.http.post(`${this.baseUrl}/events/builders?eventId=${event.id}&builderId=${builderId}`, builderId);
+    }
+
+    deleteBuilder(event: Event, builderId: string) {
+        return this.http.delete(`${this.baseUrl}/events/builders?eventId=${event.id}&builderId=${builderId}`);
+    }
 }

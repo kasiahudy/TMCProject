@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AppService } from '../../app.service';
 
 import { Event } from '../../models/event';
-import {Observable} from "rxjs";
-import {SystemUser} from "../../models/system-user";
+import {Observable, of} from 'rxjs';
+import {SystemUser} from '../../models/system-user';
 
 @Component({
     selector: 'event-details',
@@ -21,6 +21,11 @@ export class EventDetailsComponent implements OnInit {
     constructor(private appService: AppService) { }
 
     ngOnInit() {
+        this.loadEventBuilders();
+    }
+
+    loadEventBuilders() {
+        this.eventBuilders = this.appService.getBuilders(this.event);
     }
 
     selectUser(selectEvent) {
@@ -29,6 +34,27 @@ export class EventDetailsComponent implements OnInit {
 
     addBuilder(){
         console.log(this.selectedUserUsername);
+        this.appService.addBuilder(this.event, this.selectedUserUsername).subscribe(
+            responses => {
+                console.log(responses);
+                this.loadEventBuilders();
+            }
+            , error => {
+                console.log(error);
+                this.loadEventBuilders();
+            });
+    }
+
+    deleteBuilder($event) {
+        this.appService.deleteBuilder(this.event, $event.builderId).subscribe(
+            responses => {
+                console.log(responses);
+                this.loadEventBuilders();
+            }
+            , error => {
+                console.log(error);
+                this.loadEventBuilders();
+            });
     }
 
     editEvent() {
