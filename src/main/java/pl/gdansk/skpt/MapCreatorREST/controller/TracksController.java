@@ -27,9 +27,9 @@ public class TracksController {
     }
 
     @PutMapping("/checkpoints")
-    public ResponseEntity<UUID> addCheckpointToTrack(@RequestParam UUID id,
+    public ResponseEntity<UUID> addCheckpointToTrack(@RequestParam UUID trackId,
                                                      @RequestBody CheckPoint checkPoint){
-        Track track = tracksService.find(id);
+        Track track = tracksService.find(trackId);
         if(track != null){
             track.getCheckPoints().add(checkPoint);
             tracksService.save(track);
@@ -40,8 +40,8 @@ public class TracksController {
     }
 
     @GetMapping("/checkpoints")
-    public ResponseEntity<List<CheckPoint>> addCheckpointToTrack(@RequestParam UUID id){
-        Track track = tracksService.find(id);
+    public ResponseEntity<List<CheckPoint>> getCheckPointsFromTrack(@RequestParam UUID trackId){
+        Track track = tracksService.find(trackId);
         if(track != null){
             return new ResponseEntity<>(track.getCheckPoints(), HttpStatus.OK);
         }else{
