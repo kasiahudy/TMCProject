@@ -5,17 +5,18 @@ import { HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LoginComponent } from './login/login.component';
-import { MapComponent } from './map/map.component';
-import { AdminPageComponent } from './admin-page/admin-page.component';
+import { LoginComponent } from './pages/login/login.component';
+import { MapComponent } from './pages/map/map.component';
+import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 import { AuthGuard } from './guards/auth.guard';
-import { RegisterComponent } from './register/register.component';
-import { UserDetailsComponent } from './user-details/user-details.component';
-import { MarkerDetailsComponent} from './marker-details/marker-details.component';
-import {TrackDetailsComponent} from './track-details/track-details.component';
-import {EventPageComponent} from './event-page/event-page.component';
-import {CheckpointDetailsComponent} from './checkpoint-details/checkpoint-details.component';
-import {TrackMapComponent} from './track-map/track-map.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { UserDetailsComponent } from './details/user-details/user-details.component';
+import { MarkerDetailsComponent} from './details/marker-details/marker-details.component';
+import {TrackDetailsComponent} from './details/track-details/track-details.component';
+import {EventPageComponent} from './pages/event-page/event-page.component';
+import {CheckpointDetailsComponent} from './details/checkpoint-details/checkpoint-details.component';
+import {TrackMapComponent} from './pages/track-map/track-map.component';
+import {EventDetailsComponent} from './details/event-details/event-details.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {TrackMapComponent} from './track-map/track-map.component';
     TrackDetailsComponent,
     EventPageComponent,
     CheckpointDetailsComponent,
-    TrackMapComponent
+    TrackMapComponent,
+    EventDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,24 @@
+
+<div>
+    <h4>{{event.name}}</h4>
+</div>
+<div>
+    <label>Date: </label> {{event.date}}
+</div>
+<div>
+    <h4>Builders</h4>
+    <div *ngFor="let user of eventBuilders | async">
+        <user-details [user]='user'></user-details>
+    </div>
+</div>
+<button *ngIf="!isEditEvent" class="btn btn-secondary btn" (click)='editEvent()'>Edit</button>
+<div *ngIf="isEditEvent" style="width: 50%; margin-left: 25%;">
+    <label>Select new builder:</label>
+    <select class="form-control" (change)="selectUser($event)">
+        <option *ngFor="let user of users | async" [value]="user.login">{{user.login}}</option>
+    </select>
+    <button class="btn btn-secondary btn"  style="margin-right: 10px; margin-top: 10px" (click)='addBuilder()'>Add builder</button>
+    <button class="btn btn-secondary btn"  style="margin-top: 10px"(click)='return()'>Return</button>
+</div>
+<br/>
+<hr/>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 import {Observable, of} from 'rxjs';
-import {Router} from '@angular/router';
-import {Event} from "../models/event";
+import {ActivatedRoute, Router} from '@angular/router';
+import {Event} from "../../models/event";
 
 @Component({
     selector: 'event-page',
@@ -15,12 +15,16 @@ export class EventPageComponent implements OnInit {
     selectedEventId: string;
     events: Observable<Event[]>;
     showAdminPanelButton: boolean;
+    username: string;
 
-    constructor(private appService: AppService, private router: Router) { }
+    constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.isAdmin();
         this.loadEvents();
+        this.route.params.subscribe(params => {
+            this.username = params['username'];
+        });
     }
 
     loadEvents() {
@@ -31,6 +35,7 @@ export class EventPageComponent implements OnInit {
                     console.log(responses);
                     responses.forEach(function(response) {
                         this.events.subscribe(events => {
+                            //let builder = response.bulders.find
                             events.push(response);
                         });
                     }.bind(this));

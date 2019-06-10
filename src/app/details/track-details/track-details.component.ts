@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 
-import { MapComponent } from '../map/map.component';
-import {Track} from '../models/track';
+import { MapComponent } from '../../pages/map/map.component';
+import {Track} from '../../models/track';
 import {Observable, of} from 'rxjs';
-import {Marker} from '../models/marker';
-import {Event} from '../models/event';
+import {Marker} from '../../models/marker';
+import {Event} from '../../models/event';
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({

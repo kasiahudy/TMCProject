@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 
-import { Marker } from '../models/marker';
+import { Marker } from '../../models/marker';
 
 @Component({
     selector: 'marker-details',

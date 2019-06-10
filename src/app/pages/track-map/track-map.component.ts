@@ -19,15 +19,15 @@ import OlText from 'ol/style/Text';
 import { transform, toLonLat, get } from 'ol/proj';
 
 import { fromLonLat } from 'ol/proj';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 import {Router, ActivatedRoute} from '@angular/router';
 
 import {Observable, of} from 'rxjs';
 
-import { Event } from '../models/event';
-import { Marker } from '../models/marker';
-import {Track} from '../models/track';
-import {Checkpoint} from '../models/checkpoint';
+import { Event } from '../../models/event';
+import { Marker } from '../../models/marker';
+import {Track} from '../../models/track';
+import {Checkpoint} from '../../models/checkpoint';
 
 import { saveAs } from 'file-saver';
 

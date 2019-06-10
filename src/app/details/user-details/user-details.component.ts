@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 
-import { AdminPageComponent } from '../admin-page/admin-page.component';
-import {SystemUser} from '../models/system-user';
+import { AdminPageComponent } from '../../pages/admin-page/admin-page.component';
+import {SystemUser} from '../../models/system-user';
 
 @Component({
     selector: 'user-details',

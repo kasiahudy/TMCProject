@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 
-import { MapComponent } from '../map/map.component';
-import { Marker } from '../models/marker';
+import { MapComponent } from '../../pages/map/map.component';
+import { Marker } from '../../models/marker';
 import {Observable} from 'rxjs';
-import {Track} from '../models/track';
+import {Track} from '../../models/track';
 
 @Component({
     selector: 'checkpoint-details',

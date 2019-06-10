@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AppService } from '../app.service';
-import { SystemUser } from '../models/system-user';
+import { AppService } from '../../app.service';
+import { SystemUser } from '../../models/system-user';
 
 @Component({
     selector: 'app-login-page',
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 response => {
                     console.log(response);
-                    this.router.navigate(['../event-page']);},
+                    this.router.navigate(['../event-page', this.user.login]);},
                     error => console.log(error));
 
     }

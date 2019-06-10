@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../app.service';
-import { Observable } from 'rxjs';
-import {SystemUser} from '../models/system-user';
+import { AppService } from '../../app.service';
+import {Observable, of} from 'rxjs';
+import {SystemUser} from '../../models/system-user';
 import {Router} from '@angular/router';
-import { Event } from '../models/event';
+import { Event } from '../../models/event';
 import * as moment from 'moment';
 
 @Component({
@@ -20,12 +20,15 @@ export class AdminPageComponent implements OnInit {
     newEventDate: string;
     message: any;
 
+    events: Observable<Event[]>;
+
     constructor(private appService: AppService, private router: Router) {
         this.message = {exists: 'false'};
     }
 
     ngOnInit() {
         this.isAddNewEvent = false;
+        this.loadEvents();
         this.reloadData();
     }
 
@@ -46,6 +49,25 @@ export class AdminPageComponent implements OnInit {
 
     addNewEvent() {
         this.isAddNewEvent = true;
+    }
+
+    loadEvents() {
+        this.events = of([]);
+        this.appService.getAllEvents()
+            .subscribe(
+                responses => {
+                    console.log(responses);
+                    responses.forEach(function(response) {
+                        this.events.subscribe(events => {
+                            //let builder = response.bulders.find
+                            events.push(response);
+                        });
+                    }.bind(this));
+                }
+                , error => {
+                    console.log(error);
+
+                });
     }
 
     saveNewEvent() {

@@ -19,15 +19,15 @@ import OlText from 'ol/style/Text';
 import { transform, toLonLat, get } from 'ol/proj';
 
 import { fromLonLat } from 'ol/proj';
-import { AppService } from '../app.service';
+import { AppService } from '../../app.service';
 import {Router, ActivatedRoute} from '@angular/router';
 
 import {Observable, of} from 'rxjs';
 
-import { Event } from '../models/event';
-import { Marker } from '../models/marker';
-import {Track} from '../models/track';
-import {Checkpoint} from '../models/checkpoint';
+import { Event } from '../../models/event';
+import { Marker } from '../../models/marker';
+import {Track} from '../../models/track';
+import {Checkpoint} from '../../models/checkpoint';
 
 import { saveAs } from 'file-saver';
 
@@ -84,19 +84,24 @@ export class MapComponent implements OnInit {
 
         this.selectedMarker = new Marker();
 
-        this.source = new OlWMS({
-            url: 'http://mapy.geoportal.gov.pl/wss/service/img/guest/ORTO/MapServer/WMSServer',
+        /*this.source = new OlWMS({
+            url: 'http://mapy.geoportal.gov.pl/wss/service/img/guest/TOPO/MapServer/WMSServer',
             params: {
                 'LAYERS': 'Raster',
                 'CRS': 'EPSG:2180',
                 'VERSION': '1.1.1'
             }
+        });*/
+
+        this.source = new OlXYZ({
+            url: 'http://tile.osm.org/{z}/{x}/{y}.png',
+            crossOrigin: 'anonymous'
         });
 
         this.layer = new OlTileLayer({
             source: this.source,
-            isBaseLayer: true,
-            projection: get('EPSG:2180')
+            /*isBaseLayer: true,
+            projection: get('EPSG:2180')*/
         });
 
         this.view = new OlView({
