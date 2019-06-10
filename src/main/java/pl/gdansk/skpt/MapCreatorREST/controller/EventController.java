@@ -189,5 +189,29 @@ public class EventController {
 
     }
 
+    @DeleteMapping("/builders")
+    public ResponseEntity<String> deleteBuilderFromEvent(@RequestParam UUID eventId,
+                                                                 @RequestParam String builderId){
+        SystemUser user = userService.find(builderId);
+        if(user != null){
+            Event event = eventService.find(eventId);
+            if(event != null){
+                if(event.getBuilders().contains(user)){
+                    event.getBuilders().remove(user);
+                    eventService.save(event);
+                    return new ResponseEntity<>("Builder removed",HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>("Builder not on list",HttpStatus.ALREADY_REPORTED);
+                }
+
+            }else{
+                return new ResponseEntity<>("Event not found",HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        }
+
+    }
+
 
 }
