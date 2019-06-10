@@ -53,7 +53,7 @@ public class Event {
     @Column
     @Setter
     @Getter
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<SystemUser> builders;
 
 //    public Event(String name, LocalDate date, List<Marker> markers, List<SystemUser> users, List<Track> tracks){

@@ -11,6 +11,7 @@ import pl.gdansk.skpt.MapCreatorREST.model.SystemUser;
 import pl.gdansk.skpt.MapCreatorREST.model.Marker;
 import pl.gdansk.skpt.MapCreatorREST.model.Track;
 import pl.gdansk.skpt.MapCreatorREST.services.EventService;
+import pl.gdansk.skpt.MapCreatorREST.services.UserService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,7 +24,9 @@ import java.util.stream.Collectors;
 public class EventController {
 
     final EventService eventService;
-    public EventController(EventService eventService){
+    final UserService userService;
+    public EventController(EventService eventService,UserService userService){
+        this.userService = userService;
         this.eventService = eventService;
     }
 
@@ -150,6 +153,40 @@ public class EventController {
         }else{
             return new ResponseEntity<>("No such Event",HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/builders")
+    public ResponseEntity<String> addBuilderToEvent(@RequestParam UUID eventId,
+                                                    @RequestParam String builderId){
+        SystemUser user = userService.find(builderId);
+        if(user != null){
+            Event event = eventService.find(eventId);
+            if(event != null){
+                if(!event.getBuilders().contains(user)){
+                    event.getBuilders().add(user);
+                    eventService.save(event);
+                    return new ResponseEntity<>("Builder added",HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>("Builder already on list",HttpStatus.ALREADY_REPORTED);
+                }
+
+            }else{
+                return new ResponseEntity<>("Event not found",HttpStatus.NOT_FOUND);
+            }
+        }else{
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/builders")
+    public ResponseEntity<List<SystemUser>> getBuildersFromEvent(@RequestParam UUID eventId){
+        Event event = eventService.find(eventId);
+        if(event != null){
+            return new ResponseEntity<>(event.getBuilders(),HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+
     }
 
 
