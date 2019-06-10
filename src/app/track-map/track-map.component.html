@@ -1,0 +1,57 @@
+
+
+<nav class="navbar navbar-expand-md sticky-top navbar-dark fixed-top bg-dark">
+    <div class="navbar-nav-scroll">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" >SKPT Map creator</a>
+            </li>
+            <li *ngIf="showAdminPanelButton" class="nav-item">
+                <a class="nav-link " href="../admin-page">Admin page</a>
+            </li>
+        </ul>
+    </div>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <li class="nav-item">
+            <a class="nav-link p-2" (click)="exportMap()">Export map <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link p-2" href="../login" (click)="onLogout()">Logout <span class="sr-only">(current)</span></a>
+        </li>
+    </ul>
+</nav>
+<div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 20px;">
+    <div  *ngIf="!markerEdit">
+        <h3>{{selectedTrack.name}}</h3>
+        <br/>
+        <h4>All markers:</h4>
+        <div *ngFor="let marker of trackMarkers | async">
+            <marker-details [marker]='marker'></marker-details>
+        </div>
+    </div>
+    <div *ngIf="markerEdit">
+        <form (ngSubmit)="saveMarker()" style="alignment: center">
+            <h4>Checkpoint {{selectedMarker.lanternCode}}</h4>
+            <div>
+                <label>Lon: </label> {{selectedMarker.lon}}
+            </div>
+            <div>
+                <label>Lat: </label> {{selectedMarker.lat}}
+            </div>
+            <br/>
+            <h5>Affiliate checkpoints:</h5>
+            <div class="form-group row  d-inline">
+                <div *ngFor="let marker of selectedCheckpointAffiliateMarkers | async">
+                    <marker-details [marker]='marker'></marker-details>
+                </div>
+                <button class="btn btn-secondary" (click)='return()'>Return</button>
+            </div>
+        </form>
+    </div>
+    <button   *ngIf="!markerEdit" style="margin-bottom: 20px" class="btn btn-secondary" (click)='returnToMainMap()'>Return</button>
+</div>
+
+<div style=" display: inline-block; width: 80%; height: 80%">
+    <div id="map" class="map"></div>
+</div>
+

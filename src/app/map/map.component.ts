@@ -61,10 +61,12 @@ export class MapComponent implements OnInit {
     newTrackName: string
 
     showAdminPanelButton: boolean;
+    allMarkersShown: boolean;
 
     constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
+        this.allMarkersShown = false;
         this.selectedEvent = new Event();
         this.route.params.subscribe(params => {
             const selectedEventId = params['selectedEventId'];
@@ -369,6 +371,14 @@ export class MapComponent implements OnInit {
     return() {
         this.markerEdit = false;
         this.addNewTrack = false;
+    }
+
+    showAllMarkers(){
+        this.allMarkersShown = true;
+    }
+
+    hideAllMarkers() {
+        this.allMarkersShown = false;
     }
 
     isAdmin() {

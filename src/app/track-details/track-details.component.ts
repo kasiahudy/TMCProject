@@ -5,6 +5,8 @@ import { MapComponent } from '../map/map.component';
 import {Track} from '../models/track';
 import {Observable, of} from 'rxjs';
 import {Marker} from '../models/marker';
+import {Event} from '../models/event';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
     selector: 'track-details',
@@ -15,11 +17,16 @@ import {Marker} from '../models/marker';
 export class TrackDetailsComponent implements OnInit {
 
     @Input() track: Track;
+    @Input() event: Event;
+    @Output() showMainMenu: EventEmitter<null> = new EventEmitter();
+    @Output() hideMainMenu: EventEmitter<null> = new EventEmitter();
     trackMarkers: Observable<Marker[]>;
+    trackEdit: boolean;
 
-    constructor(private appService: AppService, private mapComponent: MapComponent) { }
+    constructor(private appService: AppService, private mapComponent: MapComponent, private router: Router) { }
 
     ngOnInit() {
+        this.trackEdit = false;
         this.trackMarkers = of([]);
         this.trackMarkers.subscribe(markers => {
             this.track.checkpoints.forEach(function(checkpoint) {
@@ -31,5 +38,10 @@ export class TrackDetailsComponent implements OnInit {
             }.bind(this));
         });
     }
+
+    editTrack() {
+        this.router.navigate(['../track-map', this.event.id, this.track.id]);
+    }
+
 
 }

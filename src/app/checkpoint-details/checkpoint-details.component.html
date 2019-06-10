@@ -1,0 +1,12 @@
+<div *ngIf="marker">
+    <div *ngIf="!checkpointEdit">
+        <div>
+            <label>Track: </label> {{track.name}}
+        </div>
+        <h4>Affiliate markers:</h4>
+        <div *ngFor="let marker of affiliateMarkers | async">
+            <marker-details [marker]='marker'></marker-details>
+        </div>
+    </div>
+    <hr/>
+</div>

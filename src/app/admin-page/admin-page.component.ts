@@ -3,7 +3,6 @@ import { AppService } from '../app.service';
 import { Observable } from 'rxjs';
 import {SystemUser} from '../models/system-user';
 import {Router} from '@angular/router';
-import { SiteMap} from '../site-map';
 import { Event } from '../models/event';
 import * as moment from 'moment';
 

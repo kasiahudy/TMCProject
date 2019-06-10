@@ -26,16 +26,18 @@
         <h3>{{selectedEvent.name}}</h3>
         <h4>{{selectedEvent.date}}</h4>
         <br/>
-        <br/>
-        <h4>All markers:</h4>
-        <div *ngFor="let marker of eventMarkers | async">
-            <marker-details [marker]='marker'></marker-details>
+        <button  *ngIf="!allMarkersShown"  style="margin-bottom: 20px" class="btn btn-secondary" (click)='showAllMarkers()'>Show all markers</button>
+        <div *ngIf="allMarkersShown">
+            <h4>All markers:</h4>
+            <div *ngFor="let marker of eventMarkers | async">
+                <marker-details [marker]='marker'></marker-details>
+            </div>
+            <button class="btn btn-secondary" style="margin-bottom: 20px" (click)='hideAllMarkers()'>Hide all markers</button>
         </div>
         <h4>Tracks:</h4>
         <div *ngFor="let track of selectedEventTracks | async">
-            <track-details [track]='track'></track-details>
+            <track-details [track]='track' [event]='selectedEvent'></track-details>
         </div>
-        <br/>
         <button class="btn btn-success btn-sm" (click)='newTrackForm()'>Add new track</button>
         <br/>
     </div>
@@ -53,19 +55,21 @@
             <div>
                 <label>Lat: </label> {{selectedMarker.lat}}
             </div>
+            <div class="form-group row  d-inline">
+                <button type="submit" class="btn btn-success" style="margin-right: 10px">Submit</button>
+                <button class="btn btn-danger"  style="margin-right: 10px" (click)='deleteMarker()'>Delete marker</button>
+                <button class="btn btn-secondary" (click)='return()'>Return</button>
+            </div>
+            <br/>
+            <br/>
             <div *ngIf="selectedMarker.lanternCode">
                 <h5>Select track:</h5>
                 <select class="form-control" name="selectTrackNameInMarker" [(ngModel)]="selectedTrackName" (change)="selectTrack($event)">
                     <option *ngFor="let track of selectedEventTracks | async" [value]="track.id">{{track.name}}</option>
                 </select>
-                <br/>
-                <button class="btn btn-success" style="margin-bottom: 10px" (click)='addToTrack()'>Add to track</button>
 
-            </div>
-            <div class="form-group row  d-inline">
-                <button type="submit" class="btn btn-success" style="margin-right: 10px">Submit</button>
-                <button class="btn btn-danger"  style="margin-right: 10px" (click)='deleteMarker()'>Delete marker</button>
-                <button class="btn btn-secondary" (click)='return()'>Return</button>
+                <button class="btn btn-success" style="margin-top: 10px" (click)='addToTrack()'>Add to track</button>
+
             </div>
         </form>
     </div>

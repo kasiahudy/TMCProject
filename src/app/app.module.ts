@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,8 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { MarkerDetailsComponent} from './marker-details/marker-details.component';
 import {TrackDetailsComponent} from './track-details/track-details.component';
 import {EventPageComponent} from './event-page/event-page.component';
+import {CheckpointDetailsComponent} from './checkpoint-details/checkpoint-details.component';
+import {TrackMapComponent} from './track-map/track-map.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import {EventPageComponent} from './event-page/event-page.component';
     UserDetailsComponent,
     MarkerDetailsComponent,
     TrackDetailsComponent,
-      EventPageComponent
+    EventPageComponent,
+    CheckpointDetailsComponent,
+    TrackMapComponent
   ],
   imports: [
     BrowserModule,

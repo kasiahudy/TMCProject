@@ -6,6 +6,7 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './register/register.component';
 import {EventPageComponent} from './event-page/event-page.component';
+import {TrackMapComponent} from './track-map/track-map.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -13,7 +14,8 @@ const routes: Routes = [
     { path: 'map/:selectedEventId', component: MapComponent, canActivate: [AuthGuard] },
     { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthGuard] },
     { path: 'register', component:  RegisterComponent},
-    { path: 'event-page', component: EventPageComponent}
+    { path: 'event-page', component: EventPageComponent},
+    { path: 'track-map/:selectedEventId/:selectedTrackId', component: TrackMapComponent}
 ];
 
 @NgModule({

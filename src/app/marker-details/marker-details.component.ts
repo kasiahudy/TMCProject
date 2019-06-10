@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AppService } from '../app.service';
 
-import { MapComponent } from '../map/map.component';
 import { Marker } from '../models/marker';
 
 @Component({
@@ -15,7 +14,7 @@ export class MarkerDetailsComponent implements OnInit {
 
     @Input() marker: Marker;
 
-    constructor(private appService: AppService, private mapComponent: MapComponent) { }
+    constructor(private appService: AppService) { }
 
     ngOnInit() {
         let coordinates = this.marker.coordinate;

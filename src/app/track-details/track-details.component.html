@@ -1,4 +1,8 @@
-<h5>{{track.name}}</h5>
-<div *ngFor="let marker of trackMarkers | async">
-    <marker-details [marker]='marker' ></marker-details>
+<div>
+    <h5>{{track.name}}</h5>
+    <button  style="margin-bottom: 20px" class="btn btn-secondary btn-sm" (click)='editTrack()'>Edit track</button>
+    <div *ngFor="let marker of trackMarkers | async">
+        <marker-details [marker]='marker' ></marker-details>
+    </div>
 </div>
+
