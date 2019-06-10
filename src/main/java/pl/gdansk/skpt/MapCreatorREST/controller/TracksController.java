@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.CheckPoint;
+import pl.gdansk.skpt.MapCreatorREST.model.Marker;
 import pl.gdansk.skpt.MapCreatorREST.model.Track;
+import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
 import pl.gdansk.skpt.MapCreatorREST.services.TracksService;
 
 import java.util.List;
@@ -15,7 +17,11 @@ import java.util.UUID;
 public class TracksController {
 
     final TracksService tracksService;
-    public TracksController(TracksService ts){tracksService = ts;}
+    final MarkerService markerService;
+    public TracksController(TracksService tracksService,MarkerService markerService){
+        this.tracksService = tracksService;
+        this.markerService = markerService;
+    }
 
     @PutMapping("/checkpoints")
     public ResponseEntity<UUID> addCheckpointToTrack(@RequestParam UUID id,
@@ -51,4 +57,6 @@ public class TracksController {
             return new ResponseEntity<>("No such Checkpoint in Track",HttpStatus.NOT_FOUND);
         }
     }
+
+
 }

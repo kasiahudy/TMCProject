@@ -20,7 +20,7 @@ public class CheckPoint {
 
 
     @ManyToOne(
-            cascade = {CascadeType.PERSIST,CascadeType.MERGE}
+            cascade = {CascadeType.ALL}
     )
     @Setter
     @Getter
@@ -29,7 +29,7 @@ public class CheckPoint {
     @Setter
     @Getter
     @OneToMany(
-        cascade = {CascadeType.PERSIST,CascadeType.MERGE}
+        cascade = {CascadeType.ALL}
     )
     List<Marker> affiliateMarkers;
 
