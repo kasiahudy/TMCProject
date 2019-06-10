@@ -33,7 +33,7 @@ public class Track {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<CheckPoint> checkpoints;
+    private List<CheckPoint> checkPoints;
 
 
 

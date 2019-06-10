@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.CheckPoint;
 import pl.gdansk.skpt.MapCreatorREST.model.Marker;
 import pl.gdansk.skpt.MapCreatorREST.model.Track;
+import pl.gdansk.skpt.MapCreatorREST.services.CheckPointService;
 import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
 import pl.gdansk.skpt.MapCreatorREST.services.TracksService;
 
@@ -18,9 +19,11 @@ public class TracksController {
 
     final TracksService tracksService;
     final MarkerService markerService;
-    public TracksController(TracksService tracksService,MarkerService markerService){
+    final CheckPointService checkPointService;
+    public TracksController(TracksService tracksService,MarkerService markerService, CheckPointService checkPointService){
         this.tracksService = tracksService;
         this.markerService = markerService;
+        this.checkPointService = checkPointService;
     }
 
     @PutMapping("/checkpoints")
@@ -28,7 +31,7 @@ public class TracksController {
                                                      @RequestBody CheckPoint checkPoint){
         Track track = tracksService.find(id);
         if(track != null){
-            track.getCheckpoints().add(checkPoint);
+            track.getCheckPoints().add(checkPoint);
             tracksService.save(track);
             return new ResponseEntity<>(checkPoint.getId(), HttpStatus.OK);
         }else{
@@ -36,18 +39,29 @@ public class TracksController {
         }
     }
 
+    @GetMapping("/checkpoints")
+    public ResponseEntity<List<CheckPoint>> addCheckpointToTrack(@RequestParam UUID id){
+        Track track = tracksService.find(id);
+        if(track != null){
+            return new ResponseEntity<>(track.getCheckPoints(), HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/checkpoints")
-    public ResponseEntity<String> addCheckpointToTrack(@RequestParam UUID trackId,
-                                                     @RequestParam UUID checkPointId){
+    public ResponseEntity<String> removeCheckpointFromTrack(@RequestParam UUID trackId,
+                                                            @RequestParam UUID checkPointId){
         Track track = tracksService.find(trackId);
         if(track != null){
-            CheckPoint checkPoint = track.getCheckpoints().stream()
+            CheckPoint checkPoint = track.getCheckPoints().stream()
                     .filter(c -> c.getId().compareTo(checkPointId) == 0)
                     .findAny()
                     .orElse(null);
             if(checkPoint != null){
-                track.getCheckpoints().remove(checkPoint);
+                track.getCheckPoints().remove(checkPoint);
                 tracksService.save(track);
+                checkPointService.remove(checkPoint);
                 return new ResponseEntity<>("", HttpStatus.OK);
             }else{
                 return new ResponseEntity<>("No such Track",HttpStatus.NOT_FOUND);
