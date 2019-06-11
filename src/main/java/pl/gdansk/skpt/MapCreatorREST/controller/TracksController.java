@@ -10,6 +10,7 @@ import pl.gdansk.skpt.MapCreatorREST.services.CheckPointService;
 import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
 import pl.gdansk.skpt.MapCreatorREST.services.TracksService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,7 @@ public class TracksController {
         Track track = tracksService.find(trackId);
         if(track != null){
             track.getCheckPoints().add(checkPoint);
+            if(checkPoint.getMainMarker().getMainMarkerOf() == null)checkPoint.getMainMarker().setMainMarkerOf(new ArrayList<CheckPoint>());
             checkPoint.getMainMarker().getMainMarkerOf().add(checkPoint);
             tracksService.save(track);
             return new ResponseEntity<>(checkPoint.getId(), HttpStatus.OK);
