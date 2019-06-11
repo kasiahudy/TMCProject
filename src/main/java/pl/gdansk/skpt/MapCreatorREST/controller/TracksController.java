@@ -33,7 +33,6 @@ public class TracksController {
         Track track = tracksService.find(trackId);
         if(track != null){
             track.getCheckPoints().add(checkPoint);
-            if(checkPoint.getMainMarker().getMainMarkerOf() == null)checkPoint.getMainMarker().setMainMarkerOf(new ArrayList<CheckPoint>());
             checkPoint.getMainMarker().getMainMarkerOf().add(checkPoint);
             tracksService.save(track);
             return new ResponseEntity<>(checkPoint.getId(), HttpStatus.OK);

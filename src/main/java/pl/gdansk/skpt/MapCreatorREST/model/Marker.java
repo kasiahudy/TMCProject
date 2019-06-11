@@ -11,6 +11,7 @@ import pl.gdansk.skpt.MapCreatorREST.Util.JsonToPointDeserializer;
 import pl.gdansk.skpt.MapCreatorREST.Util.PointToJsonSerializer;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,7 +49,7 @@ public class Marker {
             mappedBy = "mainMarker",
             fetch = FetchType.EAGER
     )
-    private List<CheckPoint> mainMarkerOf;
+    private List<CheckPoint> mainMarkerOf = new ArrayList<CheckPoint>();
 
 
 //
