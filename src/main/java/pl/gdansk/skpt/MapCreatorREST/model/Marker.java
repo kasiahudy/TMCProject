@@ -10,6 +10,7 @@ import pl.gdansk.skpt.MapCreatorREST.Util.JsonToPointDeserializer;
 import pl.gdansk.skpt.MapCreatorREST.Util.PointToJsonSerializer;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,6 +39,16 @@ public class Marker {
     @JsonSerialize(using = PointToJsonSerializer.class)
     @JsonDeserialize(using = JsonToPointDeserializer.class)
     private Point coordinate;
+
+    @Getter
+    @Setter
+    @OneToMany(
+            mappedBy = "mainMarker",
+            fetch = FetchType.LAZY
+
+    )
+    private List<CheckPoint> mainMarkerOf;
+
 
 //
 //    public Marker(String tapeCode, String lanternCode, Point point){

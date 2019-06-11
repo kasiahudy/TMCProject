@@ -19,8 +19,9 @@ public class CheckPoint {
     private UUID id;
 
 
+    @JoinColumn(name = "marker_id")
     @ManyToOne(
-            cascade = {CascadeType.ALL}
+            fetch = FetchType.LAZY
     )
     @Setter
     @Getter
@@ -29,7 +30,7 @@ public class CheckPoint {
     @Setter
     @Getter
     @OneToMany(
-        cascade = {CascadeType.ALL}
+        cascade = CascadeType.ALL
     )
     List<Marker> affiliateMarkers;
 

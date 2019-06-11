@@ -6,11 +6,10 @@ import com.vividsolutions.jts.io.WKTReader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.gdansk.skpt.MapCreatorREST.model.Event;
-import pl.gdansk.skpt.MapCreatorREST.model.SystemUser;
-import pl.gdansk.skpt.MapCreatorREST.model.Marker;
-import pl.gdansk.skpt.MapCreatorREST.model.Track;
+import pl.gdansk.skpt.MapCreatorREST.model.*;
+import pl.gdansk.skpt.MapCreatorREST.services.CheckPointService;
 import pl.gdansk.skpt.MapCreatorREST.services.EventService;
+import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
 import pl.gdansk.skpt.MapCreatorREST.services.UserService;
 
 import java.time.LocalDate;
@@ -25,9 +24,13 @@ public class EventController {
 
     final EventService eventService;
     final UserService userService;
-    public EventController(EventService eventService,UserService userService){
+    final MarkerService markerService;
+    final CheckPointService checkPointService;
+    public EventController(EventService eventService,UserService userService, MarkerService markerService,CheckPointService checkPointService){
         this.userService = userService;
         this.eventService = eventService;
+        this.markerService = markerService;
+        this.checkPointService = checkPointService;
     }
 
     @PostMapping("/add")
@@ -78,13 +81,13 @@ public class EventController {
     }
 
     @PutMapping("/markers")
-    public  ResponseEntity<String> getMarkersFromEvent(@RequestParam UUID eventId,
+    public  ResponseEntity<UUID> getMarkersFromEvent(@RequestParam UUID eventId,
                                                        @RequestBody Marker newMarker){
         Event event = eventService.find(eventId);
         if(event != null){
             event.getMarkers().add(newMarker);
             eventService.save(event);
-            return new ResponseEntity<>("Added new marker",HttpStatus.OK);
+            return new ResponseEntity<>(newMarker.getId(),HttpStatus.OK);
         }else{
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
         }
@@ -102,7 +105,11 @@ public class EventController {
             if(marker != null){
                 event.getMarkers().remove(marker);
                 eventService.save(event);
-                return new ResponseEntity<>("Removed track",HttpStatus.OK);
+                for(CheckPoint checkPoint : marker.getMainMarkerOf()){
+                    checkPointService.remove(checkPoint);
+                }
+                markerService.remove(marker);
+                return new ResponseEntity<>("Removed marker",HttpStatus.OK);
             }else{
                 return new ResponseEntity<>("No such marker in Event",HttpStatus.NOT_FOUND);
             }
