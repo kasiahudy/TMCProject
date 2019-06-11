@@ -44,7 +44,7 @@ public class Marker {
     @Setter
     @OneToMany(
             mappedBy = "mainMarker",
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     private List<CheckPoint> mainMarkerOf;
 

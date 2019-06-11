@@ -21,7 +21,7 @@ public class CheckPoint {
 
     @JoinColumn(name = "marker_id")
     @ManyToOne(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL
     )
     @Setter
