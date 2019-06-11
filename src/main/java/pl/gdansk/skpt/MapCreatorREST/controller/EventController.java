@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.*;
-import pl.gdansk.skpt.MapCreatorREST.services.CheckPointService;
-import pl.gdansk.skpt.MapCreatorREST.services.EventService;
-import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
-import pl.gdansk.skpt.MapCreatorREST.services.UserService;
+import pl.gdansk.skpt.MapCreatorREST.services.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,11 +23,13 @@ public class EventController {
     final UserService userService;
     final MarkerService markerService;
     final CheckPointService checkPointService;
-    public EventController(EventService eventService,UserService userService, MarkerService markerService,CheckPointService checkPointService){
+    final TracksService trackService;
+    public EventController(EventService eventService,UserService userService, MarkerService markerService,CheckPointService checkPointService, TracksService trackService){
         this.userService = userService;
         this.eventService = eventService;
         this.markerService = markerService;
         this.checkPointService = checkPointService;
+        this.trackService = trackService;
     }
 
     @PostMapping("/add")
@@ -105,11 +104,15 @@ public class EventController {
                     .orElse(null);
             if(marker != null){
                 event.getMarkers().remove(marker);
-                eventService.save(event);
                 for(CheckPoint checkPoint : marker.getMainMarkerOf()){
-                    checkPointService.remove(checkPoint);
+                    Track trackWithCheckPoint = event.getTracks().stream()
+                            .filter(t->t.getCheckPoints().contains(checkPoint))
+                            .findAny()
+                            .orElse(null);
+                    trackWithCheckPoint.getCheckPoints().remove(checkPoint);
+                    trackService.save(trackWithCheckPoint);
                 }
-                markerService.remove(marker);
+                eventService.save(event);
                 return new ResponseEntity<>("Removed marker",HttpStatus.OK);
             }else{
                 return new ResponseEntity<>("No such marker in Event",HttpStatus.NOT_FOUND);
