@@ -8,7 +8,7 @@ import {Observable, of} from 'rxjs';
 import { Event } from '../../models/event';
 import { Marker } from '../../models/marker';
 import {Track} from '../../models/track';
-import {Checkpoint} from '../../models/checkpoint';
+import {CheckPoint} from '../../models/checkPoint';
 
 import {MapComponent} from '../../map/map.component';
 
@@ -69,7 +69,7 @@ export class MainMapPageComponent implements OnInit {
     clickOnMap($event) {
         if (!this.markerEdit && this.selectedEvent != null) {
             const lontat = $event.coordinate;
-            console.log(lontat); //   <=== coordinate projection
+            console.log(lontat);
 
             const marker = new Marker();
             marker.coordinate = Marker.lonLatToCoordinates(lontat[0], lontat[1]);
@@ -136,7 +136,7 @@ export class MainMapPageComponent implements OnInit {
             this.selectedTrack = tracks.find(track => track.id === selectedTrackId);
         });
         this.trackMarkers.subscribe(markers => {
-            this.selectedTrack.checkpoints.forEach(function(checkpoint) {
+            this.selectedTrack.checkPoints.forEach(function(checkpoint) {
                 let marker = new Marker();
                 marker = checkpoint.mainMarker;
                 if(marker != null) {
@@ -149,7 +149,7 @@ export class MainMapPageComponent implements OnInit {
 
     addToTrack() {
         if(this.selectedMarker.lanternCode != null) {
-            const checkpoint = new Checkpoint();
+            const checkpoint = new CheckPoint();
             checkpoint.mainMarker = this.selectedMarker;
             this.appService.addCheckpointToTrack(this.selectedTrack, checkpoint).subscribe(
                 responses2 => {
@@ -179,45 +179,6 @@ export class MainMapPageComponent implements OnInit {
     }
 
     deleteMarker() {
-        let isMarkerInTrack = false;
-        this.selectedEventTracks.subscribe(tracks => {
-            tracks.forEach(function(track) {
-                track.checkpoints.forEach(function(checkpoint) {
-                    if(checkpoint.mainMarker.id === this.selectedMarker.id) {
-                        this.appService.deleteCheckpointFromTrack(track, checkpoint).subscribe(
-                            responses => {
-                                console.log(responses);
-                                this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
-                                    responses2 => {
-                                        console.log(responses2);
-                                        this.refreshSelectedEvent();
-                                    }
-                                    , error2 => {
-                                        console.log(error2);
-                                        this.refreshSelectedEvent();
-                                    }
-                                );
-                            }
-                            , error => {
-                                console.log(error);
-                                this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
-                                    responses2 => {
-                                        console.log(responses2);
-                                        this.refreshSelectedEvent();
-                                    }
-                                    , error2 => {
-                                        console.log(error2);
-                                        this.refreshSelectedEvent();
-                                    }
-                                );
-                            }
-                        );
-                        isMarkerInTrack = true;
-                    }
-                }.bind(this));
-            }.bind(this));
-        });
-        if(!isMarkerInTrack) {
             this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
                 responses => {
                     console.log(responses);
@@ -228,7 +189,6 @@ export class MainMapPageComponent implements OnInit {
                     this.refreshSelectedEvent();
                 }
             );
-        }
 
     }
 

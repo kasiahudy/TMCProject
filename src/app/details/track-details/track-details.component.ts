@@ -28,7 +28,7 @@ export class TrackDetailsComponent implements OnInit {
         this.trackEdit = false;
         this.trackMarkers = of([]);
         this.trackMarkers.subscribe(markers => {
-            this.track.checkpoints.forEach(function(checkpoint) {
+            this.track.checkPoints.forEach(function(checkpoint) {
                 let marker = new Marker();
                 marker = checkpoint.mainMarker;
                 if(marker != null) {

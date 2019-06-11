@@ -8,7 +8,7 @@ import {Observable, of} from 'rxjs';
 import { Event } from '../../models/event';
 import { Marker } from '../../models/marker';
 import {Track} from '../../models/track';
-import {Checkpoint} from '../../models/checkpoint';
+import {CheckPoint} from '../../models/checkPoint';
 
 import { saveAs } from 'file-saver';
 import {MapComponent} from '../../map/map.component';
@@ -27,11 +27,11 @@ export class TrackMapComponent implements OnInit {
     selectedEvent: Event;
     selectedTrack: Track;
     trackMarkers: Observable<Marker[]>;
-    trackCheckpoints: Checkpoint[];
+    trackCheckpoints: CheckPoint[];
 
 
     selectedMarker: Marker;
-    selectedCheckpoint: Checkpoint;
+    selectedCheckpoint: CheckPoint;
     selectedCheckpointAffiliateMarkers: Observable<Marker[]>;
 
     markerEdit: boolean;
@@ -52,7 +52,7 @@ export class TrackMapComponent implements OnInit {
         this.trackMarkers = of([]);
         this.trackCheckpoints = [];
         this.selectedMarker = new Marker();
-        this.selectedCheckpoint = new Checkpoint();
+        this.selectedCheckpoint = new CheckPoint();
         this.selectedCheckpointAffiliateMarkers = of([]);
         this.isAdmin();
     }
@@ -70,42 +70,25 @@ export class TrackMapComponent implements OnInit {
     clickOnMap($event) {
         if (this.markerEdit) {
             const lontat = $event.coordinate;
-            console.log(lontat); //   <=== coordinate projection
+            console.log(lontat);
 
             const marker = new Marker();
             marker.coordinate = Marker.lonLatToCoordinates(lontat[0], lontat[1]);
-            this.selectedCheckpoint.affiliateMarkers.push(marker);
-            this.selectedCheckpointAffiliateMarkers.subscribe(selectedCheckpointAffiliateMarkers => {
-                selectedCheckpointAffiliateMarkers = this.selectedCheckpoint.affiliateMarkers;
-            });
-            const checkpointIndex = this.selectedTrack.checkpoints.findIndex(checkpoint => checkpoint.id === this.selectedCheckpoint.id);
-            this.selectedTrack.checkpoints[checkpointIndex] = this.selectedCheckpoint;
             this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
                 response => {
                     console.log(response);
-                    this.appService.addCheckpointToTrack(this.selectedTrack, this.selectedCheckpoint).subscribe(
-                        response2 => {
-                            console.log(response2);
-                            this.refreshSelectedTrack();
-                        }
-                        , error2 => {
-                            console.log(error2.error);
-                            this.refreshSelectedTrack();
-                        }
-                    );
+
                 }
                 , error => {
                     console.log(error.error);
-                    this.appService.addCheckpointToTrack(this.selectedTrack, this.selectedCheckpoint).subscribe(
+                    this.appService.addCheckpointAffiliateMarker(this.selectedCheckpoint, marker.id).subscribe(
                         response2 => {
                             console.log(response2);
-                            this.refreshSelectedTrack();
+
                         }
                         , error2 => {
                             console.log(error2.error);
-                            this.refreshSelectedTrack();
-                        }
-                    );
+                        });
                 }
             );
 
@@ -124,19 +107,17 @@ export class TrackMapComponent implements OnInit {
                 this.child.markerSource.clear();
 
                     this.trackMarkers.subscribe(trackMarkers => {
-                        this.selectedTrack.checkpoints.forEach(function(checkpoint) {
-                            let newCheckpoint = new Checkpoint();
+                        this.selectedTrack.checkPoints.forEach(function(checkpoint) {
+                            let newCheckpoint = new CheckPoint();
                             newCheckpoint = checkpoint;
                             let newMarker = new Marker();
                             newMarker = checkpoint.mainMarker;
                             let coordinates = checkpoint.mainMarker.coordinate;
                             if(coordinates != null) {
-                                coordinates = coordinates.replace(new RegExp('POINT \\(', 'g'), '');
-                                coordinates = coordinates.replace(new RegExp('\\);', 'g'), '');
-                                const lonLat = coordinates.split(' ');
-                                newMarker.lon = parseFloat (lonLat[0]);
-                                newMarker.lat = parseFloat (lonLat[1]);
-                                this.child.addMarker(newMarker.lon, newMarker.lat, checkpoint.mainMarker);
+                                const lonLat = Marker.coordinatesToLonLat(coordinates);
+                                newMarker.lon = lonLat.lon;
+                                newMarker.lat = lonLat.lat;
+                                this.child.addMarker(lonLat.lon, lonLat.lat, checkpoint.mainMarker);
                             }
                             this.trackCheckpoints.push(newCheckpoint);
                             trackMarkers.push(newMarker);

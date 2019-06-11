@@ -6,7 +6,7 @@ import { SystemUser } from './models/system-user';
 import { Event } from './models/event';
 import {Marker} from './models/marker';
 import {Track} from './models/track';
-import {Checkpoint} from './models/checkpoint';
+import {CheckPoint} from './models/checkPoint';
 
 @Injectable({
     providedIn: 'root'
@@ -76,12 +76,24 @@ export class AppService {
         return this.http.put(`${this.baseUrl}/events/tracks?eventId=${event.id}`, track);
     }
 
-    addCheckpointToTrack(track: Track, checkpoint: Checkpoint) {
-        return this.http.put(`${this.baseUrl}/tracks/checkpoints?id=${track.id}`, checkpoint);
+    addCheckpointToTrack(track: Track, checkpoint: CheckPoint) {
+        return this.http.put(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}`, checkpoint);
     }
 
-    deleteCheckpointFromTrack(track: Track, checkpoint: Checkpoint) {
+    deleteCheckpointFromTrack(track: Track, checkpoint: CheckPoint) {
         return this.http.delete(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}&checkPointId=${checkpoint.id}`);
+    }
+
+    getCheckpointAffiliatesMarkers(checkpoint: CheckPoint, affiliateId: string): Observable<any>  {
+        return this.http.get(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`);
+    }
+
+    addCheckpointAffiliateMarker(checkpoint: CheckPoint, affiliateId: string)  {
+        return this.http.put(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`, affiliateId);
+    }
+
+    deleteCheckpointAffiliateMarker(checkpoint: CheckPoint, affiliateId: string) {
+        return this.http.delete(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`);
     }
 
     getBuilders(event: Event): Observable<any> {

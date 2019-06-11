@@ -81,10 +81,11 @@ export class AdminPageComponent implements OnInit {
                 this.appService.addEvent(event).subscribe(
                     response => {
                         console.log(response);
+                        this.loadEvents();
                     }
                     , error => {
                         console.log(error);
-
+                        this.loadEvents();
                     });
             } else {
                 this.message = {exists: true, text: 'Wrong date type', type: 'error'};
