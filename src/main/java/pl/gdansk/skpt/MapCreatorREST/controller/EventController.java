@@ -85,6 +85,7 @@ public class EventController {
                                                        @RequestBody Marker newMarker){
         Event event = eventService.find(eventId);
         if(event != null){
+            markerService.save(newMarker);
             event.getMarkers().add(newMarker);
             eventService.save(event);
             return new ResponseEntity<>(newMarker.getId(),HttpStatus.OK);
