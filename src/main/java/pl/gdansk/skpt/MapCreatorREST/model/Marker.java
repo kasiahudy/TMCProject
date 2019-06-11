@@ -1,5 +1,6 @@
 package pl.gdansk.skpt.MapCreatorREST.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
@@ -42,6 +43,7 @@ public class Marker {
 
     @Getter
     @Setter
+    @JsonIgnore
     @OneToMany(
             mappedBy = "mainMarker",
             fetch = FetchType.EAGER
