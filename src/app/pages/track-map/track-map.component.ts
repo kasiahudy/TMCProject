@@ -34,8 +34,10 @@ export class TrackMapComponent implements OnInit {
     selectedCheckpoint: CheckPoint;
     selectedCheckpointAffiliateMarkers: Observable<Marker[]>;
 
-    markerEdit: boolean;
+    checkpointEdit = false;
     showAdminPanelButton: boolean;
+
+    affiliateMarkerEdit = false;
 
     addNewAffiliateMarker = false;
     newTapeCode: string;
@@ -53,7 +55,6 @@ export class TrackMapComponent implements OnInit {
             this.refreshSelectedTrack();
         });
 
-        this.markerEdit = false;
         this.trackMarkers = of([]);
         this.trackCheckpoints = of([]);
         this.selectedMarker = new Marker();
@@ -70,12 +71,15 @@ export class TrackMapComponent implements OnInit {
         });
         if(this.selectedCheckpoint) {
             this.refreshCheckpoint();
-            this.editMarkerForm();
+            this.editCheckpointForm();
+        }
+        else {
+            this.affiliateMarkerEdit = true;
         }
     }
 
     clickOnMap($event) {
-        if (this.markerEdit) {
+        if (this.checkpointEdit) {
             this.addNewAffiliateMarker = true;
             const lontat = $event.coordinate;
             console.log(lontat);
@@ -174,16 +178,61 @@ export class TrackMapComponent implements OnInit {
                 this.refreshSelectedTrack();
             }
         );
-        this.markerEdit = false;
+        this.affiliateMarkerEdit = false;
     }
 
-    editMarkerForm() {
-        this.markerEdit = true;
+    deleteMarker() {
+        this.appService.deleteCheckpointAffiliateMarker(this.checkAffiliateMarkerMainMarker(this.selectedMarker), this.selectedMarker.id).subscribe(
+            responses => {
+                console.log(responses);
+                this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
+                    responses2 => {
+                        console.log(responses2);
+                        this.refreshSelectedTrack();
+                    }
+                    , error => {
+                        console.log(error);
+                        this.refreshSelectedTrack();
+                    }
+                );
+            }
+            , error => {
+                console.log(error);
+                this.appService.deleteMarkerFromEvent(this.selectedEvent, this.selectedMarker).subscribe(
+                    responses => {
+                        console.log(responses);
+                        this.refreshSelectedTrack();
+                    }
+                    , error2 => {
+                        console.log(error2);
+                        this.refreshSelectedTrack();
+                    }
+                );
+            }
+        );
+        this.affiliateMarkerEdit = false;
+    }
+
+    checkAffiliateMarkerMainMarker(marker) {
+        let foundCheckpoint;
+        this.selectedTrack.checkPoints.forEach(checkpoint => {
+            const foundAffiliateMarker = checkpoint.affiliateMarkers.find(affiliateMarker => affiliateMarker.id === marker.id);
+            if(foundAffiliateMarker) {
+                foundCheckpoint = checkpoint;
+            }
+        });
+        return foundCheckpoint;
+    }
+
+    editCheckpointForm() {
+        this.checkpointEdit = true;
     }
 
     return() {
-        this.markerEdit = false;
+        this.refreshSelectedTrack();
+        this.checkpointEdit = false;
         this.addNewAffiliateMarker = false;
+        this.affiliateMarkerEdit = false;
     }
 
     isAdmin() {

@@ -97,6 +97,9 @@ export class MainMapPageComponent implements OnInit {
         this.addNewMarker = false;
     }
 
+
+
+
     refreshSelectedEvent() {
         this.appService.getEvent(this.selectedEvent).subscribe(
             response => {
@@ -116,7 +119,10 @@ export class MainMapPageComponent implements OnInit {
                             const lonLat = Marker.coordinatesToLonLat(coordinates);
                             newMarker.lon = lonLat.lon;
                             newMarker.lat = lonLat.lat;
-                            this.child.addMarker(lonLat.lon, lonLat.lat, marker);
+                            if(!this.isAffiliateMarker(marker)) {
+                                this.child.addMarker(lonLat.lon, lonLat.lat, marker);
+                            }
+
                         }
                         eventMarkers.push(newMarker);
 
@@ -134,6 +140,18 @@ export class MainMapPageComponent implements OnInit {
                 console.log(error);
 
             });
+    }
+
+    isAffiliateMarker(marker) {
+        let isAffiliate = false;
+        this.selectedEvent.tracks.forEach(track => {
+            track.checkPoints.forEach(checkpoint => {
+                if(checkpoint.affiliateMarkers.find(affiliateMarker => affiliateMarker.id === marker.id)) {
+                    isAffiliate = true;
+                }
+            });
+        });
+        return isAffiliate;
     }
 
     editMarkerForm() {
@@ -200,8 +218,8 @@ export class MainMapPageComponent implements OnInit {
                     this.refreshSelectedEvent();
                 }
             );
-
     }
+
 
     newTrackForm() {
         this.addNewTrack = true;
