@@ -1,12 +1,15 @@
-<div *ngIf="marker">
-    <div *ngIf="!checkpointEdit">
-        <div>
-            <label>Track: </label> {{track.name}}
-        </div>
-        <h4>Affiliate markers:</h4>
-        <div *ngFor="let marker of affiliateMarkers | async">
-            <marker-details [marker]='marker'></marker-details>
-        </div>
-    </div>
-    <hr/>
+<h4>{{checkpoint.mainMarker.lanternCode}}</h4>
+<div>
+    <label>Tape code: </label> {{checkpoint.mainMarker.tapeCode}}
 </div>
+<div>
+    <label>Lon: </label> {{checkpoint.mainMarker.lon}}
+</div>
+<div>
+    <label>Lat: </label> {{checkpoint.mainMarker.lat}}
+</div>
+<h4 *ngIf="showAffiliateMarkers">Affiliate markers:</h4>
+<div *ngFor="let marker of affiliateMarkers | async">
+    <marker-details [marker]='marker'></marker-details>
+</div>
+<hr/>

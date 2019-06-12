@@ -27,7 +27,7 @@ export class TrackMapComponent implements OnInit {
     selectedEvent: Event;
     selectedTrack: Track;
     trackMarkers: Observable<Marker[]>;
-    trackCheckpoints: CheckPoint[];
+    trackCheckpoints:  Observable<CheckPoint[]>;
 
 
     selectedMarker: Marker;
@@ -36,6 +36,11 @@ export class TrackMapComponent implements OnInit {
 
     markerEdit: boolean;
     showAdminPanelButton: boolean;
+
+    addNewAffiliateMarker = false;
+    newTapeCode: string;
+    newLanternCode: string;
+    newMarker;
 
     constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) { }
 
@@ -50,7 +55,7 @@ export class TrackMapComponent implements OnInit {
 
         this.markerEdit = false;
         this.trackMarkers = of([]);
-        this.trackCheckpoints = [];
+        this.trackCheckpoints = of([]);
         this.selectedMarker = new Marker();
         this.selectedCheckpoint = new CheckPoint();
         this.selectedCheckpointAffiliateMarkers = of([]);
@@ -60,42 +65,55 @@ export class TrackMapComponent implements OnInit {
     clickOnMarker($event) {
         console.log('click' + $event.marker.lon + ' ' + $event.marker.lat);
         this.selectedMarker = $event.marker;
-        this.selectedCheckpoint = this.trackCheckpoints.find(checkpoint => checkpoint.mainMarker.id === $event.marker.id);
-        this.refreshCheckpoint();
-        this.editMarkerForm();
+        this.trackCheckpoints.subscribe(trackCheckpoints => {
+            this.selectedCheckpoint = trackCheckpoints.find(checkpoint => checkpoint.mainMarker.id === $event.marker.id);
+        });
+        if(this.selectedCheckpoint) {
+            this.refreshCheckpoint();
+            this.editMarkerForm();
+        }
     }
 
     clickOnMap($event) {
         if (this.markerEdit) {
+            this.addNewAffiliateMarker = true;
             const lontat = $event.coordinate;
             console.log(lontat);
 
-            const marker = new Marker();
-            marker.coordinate = Marker.lonLatToCoordinates(lontat[0], lontat[1]);
-            marker.lanternCode = this.selectedCheckpoint.mainMarker.lanternCode + ' AM';
-            this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
-                response => {
-                    console.log(response);
-                    marker.id = String(response);
+            this.newMarker = new Marker();
+            this.newMarker.coordinate = Marker.lonLatToCoordinates(lontat[0], lontat[1]);
 
-                    this.appService.addCheckpointAffiliateMarker(this.selectedCheckpoint, marker.id).subscribe(
-                        response2 => {
-                            console.log(response2);
-                            this.refreshSelectedTrack();
-                            this.refreshCheckpoint();
-                        }
-                        , error2 => {
-                            console.log(error2.error);
-                            this.refreshSelectedTrack();
-                            this.refreshCheckpoint();
-                        });
-                }
-                , error => {
-                    console.log(error.error);
-                }
-            );
+            this.newMarker.lanternCode = this.selectedCheckpoint.mainMarker.lanternCode + ' AM';
 
         }
+    }
+
+    createAffiliateMarker() {
+        this.newMarker.tapeCode = this.newTapeCode;
+        this.newMarker.lanternCode = this.newLanternCode;
+        this.appService.addMarkerToEvent(this.selectedEvent, this.newMarker).subscribe(
+            response => {
+                console.log(response);
+                this.newMarker.id = String(response);
+
+                this.appService.addCheckpointAffiliateMarker(this.selectedCheckpoint, this.newMarker.id).subscribe(
+                    response2 => {
+                        console.log(response2);
+                        this.refreshSelectedTrack();
+                        this.refreshCheckpoint();
+                    }
+                    , error2 => {
+                        console.log(error2.error);
+                        this.refreshSelectedTrack();
+                        this.refreshCheckpoint();
+                    });
+            }
+            , error => {
+                console.log(error.error);
+            }
+        );
+        this.newTapeCode = null;
+        this.addNewAffiliateMarker = false;
     }
 
     refreshCheckpoint() {
@@ -104,7 +122,7 @@ export class TrackMapComponent implements OnInit {
             this.selectedCheckpoint.affiliateMarkers.forEach(function(affiliateMarker) {
                 selectedCheckpointAffiliateMarkers.push(affiliateMarker);
             }.bind(this));
-        })
+        });
     }
 
     refreshSelectedTrack() {
@@ -115,31 +133,34 @@ export class TrackMapComponent implements OnInit {
                 this.selectedEvent = event;
                 this.selectedTrack = this.selectedEvent.tracks.find(track => track.id === this.selectedTrack.id);
                 this.trackMarkers = of([]);
-                this.trackCheckpoints = [];
+                this.trackCheckpoints = of([]);
                 this.child.markerSource.clear();
 
-                    this.trackMarkers.subscribe(trackMarkers => {
+                this.trackCheckpoints.subscribe(trackCheckpoints => {
                         this.selectedTrack.checkPoints.forEach(function(checkpoint) {
-                            let newCheckpoint = new CheckPoint();
-                            newCheckpoint = checkpoint;
-                            let newMarker = new Marker();
-                            newMarker = checkpoint.mainMarker;
-                            let coordinates = checkpoint.mainMarker.coordinate;
-                            if(coordinates != null) {
-                                const lonLat = Marker.coordinatesToLonLat(coordinates);
-                                newMarker.lon = lonLat.lon;
-                                newMarker.lat = lonLat.lat;
-                                this.child.addMarker(lonLat.lon, lonLat.lat, checkpoint.mainMarker);
-                            }
-                            this.trackCheckpoints.push(newCheckpoint);
-                            trackMarkers.push(newMarker);
+                            this.addMarkerToMap(checkpoint.mainMarker)
+                            checkpoint.affiliateMarkers.forEach(affiliateMarker => {
+                                this.addMarkerToMap(affiliateMarker);
+                            })
+                            trackCheckpoints.push(checkpoint);
                         }.bind(this));
-                    });
+                });
 
             }
             , error => {
                 console.log(error);
             });
+    }
+
+    addMarkerToMap(marker) {
+        const newMarker = marker;
+        const coordinates = marker.coordinate;
+        if(coordinates != null) {
+            const lonLat = Marker.coordinatesToLonLat(coordinates);
+            newMarker.lon = lonLat.lon;
+            newMarker.lat = lonLat.lat;
+            this.child.addMarker(lonLat.lon, lonLat.lat, marker);
+        }
     }
 
     saveMarker() {
@@ -162,6 +183,7 @@ export class TrackMapComponent implements OnInit {
 
     return() {
         this.markerEdit = false;
+        this.addNewAffiliateMarker = false;
     }
 
     isAdmin() {
