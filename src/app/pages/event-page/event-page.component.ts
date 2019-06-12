@@ -15,15 +15,15 @@ export class EventPageComponent implements OnInit {
 
     selectedEventId: string;
     events: Observable<Event[]>;
-    showAdminPanelButton: boolean;
+    isAdmin: boolean;
     username: string;
 
     constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.isAdmin();
-        this.loadEvents();
         this.username = CurrentUser.username;
+        this.checkIfAdmin();
+        this.loadEvents();
     }
 
     loadEvents() {
@@ -35,7 +35,7 @@ export class EventPageComponent implements OnInit {
                     responses.forEach(function(response) {
                         this.events.subscribe(events => {
                             const eventBuilder = response.builders.find(builder => builder.login === this.username);
-                            if(eventBuilder != null || this.username === 'admin') {
+                            if(eventBuilder != null || this.isAdmin) {
                                 events.push(response);
                             }
                         });
@@ -58,13 +58,13 @@ export class EventPageComponent implements OnInit {
         }
     }
 
-    isAdmin() {
+    checkIfAdmin() {
         this.appService.getUsers().subscribe(
             users => {
                 if(users.length === 0){
-                    this.showAdminPanelButton = false;
+                    this.isAdmin = false;
                 } else {
-                    this.showAdminPanelButton = true;
+                    this.isAdmin = true;
                 }
             });
     }

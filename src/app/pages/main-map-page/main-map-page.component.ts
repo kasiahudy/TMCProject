@@ -40,6 +40,10 @@ export class MainMapPageComponent implements OnInit {
     showAdminPanelButton: boolean;
     allMarkersShown = false;
 
+    addNewMarker = false;
+    newMarker;
+    newTapeCode: string;
+
     constructor(private appService: AppService, private router: Router, private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -68,22 +72,29 @@ export class MainMapPageComponent implements OnInit {
 
     clickOnMap($event) {
         if (!this.markerEdit && this.selectedEvent != null) {
+            this.addNewMarker = true;
             const lontat = $event.coordinate;
             console.log(lontat);
 
-            const marker = new Marker();
-            marker.coordinate = Marker.lonLatToCoordinates(lontat[0], lontat[1]);
-            this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
-                response => {
-                    console.log(response);
-                    this.refreshSelectedEvent();
-                }
-                , error => {
-                    console.log(error.error);
-                    this.refreshSelectedEvent();
-                }
-            );
+            this.newMarker = new Marker();
+            this.newMarker.coordinate = Marker.lonLatToCoordinates(lontat[0], lontat[1]);
         }
+    }
+
+    createMarker() {
+        this.newMarker.tapeCode = this.newTapeCode;
+        this.appService.addMarkerToEvent(this.selectedEvent, this.newMarker).subscribe(
+            response => {
+                console.log(response);
+                this.refreshSelectedEvent();
+            }
+            , error => {
+                console.log(error.error);
+                this.refreshSelectedEvent();
+            }
+        );
+        this.newTapeCode = null;
+        this.addNewMarker = false;
     }
 
     refreshSelectedEvent() {
@@ -215,6 +226,7 @@ export class MainMapPageComponent implements OnInit {
     return() {
         this.markerEdit = false;
         this.addNewTrack = false;
+        this.addNewMarker = false;
     }
 
     showAllMarkers(){

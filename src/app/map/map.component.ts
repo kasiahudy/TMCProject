@@ -110,7 +110,7 @@ export class MapComponent implements OnInit {
                 crossOrigin: null
             })),
             text: new OlText({
-                text: marker.lanternCode,
+                text: marker.tapeCode + ' ' + (marker.lanternCode ? marker.lanternCode : ''),
                 offsetY: -16,
                 font: 'bold 15px sans-serif'
             })

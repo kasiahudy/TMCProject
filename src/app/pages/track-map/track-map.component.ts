@@ -61,9 +61,7 @@ export class TrackMapComponent implements OnInit {
         console.log('click' + $event.marker.lon + ' ' + $event.marker.lat);
         this.selectedMarker = $event.marker;
         this.selectedCheckpoint = this.trackCheckpoints.find(checkpoint => checkpoint.mainMarker.id === $event.marker.id);
-        this.selectedCheckpointAffiliateMarkers.subscribe(selectedCheckpointAffiliateMarkers => {
-            selectedCheckpointAffiliateMarkers = this.selectedCheckpoint.affiliateMarkers;
-        })
+        this.refreshCheckpoint();
         this.editMarkerForm();
     }
 
@@ -74,25 +72,39 @@ export class TrackMapComponent implements OnInit {
 
             const marker = new Marker();
             marker.coordinate = Marker.lonLatToCoordinates(lontat[0], lontat[1]);
+            marker.lanternCode = this.selectedCheckpoint.mainMarker.lanternCode + ' AM';
             this.appService.addMarkerToEvent(this.selectedEvent, marker).subscribe(
                 response => {
                     console.log(response);
+                    marker.id = String(response);
 
-                }
-                , error => {
-                    console.log(error.error);
                     this.appService.addCheckpointAffiliateMarker(this.selectedCheckpoint, marker.id).subscribe(
                         response2 => {
                             console.log(response2);
-
+                            this.refreshSelectedTrack();
+                            this.refreshCheckpoint();
                         }
                         , error2 => {
                             console.log(error2.error);
+                            this.refreshSelectedTrack();
+                            this.refreshCheckpoint();
                         });
+                }
+                , error => {
+                    console.log(error.error);
                 }
             );
 
         }
+    }
+
+    refreshCheckpoint() {
+        this.selectedCheckpointAffiliateMarkers = of([]);
+        this.selectedCheckpointAffiliateMarkers.subscribe(selectedCheckpointAffiliateMarkers => {
+            this.selectedCheckpoint.affiliateMarkers.forEach(function(affiliateMarker) {
+                selectedCheckpointAffiliateMarkers.push(affiliateMarker);
+            }.bind(this));
+        })
     }
 
     refreshSelectedTrack() {

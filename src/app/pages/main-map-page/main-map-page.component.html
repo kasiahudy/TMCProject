@@ -22,7 +22,7 @@
 </nav>
 <div style="display: inline-block; float: left; width: 20%; height: 650px; overflow-y: auto ; padding: 20px;">
 
-    <div *ngIf="!markerEdit && !addNewTrack">
+    <div *ngIf="!markerEdit && !addNewTrack && !addNewMarker">
         <h3>{{selectedEvent.name}}</h3>
         <h4>{{selectedEvent.date}}</h4>
         <br/>
@@ -49,6 +49,12 @@
                 <div class="col-sm-6" style="margin-left: 25%;">
                     <label>Lantern: </label>
                     <input type="text" id="lanternCode" class="form-control" required [(ngModel)]="selectedMarker.lanternCode" name="name">
+                </div>
+            </div>
+            <div class="form-group row ">
+                <div class="col-sm-6" style="margin-left: 25%;">
+                    <label>Tape code: </label>
+                    <input type="text" id="tapeCode" class="form-control" required [(ngModel)]="selectedMarker.tapeCode" name="name">
                 </div>
             </div>
             <div>
@@ -84,7 +90,22 @@
                 </div>
             </div>
             <div class="form-group row  d-inline">
-                <button type="submit" class="btn btn-success" style="margin-right: 10px">Add track</button>
+                <button type="submit" class="btn btn-success"  [disabled]='!newTrackName' style="margin-right: 10px">Add track</button>
+                <button class="btn btn-secondary" (click)='return()'>Return</button>
+            </div>
+        </form>
+    </div>
+
+    <div *ngIf="addNewMarker">
+        <form (ngSubmit)="createMarker()" style="alignment: center">
+            <div class="form-group row ">
+                <div class="col-sm-6" style="margin-left: 25%;">
+                    <label>Tape code: </label>
+                    <input type="text" id="newMarkerTapeName" class="form-control" required [(ngModel)]="newTapeCode" name="name">
+                </div>
+            </div>
+            <div class="form-group row  d-inline">
+                <button type="submit" id="addNewMarkerButton" class="btn btn-success" [disabled]='!newTapeCode' style="margin-right: 10px">Add track</button>
                 <button class="btn btn-secondary" (click)='return()'>Return</button>
             </div>
         </form>
