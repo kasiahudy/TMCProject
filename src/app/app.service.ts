@@ -48,63 +48,76 @@ export class AppService {
         const users = [user, user, user, user];
         return of(users);*/
     }
+
+    deleteUser(user: SystemUser) {
+        return this.http.post(`${this.baseUrl}/users/remove`, user, { withCredentials: true});
+    }
+
     addEvent(event: Event) {
-        return this.http.post(`${this.baseUrl}` + `/events/add?`, event);
+        return this.http.post(`${this.baseUrl}` + `/events/add?`, event,{ withCredentials: true});
     }
 
     getAllEvents(): Observable<any> {
-        return this.http.get(`${this.baseUrl}/events`);
+        return this.http.get(`${this.baseUrl}/events`,{ withCredentials: true});
     }
 
     getEvent(event: Event): Observable<any> {
-        return this.http.get(`${this.baseUrl}/events/${event.id}`);
+        return this.http.get(`${this.baseUrl}/events/${event.id}`,{ withCredentials: true});
     }
 
     addMarkerToEvent(event: Event, marker: Marker) {
-        return this.http.put(`${this.baseUrl}/events/markers?eventId=${event.id}`, marker);
+        return this.http.put(`${this.baseUrl}/events/markers?eventId=${event.id}`, marker,{ withCredentials: true});
     }
 
     deleteMarkerFromEvent(event: Event, marker: Marker) {
-        return this.http.delete(`${this.baseUrl}/events/markers?eventId=${event.id}&markerId=${marker.id}`);
+        return this.http.delete(`${this.baseUrl}/events/markers?eventId=${event.id}&markerId=${marker.id}`,{ withCredentials: true});
     }
 
     editMarker(marker: Marker) {
-        return this.http.post(`${this.baseUrl}` + `/markers?`, marker);
+        return this.http.post(`${this.baseUrl}` + `/markers?`, marker,{ withCredentials: true});
     }
 
     addTrackToEvent(event: Event, track: Track) {
-        return this.http.put(`${this.baseUrl}/events/tracks?eventId=${event.id}`, track);
+        return this.http.put(`${this.baseUrl}/events/tracks?eventId=${event.id}`, track,{ withCredentials: true});
+    }
+
+    getEventTracks(event: Event): Observable<any> {
+        return this.http.get(`${this.baseUrl}/events/tracks?eventId=${event.id}`, { withCredentials: true});
+    }
+
+    deleteTrack(event: Event, track: Track) {
+        return this.http.delete(`${this.baseUrl}/events/tracks?eventId=${event.id}&trackId=${track.id}`,{ withCredentials: true});
     }
 
     addCheckpointToTrack(track: Track, checkpoint: CheckPoint) {
-        return this.http.put(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}`, checkpoint);
+        return this.http.put(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}`, checkpoint,{ withCredentials: true});
     }
 
     deleteCheckpointFromTrack(track: Track, checkpoint: CheckPoint) {
-        return this.http.delete(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}&checkPointId=${checkpoint.id}`);
+        return this.http.delete(`${this.baseUrl}/tracks/checkpoints?trackId=${track.id}&checkPointId=${checkpoint.id}`,{ withCredentials: true});
     }
 
     getCheckpointAffiliatesMarkers(checkpoint: CheckPoint, affiliateId: string): Observable<any>  {
-        return this.http.get(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`);
+        return this.http.get(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`,{ withCredentials: true});
     }
 
     addCheckpointAffiliateMarker(checkpoint: CheckPoint, affiliateId: string)  {
-        return this.http.put(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`, affiliateId);
+        return this.http.put(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`, affiliateId,{ withCredentials: true});
     }
 
     deleteCheckpointAffiliateMarker(checkpoint: CheckPoint, affiliateId: string) {
-        return this.http.delete(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`);
+        return this.http.delete(`${this.baseUrl}/checkpoints/affiliates?checkPointId=${checkpoint.id}&affiliateId=${affiliateId}`,{ withCredentials: true});
     }
 
     getBuilders(event: Event): Observable<any> {
-        return this.http.get(`${this.baseUrl}/events/builders?eventId=${event.id}`);
+        return this.http.get(`${this.baseUrl}/events/builders?eventId=${event.id}`,{ withCredentials: true});
     }
 
     addBuilder(event: Event, builderId: string) {
-        return this.http.post(`${this.baseUrl}/events/builders?eventId=${event.id}&builderId=${builderId}`, builderId);
+        return this.http.post(`${this.baseUrl}/events/builders?eventId=${event.id}&builderId=${builderId}`, builderId,{ withCredentials: true});
     }
 
     deleteBuilder(event: Event, builderId: string) {
-        return this.http.delete(`${this.baseUrl}/events/builders?eventId=${event.id}&builderId=${builderId}`);
+        return this.http.delete(`${this.baseUrl}/events/builders?eventId=${event.id}&builderId=${builderId}`,{ withCredentials: true});
     }
 }

@@ -28,6 +28,7 @@
         <div *ngFor="let checkpoint of trackCheckpoints | async">
             <checkpoint-details [checkpoint]='checkpoint' [showAffiliateMarkers]="false"></checkpoint-details>
         </div>
+        <button style="margin-bottom: 20px" class="btn btn-secondary" (click)='returnToMainMap()'>Return to main map</button>
     </div>
     <div *ngIf="checkpointEdit && !addNewAffiliateMarker">
         <form (ngSubmit)="saveMarker()" style="alignment: center">
@@ -93,8 +94,6 @@
             </div>
         </form>
     </div>
-
-    <button   *ngIf="!markerEdit" style="margin-bottom: 20px" class="btn btn-secondary" (click)='returnToMainMap()'>Return</button>
 </div>
 
 <div style=" display: inline-block; width: 80%; height: 80%">

@@ -1,12 +1,14 @@
 
 <div>
-    <h4>{{event.name}}</h4>
+    <h2>{{event.name}}</h2>
 </div>
 <div>
     <label>Date: </label> {{event.date}}
 </div>
+<div *ngIf="!isEditEvent">
+    <button class="btn btn-secondary btn" style="margin-right: 10px;" (click)='editEvent()'>Edit event</button>
+</div>
 
-<button *ngIf="!isEditEvent" class="btn btn-secondary btn" (click)='editEvent()'>Edit</button>
 <br/>
 <div *ngIf="isEditEvent" style="width: 50%; margin-left: 25%;">
     <label>Select new builder:</label>
@@ -18,10 +20,14 @@
 </div>
 <br/>
 <div>
-    <h4>Builders:</h4>
+    <h5>Tracks:</h5>
+    <div *ngFor="let track of eventTracks | async">
+        <track-details [track]='track' [event]='event' [isInAdminPanel]='true' (refreshEvent)="loadEventTracks()"></track-details>
+    </div>
+    <h5>Builders:</h5>
     <div *ngFor="let user of eventBuilders | async">
         <user-details [user]='user' [isBuilder]="true" (deleteBuilder)="deleteBuilder($event)"></user-details>
     </div>
 </div>
 <br/>
-<hr/>
+<hr>

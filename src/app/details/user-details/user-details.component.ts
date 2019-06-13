@@ -14,8 +14,9 @@ export class UserDetailsComponent implements OnInit {
     @Input() user: SystemUser;
     @Input() isBuilder: boolean;
     @Output() deleteBuilder = new EventEmitter();
+    @Output() refreshEvent: EventEmitter<null> = new EventEmitter();
 
-    constructor(private customerService: AppService, private adminPageComponent: AdminPageComponent) { }
+    constructor(private appService: AppService, private adminPageComponent: AdminPageComponent) { }
 
     ngOnInit() {
     }
@@ -32,13 +33,16 @@ export class UserDetailsComponent implements OnInit {
     }
 
     deleteUser() {
-        /*this.customerService.deleteUser(this.user.id)
+        this.appService.deleteUser(this.user)
             .subscribe(
                 data => {
                     console.log(data);
-                    this.adminPageComponent.reloadData();
+                    this.refreshEvent.emit();
                 },
-                error => console.log(error));*/
+                error => {
+                    console.log(error);
+                    this.refreshEvent.emit();
+                });
     }
 
     delete() {

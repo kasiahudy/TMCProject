@@ -17,8 +17,8 @@ export class TrackDetailsComponent implements OnInit {
 
     @Input() track: Track;
     @Input() event: Event;
-    @Output() showMainMenu: EventEmitter<null> = new EventEmitter();
-    @Output() hideMainMenu: EventEmitter<null> = new EventEmitter();
+    @Input() isInAdminPanel: boolean;
+    @Output() refreshEvent: EventEmitter<null> = new EventEmitter();
     trackMarkers: Observable<Marker[]>;
     trackEdit: boolean;
 
@@ -36,6 +36,19 @@ export class TrackDetailsComponent implements OnInit {
                 }
             }.bind(this));
         });
+    }
+
+    deleteTrack() {
+        this.appService.deleteTrack(this.event, this.track).subscribe(
+            responses => {
+                console.log(responses);
+                this.refreshEvent.emit();
+            }
+            , error => {
+                console.log(error);
+                this.refreshEvent.emit();
+            }
+        );
     }
 
     editTrack() {

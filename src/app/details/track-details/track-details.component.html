@@ -1,6 +1,7 @@
 <div>
-    <h5>{{track.name}}</h5>
-    <button  style="margin-bottom: 20px" class="btn btn-secondary btn-sm" (click)='editTrack()'>Edit track</button>
+    <h6>{{track.name}}</h6>
+    <button  *ngIf="isInAdminPanel" style="margin-bottom: 20px" class="btn btn-danger btn-sm" (click)='deleteTrack()'>Delete track</button>
+    <button *ngIf="!isInAdminPanel"  style="margin-bottom: 20px" class="btn btn-secondary btn-sm" (click)='editTrack()'>Edit track</button>
     <div *ngFor="let marker of trackMarkers | async">
         <marker-details [marker]='marker' ></marker-details>
     </div>

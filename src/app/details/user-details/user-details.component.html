@@ -2,7 +2,8 @@
     <div>
         <label>Name: </label> {{user.login}}
         <br/>
-        <button *ngIf="isBuilder" class="btn btn-danger btn-sm" (click)='delete()'>Delete</button>
+        <!--<button *ngIf="!isBuilder" class="btn btn-danger btn-sm" (click)='deleteUser()'>Delete user</button>-->
+        <button *ngIf="isBuilder" class="btn btn-danger btn-sm" (click)='delete()'>Delete builder</button>
     </div>
 
 </div>

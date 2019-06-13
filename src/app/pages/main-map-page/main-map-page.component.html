@@ -36,7 +36,7 @@
         </div>
         <h4>Tracks:</h4>
         <div *ngFor="let track of selectedEventTracks | async">
-            <track-details [track]='track' [event]='selectedEvent'></track-details>
+            <track-details [track]='track' [event]='selectedEvent' [isInAdminPanel]='false'></track-details>
         </div>
         <button class="btn btn-success btn-sm" (click)='newTrackForm()'>Add new track</button>
         <br/>
