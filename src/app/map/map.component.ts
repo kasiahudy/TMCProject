@@ -101,7 +101,6 @@ export class MapComponent implements OnInit {
             desc: marker,
             geometry: new OlGeomPoint(transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857'))
         });
-
         const iconStyle = new OlStyle({
             image: new OlIcon(({
                 anchor: [0.5, 0.5],
@@ -119,6 +118,8 @@ export class MapComponent implements OnInit {
 
         this.markerSource.addFeature(olMarker);
     }
+
+
 
     exportMap() {
         this.map.once('rendercomplete', function(event) {
