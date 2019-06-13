@@ -52,6 +52,11 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
+    /**
+     * Gets an event.
+     * @param id Id of an event in database.
+     * @return Status of the operation.
+     */
     @GetMapping("/{id}")
     public  ResponseEntity<Event> getEvent(@PathVariable UUID id){
         Event event = eventService.find(id);
