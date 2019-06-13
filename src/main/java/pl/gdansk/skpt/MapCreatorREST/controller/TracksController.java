@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Controller of tracks operations.
+ */
 @RestController
 @RequestMapping("/tracks")
 public class TracksController {
@@ -27,6 +30,12 @@ public class TracksController {
         this.checkPointService = checkPointService;
     }
 
+    /**
+     * Adds new checkpoint to a track.
+     * @param trackId Track id in database.
+     * @param checkPoint New checkpoint to add.
+     * @return Status of the operation.
+     */
     @PutMapping("/checkpoints")
     public ResponseEntity<UUID> addCheckpointToTrack(@RequestParam UUID trackId,
                                                      @RequestBody CheckPoint checkPoint){
@@ -41,6 +50,11 @@ public class TracksController {
         }
     }
 
+    /**
+     * Retrieves all checkpoint of a track.
+     * @param trackId Track id in database.
+     * @return Status of the operation.
+     */
     @GetMapping("/checkpoints")
     public ResponseEntity<List<CheckPoint>> getCheckPointsFromTrack(@RequestParam UUID trackId){
         Track track = tracksService.find(trackId);
@@ -51,6 +65,12 @@ public class TracksController {
         }
     }
 
+    /**
+     * Removes a certain checkpoint from track, and deletes it from database.
+     * @param trackId Track id in database.
+     * @param checkPointId Checkpoint id in database.
+     * @return Status of the operation.
+     */
     @DeleteMapping("/checkpoints")
     public ResponseEntity<String> removeCheckpointFromTrack(@RequestParam UUID trackId,
                                                             @RequestParam UUID checkPointId){

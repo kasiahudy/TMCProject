@@ -39,7 +39,7 @@ public class EventController {
     /**
      * Add new event.
      * @param newEvent Event to add.
-     * @return
+     * @return Status of the operation.
      */
     @PostMapping("/add")
     public ResponseEntity<UUID> addEvent(@RequestBody Event newEvent){
@@ -49,6 +49,10 @@ public class EventController {
         return new ResponseEntity<>(newEvent.getId(), HttpStatus.NOT_IMPLEMENTED);
     }
 
+    /**
+     * Gets all events.
+     * @return Status of the operation.
+     */
     @GetMapping()
     public  List<Event> getAllEvents(){
         return eventService.getAllEvents();
@@ -64,6 +68,11 @@ public class EventController {
         }
     }
 
+    /**
+     * Get all markers from certain event.
+     * @param eventId Id of an event which markers should be extracted from.
+     * @return Status of the operation.
+     */
     @GetMapping("/markers")
     public  ResponseEntity<List<Marker>> getMarkersFromEvent(@RequestParam UUID eventId){
         Event event = eventService.find(eventId);
@@ -74,6 +83,12 @@ public class EventController {
         }
     }
 
+    /**
+     * Get all lanterns (markers with lanternCode != null) from certain event.
+     * @param eventId Id of an event which lanterns should be extracted from.
+     * @return Status of the operation.
+     * @see Marker
+     */
     @GetMapping("/lanterns")
     public  ResponseEntity<List<Marker>> getLanternsFromEvent(@RequestParam UUID eventId){
         Event event = eventService.find(eventId);
@@ -88,9 +103,15 @@ public class EventController {
         }
     }
 
+    /**
+     * Adds new marker to certain event.
+     * @param eventId Id of an event that marker should be added to.
+     * @param newMarker New marker's content.
+     * @return Status of the operation.
+     */
     @PutMapping("/markers")
-    public  ResponseEntity<UUID> getMarkersFromEvent(@RequestParam UUID eventId,
-                                                       @RequestBody Marker newMarker){
+    public  ResponseEntity<UUID> addMarkersToEvent(@RequestParam UUID eventId,
+                                                   @RequestBody Marker newMarker){
         Event event = eventService.find(eventId);
         if(event != null){
             markerService.save(newMarker);
@@ -102,9 +123,18 @@ public class EventController {
         }
     }
 
+    /**
+     * Deletes marker existing in certain event.
+     * That also deletes checkpoint for which marker was a MainMarker.
+     * @param eventId Id of an event that contains marker.
+     * @param markerId Id of a marker to be removed.
+     * @return Status of the operation.
+     * @see CheckPoint
+     * @see Marker
+     */
     @DeleteMapping("/markers")
-    public  ResponseEntity<String> getMarkerFromEvent(@RequestParam UUID eventId,
-                                                      @RequestParam UUID markerId){
+    public  ResponseEntity<String> deleteMarkerFromEvent(@RequestParam UUID eventId,
+                                                         @RequestParam UUID markerId){
         Event event = eventService.find(eventId);
         if(event != null){
             Marker marker = event.getMarkers().stream()
@@ -131,6 +161,11 @@ public class EventController {
         }
     }
 
+    /**
+     * Get all tracks from certain event.
+     * @param eventId Id of an event which tracks should be extracted from.
+     * @return Status of the operation.
+     */
     @GetMapping("/tracks")
     public  ResponseEntity<List<Track>> getTracksFromEvent(@RequestParam UUID eventId){
         Event event = eventService.find(eventId);
@@ -141,9 +176,15 @@ public class EventController {
         }
     }
 
+    /**
+     * Adds a new track to certain event.
+     * @param eventId Id of an event which track should be added to.
+     * @param newTrack Content of track to add.
+     * @return Status of the operation.
+     */
     @PutMapping("/tracks")
-    public  ResponseEntity<String> getTracksFromEvent(@RequestParam UUID eventId,
-                                                       @RequestBody Track newTrack){
+    public  ResponseEntity<String> addTrackToEvent(@RequestParam UUID eventId,
+                                                   @RequestBody Track newTrack){
         Event event = eventService.find(eventId);
         if(event != null){
             event.getTracks().add(newTrack);
@@ -154,9 +195,15 @@ public class EventController {
         }
     }
 
+    /**
+     * Deletes a track from event.
+     * @param eventId Id of an event which contains a track.
+     * @param trackId Id of an track to delete.
+     * @return Status of the operation.
+     */
     @DeleteMapping("/tracks")
-    public  ResponseEntity<String> getTrackFromEvent(@RequestParam UUID eventId,
-                                                     @RequestParam UUID trackId){
+    public  ResponseEntity<String> deleteTrackFromEvent(@RequestParam UUID eventId,
+                                                        @RequestParam UUID trackId){
         Event event = eventService.find(eventId);
         if(event != null){
             Track track = event.getTracks().stream()
@@ -175,6 +222,14 @@ public class EventController {
         }
     }
 
+    /**
+     * Adds a user to builders list of an event.
+     * @param eventId Id of an event which builder should be added to.
+     * @param builderId Id of a user that should become builder of this event.
+     * @return Status of the operation.
+     * @see Event
+     * @see SystemUser
+     */
     @PostMapping("/builders")
     public ResponseEntity<String> addBuilderToEvent(@RequestParam UUID eventId,
                                                     @RequestParam String builderId){
@@ -198,6 +253,12 @@ public class EventController {
         }
     }
 
+    /**
+     * Gets all builders from certain event.
+     * @param eventId Id of an event.
+     * @return Status of the operation.
+     * @see Event
+     */
     @GetMapping("/builders")
     public ResponseEntity<List<SystemUser>> getBuildersFromEvent(@RequestParam UUID eventId){
         Event event = eventService.find(eventId);
@@ -209,9 +270,15 @@ public class EventController {
 
     }
 
+    /**
+     * Removes user from builders list of and event.
+     * @param eventId Id of an event.
+     * @param builderId Id of an user.
+     * @return Status of the operation.
+     */
     @DeleteMapping("/builders")
     public ResponseEntity<String> deleteBuilderFromEvent(@RequestParam UUID eventId,
-                                                                 @RequestParam String builderId){
+                                                         @RequestParam String builderId){
         SystemUser user = userService.find(builderId);
         if(user != null){
             Event event = eventService.find(eventId);
@@ -230,10 +297,6 @@ public class EventController {
         }else{
             return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
         }
-
     }
-
-
-
 
 }

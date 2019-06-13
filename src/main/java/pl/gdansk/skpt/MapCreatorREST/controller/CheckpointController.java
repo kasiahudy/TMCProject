@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Controller of checkpoints.
+ * Controller of checkpoints operations.
  * @see CheckPoint
  */
 @RestController

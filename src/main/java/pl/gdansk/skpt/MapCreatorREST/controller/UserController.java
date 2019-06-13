@@ -8,6 +8,9 @@ import pl.gdansk.skpt.MapCreatorREST.services.UserService;
 
 import java.util.List;
 
+/**
+ * Controller for user operations.
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -18,8 +21,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Adds a new user.
+     * @param systemUser User to add.
+     * @return Status of the operation.
+     */
     @PostMapping("/add")
-    public ResponseEntity<String> CreateUser(@RequestBody SystemUser systemUser){
+    public ResponseEntity<String> addUser(@RequestBody SystemUser systemUser){
         if(userService.find(systemUser.getLogin()) == null){
             if(systemUser.getPrivilege() == SystemUser.PrivilegeLevels.SUPER_USER){
                 return new ResponseEntity<>("Can't add another admin using API",HttpStatus.FORBIDDEN);
@@ -32,13 +40,22 @@ public class UserController {
         }
     }
 
+    /**
+     * Gets all users.
+     * @return List of users.
+     */
     @GetMapping()
-    public List<SystemUser> GetAllUsers(){
+    public List<SystemUser> getAllUsers(){
         return userService.getAllUsers();
     }
 
+    /**
+     * Removes a certain user.
+     * @param systemUser User to remove.
+     * @return Status of the operation.
+     */
     @PostMapping("/remove")
-    public ResponseEntity<String> DeleteUser(@RequestBody SystemUser systemUser){
+    public ResponseEntity<String> deleteUser(@RequestBody SystemUser systemUser){
         if(userService.find(systemUser.getLogin()) != null){
             userService.remove(systemUser);
             return new ResponseEntity<>("Added new systemUser", HttpStatus.OK);

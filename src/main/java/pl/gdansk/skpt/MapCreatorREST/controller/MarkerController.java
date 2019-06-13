@@ -9,6 +9,9 @@ import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
 
 import java.util.UUID;
 
+/**
+ * Controller for markers operations.
+ */
 @RestController
 @RequestMapping("/markers")
 public class MarkerController {
@@ -16,6 +19,11 @@ public class MarkerController {
     final MarkerService markerService;
     public MarkerController(MarkerService service){this.markerService = service;}
 
+    /**
+     * Get a marker.
+     * @param id Marker's id.
+     * @return Status of the operation.
+     */
     @GetMapping("{id}")
     public ResponseEntity<Marker> getMarker(@PathVariable UUID id){
         Marker marker = markerService.find(id);
@@ -26,6 +34,13 @@ public class MarkerController {
         }
     }
 
+    /**
+     * Adds a new marker.
+     * @param marker Marker to add.
+     * @return Status of the operation.
+     * @deprecated Use {@link EventController#addMarkersToEvent(UUID, Marker)} instead
+     */
+    @Deprecated
     @PostMapping("")
     public ResponseEntity<String> addMarker(@RequestBody Marker marker){
         if(markerService.find(marker.getId()) != null){
