@@ -6,6 +6,9 @@ import pl.gdansk.skpt.MapCreatorREST.model.Marker;
 import javax.persistence.EntityManager;
 import java.util.function.Function;
 
+/**
+ * DBService for Markers.
+ */
 @Service
 public class MarkerService extends DBService<Marker>{
     public MarkerService(EntityManager entityManager) {

@@ -6,6 +6,9 @@ import pl.gdansk.skpt.MapCreatorREST.model.Track;
 import javax.persistence.EntityManager;
 import java.util.function.Function;
 
+/**
+ * DBService for Tracks.
+ */
 @Service
 public class TracksService extends DBService<Track>{
 

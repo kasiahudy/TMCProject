@@ -6,6 +6,10 @@ import javax.persistence.EntityManager;
 import java.util.UUID;
 import java.util.function.Function;
 
+/**
+ * Connection to database.
+ * @param <T> Entity class.
+ */
 abstract public class DBService<T> {
     final EntityManager entityManager;
     protected final Class<T> entityClass;
