@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTWriter;
 
+/**
+ * List version of {@link PointToJsonSerializer}
+ */
 public class PointsListToJsonSerializer extends JsonSerializer<List<Point>> {
 
     @Override

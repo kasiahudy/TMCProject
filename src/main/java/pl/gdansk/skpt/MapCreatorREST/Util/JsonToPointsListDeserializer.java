@@ -14,6 +14,9 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import com.vividsolutions.jts.io.WKTReader;
 
+/**
+ * List version of {@link JsonToPointDeserializer}
+ */
 public class JsonToPointsListDeserializer extends JsonDeserializer<List<Point>> {
 
     private final static GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 26910);

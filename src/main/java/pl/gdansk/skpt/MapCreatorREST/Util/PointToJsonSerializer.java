@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTWriter;
 
+/**
+ * Helper class for geographic point JSON serialization.
+ */
 public class PointToJsonSerializer extends JsonSerializer<Point> {
 
     @Override
