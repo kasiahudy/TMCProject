@@ -103,13 +103,15 @@ export class TrackMapComponent implements OnInit {
                 this.appService.addCheckpointAffiliateMarker(this.selectedCheckpoint, this.newMarker.id).subscribe(
                     response2 => {
                         console.log(response2);
-                        this.refreshSelectedTrack();
                         this.refreshCheckpoint();
+                        this.refreshSelectedTrack();
+
                     }
                     , error2 => {
                         console.log(error2.error);
-                        this.refreshSelectedTrack();
                         this.refreshCheckpoint();
+                        this.refreshSelectedTrack();
+
                     });
             }
             , error => {
@@ -163,8 +165,20 @@ export class TrackMapComponent implements OnInit {
             const lonLat = Marker.coordinatesToLonLat(coordinates);
             newMarker.lon = lonLat.lon;
             newMarker.lat = lonLat.lat;
-            this.child.addMarker(lonLat.lon, lonLat.lat, marker);
+            this.child.addMarker(lonLat.lon, lonLat.lat, marker, this.isAffiliateMarker(marker));
         }
+    }
+
+    isAffiliateMarker(marker) {
+        let isAffiliate = false;
+        this.selectedEvent.tracks.forEach(track => {
+            track.checkPoints.forEach(checkpoint => {
+                if(checkpoint.affiliateMarkers.find(affiliateMarker => affiliateMarker.id === marker.id)) {
+                    isAffiliate = true;
+                }
+            });
+        });
+        return isAffiliate;
     }
 
     saveMarker() {

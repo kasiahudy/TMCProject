@@ -1,0 +1,19 @@
+.demo h1 {
+    position: relative;
+    padding-bottom: 6rem;
+    min-height: 100%;
+    margin-top: 0;
+}
+
+/**
+ * Footer Styles
+ */
+
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    text-align: center;
+}

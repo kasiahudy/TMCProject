@@ -120,11 +120,13 @@ export class MainMapPageComponent implements OnInit {
                             newMarker.lon = lonLat.lon;
                             newMarker.lat = lonLat.lat;
                             if(!this.isAffiliateMarker(marker)) {
-                                this.child.addMarker(lonLat.lon, lonLat.lat, marker);
+                                this.child.addMarker(lonLat.lon, lonLat.lat, marker, false);
                             }
 
                         }
-                        eventMarkers.push(newMarker);
+                        if(!this.isAffiliateMarker(marker)) {
+                            eventMarkers.push(newMarker);
+                        }
 
                     }.bind(this));
                 });
