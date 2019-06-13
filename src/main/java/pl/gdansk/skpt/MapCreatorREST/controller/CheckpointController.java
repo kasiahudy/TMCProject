@@ -12,17 +12,30 @@ import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Controller of checkpoints.
+ * @see CheckPoint
+ */
 @RestController
 @RequestMapping("/checkpoints")
 public class CheckpointController {
     final CheckPointService checkPointService;
     final MarkerService markerService;
 
+
     public CheckpointController(CheckPointService checkPointService,MarkerService markerService){
         this.checkPointService = checkPointService;
         this.markerService = markerService;
     }
 
+    /**
+     * Adds marker to affiliates list in certain checkpoint.
+     * @param checkPointId Checkpoint id in database.
+     * @param affiliateId Marker id in database.
+     * @return Status of the operation.
+     * @see CheckPoint
+     * @see Marker
+     */
     @PutMapping("/affiliates")
     public ResponseEntity<String> addAffiliateMarker(@RequestParam UUID checkPointId,
                                                      @RequestParam UUID affiliateId){
@@ -43,6 +56,14 @@ public class CheckpointController {
         }
     }
 
+    /**
+     * Removes marker from affiliates of certain checkpoint.
+     * @param checkPointId Checkpoint id in database.
+     * @param affiliateId Marker id in database.
+     * @return Status of the operation.
+     * @see CheckPoint
+     * @see Marker
+     */
     @DeleteMapping("/affiliates")
     public ResponseEntity<String> removeAffiliateMarker(@RequestParam UUID checkPointId,
                                                      @RequestParam UUID affiliateId){
@@ -63,6 +84,11 @@ public class CheckpointController {
         }
     }
 
+    /**
+     * Gets a list of all affiliates of a certain checkpoint.
+     * @param checkPointId Checkpoint id in database.
+     * @return Status of the operation.
+     */
     @GetMapping("/affiliates")
     public ResponseEntity<List<Marker>> getAllAffiliates(@RequestParam UUID checkPointId){
         CheckPoint checkPoint = checkPointService.find(checkPointId);

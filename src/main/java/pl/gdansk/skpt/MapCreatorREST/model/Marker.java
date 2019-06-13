@@ -15,26 +15,41 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Class representing a marker (tasiemka).
+ */
 @Entity
 @Table(name = "markers_table")
 @EqualsAndHashCode(of = "id")
 public class Marker {
+    /**
+     * Unique ID given by DBMS.
+     */
     @Id
     @Getter
     @Column(name="id")
     @GeneratedValue( strategy= GenerationType.AUTO )
     private UUID id;
 
+    /**
+     * Lantern code (kod lampionu).
+     */
     @Getter
     @Setter
     @Column(name="lanternCode")
     private String lanternCode;
 
+    /**
+     * Tape code (kod tasiemki).
+     */
     @Getter
     @Setter
     @Column(name="tapeCode")
     private String tapeCode;
 
+    /**
+     * Spatial point.
+     */
     @Getter
     @Setter
     @Column(name="coordinate")
@@ -42,6 +57,10 @@ public class Marker {
     @JsonDeserialize(using = JsonToPointDeserializer.class)
     private Point coordinate;
 
+    /**
+     * Child side of Marker-Checkpoint relationship.
+     * @see CheckPoint
+     */
     @Getter
     @Setter
     @JsonIgnore
@@ -50,12 +69,4 @@ public class Marker {
             fetch = FetchType.EAGER
     )
     private List<CheckPoint> mainMarkerOf = new ArrayList<CheckPoint>();
-
-
-//
-//    public Marker(String tapeCode, String lanternCode, Point point){
-//        this.coordinate = point;
-//        this.tapeCode = tapeCode;
-//        this.lanternCode = lanternCode;
-//    }
 }

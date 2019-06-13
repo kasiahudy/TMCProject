@@ -23,9 +23,9 @@ public class MyUserDetails implements UserDetails {
 
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
 
-        if(systemUser.getPrivilage() == SystemUser.PriviligeLevels.SUPER_USER){
+        if(systemUser.getPrivilege() == SystemUser.PrivilegeLevels.SUPER_USER){
             list.add(new SimpleGrantedAuthority(ROLE_PREFIX + "SUPER_USER"));
-        }else{
+        }else if(systemUser.getPrivilege() == SystemUser.PrivilegeLevels.NORMAL_USER){
 
         }
 

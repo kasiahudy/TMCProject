@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Main controller of the application since Event is the parent class of all.
+ * @see Event
+ */
 @RestController
 @RequestMapping("/events")
 public class EventController {
@@ -32,6 +36,11 @@ public class EventController {
         this.trackService = trackService;
     }
 
+    /**
+     * Add new event.
+     * @param newEvent Event to add.
+     * @return
+     */
     @PostMapping("/add")
     public ResponseEntity<UUID> addEvent(@RequestBody Event newEvent){
 

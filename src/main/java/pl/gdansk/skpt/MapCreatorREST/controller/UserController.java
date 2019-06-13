@@ -21,6 +21,9 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity<String> CreateUser(@RequestBody SystemUser systemUser){
         if(userService.find(systemUser.getLogin()) == null){
+            if(systemUser.getPrivilege() == SystemUser.PrivilegeLevels.SUPER_USER){
+                return new ResponseEntity<>("Can't add another admin using API",HttpStatus.FORBIDDEN);
+            }
             userService.save(systemUser);
             return new ResponseEntity<>("Added new systemUser", HttpStatus.OK);
         }
