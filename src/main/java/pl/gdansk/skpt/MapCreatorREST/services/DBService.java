@@ -1,7 +1,6 @@
 package pl.gdansk.skpt.MapCreatorREST.services;
 
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import java.util.UUID;
 import java.util.function.Function;

@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.SystemUser;
 import pl.gdansk.skpt.MapCreatorREST.services.UserService;
-
 import java.util.List;
 
 /**

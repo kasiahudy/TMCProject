@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.gdansk.skpt.MapCreatorREST.Util.JsonToPointDeserializer;
 import pl.gdansk.skpt.MapCreatorREST.Util.PointToJsonSerializer;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

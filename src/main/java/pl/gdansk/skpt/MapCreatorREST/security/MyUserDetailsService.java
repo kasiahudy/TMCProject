@@ -5,10 +5,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.gdansk.skpt.MapCreatorREST.model.SystemUser;
-import pl.gdansk.skpt.MapCreatorREST.services.UserService;
 
-import javax.persistence.EntityManager;
-
+/**
+ * UserDetailsService
+ */
+@Deprecated
 @Service
 public class MyUserDetailsService implements UserDetailsService{
 

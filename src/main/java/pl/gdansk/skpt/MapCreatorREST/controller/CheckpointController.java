@@ -5,10 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.CheckPoint;
 import pl.gdansk.skpt.MapCreatorREST.model.Marker;
-import pl.gdansk.skpt.MapCreatorREST.model.Track;
 import pl.gdansk.skpt.MapCreatorREST.services.CheckPointService;
 import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
-
 import java.util.List;
 import java.util.UUID;
 

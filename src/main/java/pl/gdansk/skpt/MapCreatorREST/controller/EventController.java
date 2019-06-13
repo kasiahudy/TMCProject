@@ -1,16 +1,10 @@
 package pl.gdansk.skpt.MapCreatorREST.controller;
 
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.*;
 import pl.gdansk.skpt.MapCreatorREST.services.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

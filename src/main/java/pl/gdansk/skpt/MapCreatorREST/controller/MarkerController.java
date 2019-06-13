@@ -1,12 +1,10 @@
 package pl.gdansk.skpt.MapCreatorREST.controller;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.gdansk.skpt.MapCreatorREST.model.Marker;
 import pl.gdansk.skpt.MapCreatorREST.services.MarkerService;
-
 import java.util.UUID;
 
 /**

@@ -2,9 +2,7 @@ package pl.gdansk.skpt.MapCreatorREST.services;
 
 import org.springframework.stereotype.Service;
 import pl.gdansk.skpt.MapCreatorREST.model.Track;
-
 import javax.persistence.EntityManager;
-import java.util.function.Function;
 
 /**
  * DBService for Tracks.

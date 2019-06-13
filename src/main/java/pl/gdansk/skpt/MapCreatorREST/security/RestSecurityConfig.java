@@ -15,11 +15,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import pl.gdansk.skpt.MapCreatorREST.services.UserService;
-
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Security config
+ * @see WebSecurityConfigurerAdapter
+ */
 @EnableWebSecurity
 @Configuration
 public class RestSecurityConfig extends WebSecurityConfigurerAdapter {

@@ -2,7 +2,6 @@ package pl.gdansk.skpt.MapCreatorREST.services;
 
 import org.springframework.stereotype.Service;
 import pl.gdansk.skpt.MapCreatorREST.model.CheckPoint;
-
 import javax.persistence.EntityManager;
 
 /**
